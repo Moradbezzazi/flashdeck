@@ -14,18 +14,14 @@
 }
 body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-/* ── LOADING SCREEN ── */
+/* ── LOADING ── */
 #loadingScreen {
   position: fixed; inset: 0; background: var(--bg);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   z-index: 999; gap: 16px;
 }
 .loading-logo { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--accent2); }
-.loading-spinner {
-  width: 32px; height: 32px; border: 2px solid var(--border);
-  border-top-color: var(--accent); border-radius: 50%;
-  animation: spin .8s linear infinite;
-}
+.loading-spinner { width: 32px; height: 32px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; }
 .loading-text { font-size: 0.85rem; color: var(--muted); }
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -40,23 +36,15 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   max-width: 400px; width: 90%;
 }
 .auth-logo { font-family: 'DM Serif Display', serif; font-size: 2.2rem; color: var(--accent2); margin-bottom: 8px; }
-.auth-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 32px; line-height: 1.6; }
-.auth-email { font-size: 0.82rem; color: var(--muted); margin-top: 16px; }
-.auth-email span { color: var(--green); font-weight: 500; }
+.auth-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 28px; line-height: 1.6; }
+.auth-error { color: var(--red); font-size: 0.82rem; margin-top: 12px; min-height: 20px; }
 
 /* ── APP ── */
 .app { display: flex; min-height: 100vh; }
 
 /* ── SIDEBAR ── */
-.sidebar {
-  width: 280px; min-height: 100vh; background: var(--surface);
-  border-right: 1px solid var(--border); display: flex; flex-direction: column;
-  padding: 28px 20px; position: fixed; top: 0; left: 0; bottom: 0; z-index: 10;
-  transition: transform .3s ease;
-}
-.sidebar-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
-.sidebar-logo { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--accent2); display: flex; align-items: center; gap: 8px; }
-.user-badge { font-size: 0.72rem; color: var(--muted); background: var(--surface2); padding: 4px 10px; border-radius: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+.sidebar { width: 280px; min-height: 100vh; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 28px 20px; position: fixed; top: 0; left: 0; bottom: 0; z-index: 10; transition: transform .3s ease; }
+.sidebar-logo { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--accent2); display: flex; align-items: center; gap: 8px; margin-bottom: 32px; }
 .sidebar-section-title { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
 .project-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
 .project-item { padding: 10px 14px; border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: background .15s; font-size: 0.9rem; }
@@ -73,6 +61,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .sync-dot.syncing { background: var(--accent); animation: pulse 1s infinite; }
 .sync-dot.error { background: var(--red); }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.sidebar-footer { margin-top: 8px; }
+.btn-logout { width: 100%; padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; cursor: pointer; text-align: left; transition: color .15s, border-color .15s; }
+.btn-logout:hover { color: var(--red); border-color: var(--red); }
 
 /* ── MAIN ── */
 .main { margin-left: 280px; flex: 1; padding: 40px; min-height: 100vh; }
@@ -183,7 +174,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 20px; font-size: 0.86rem; z-index: 999; transform: translateY(80px); transition: transform .3s; pointer-events: none; }
 .toast.show { transform: translateY(0); }
 
-/* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
@@ -208,18 +198,21 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 <div id="loadingScreen">
   <div class="loading-logo">🃏 FlashDeck</div>
   <div class="loading-spinner"></div>
-  <div class="loading-text" id="loadingText">Connexion à Google...</div>
+  <div class="loading-text" id="loadingText">Chargement...</div>
 </div>
 
-<!-- AUTH SCREEN (si pas connecté) -->
-<div id="authScreen" style="display:none;position:fixed;inset:0;background:var(--bg);align-items:center;justify-content:center;z-index:998;">
+<!-- AUTH SCREEN -->
+<div id="authScreen">
   <div class="auth-card">
     <div class="auth-logo">🃏 FlashDeck</div>
-    <div class="auth-sub">Pour accéder à tes flashcards,<br>connecte-toi avec ton compte Google autorisé.</div>
-    <a href="#" id="authLink" class="btn btn-primary" style="display:inline-flex;text-decoration:none;font-size:1rem;padding:14px 28px;">
-      🔐 Se connecter avec Google
-    </a>
-    <div class="auth-email" id="authEmailHint"></div>
+    <div class="auth-sub">Entre ton token pour accéder à tes flashcards.</div>
+    <div class="form-group">
+      <input class="form-input" type="password" id="tokenInput" placeholder="Token secret..." autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px" onclick="submitToken()">
+      🔐 Accéder
+    </button>
+    <div class="auth-error" id="authError"></div>
   </div>
 </div>
 
@@ -227,25 +220,21 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
 <div class="app" id="mainApp" style="display:none">
-  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-top">
-      <div class="sidebar-logo">🃏 FlashDeck</div>
-    </div>
-    <div class="user-badge" id="userBadge"></div>
-    <br>
+    <div class="sidebar-logo">🃏 FlashDeck</div>
     <div class="sidebar-section-title">Projets</div>
     <div class="project-list" id="projectList"></div>
     <button class="btn-new-project" onclick="openModal('project')">＋ Nouveau projet</button>
-    <div class="sync-indicator">
-      <div class="sync-dot" id="syncDot"></div>
-      <span id="syncText">Synchronisé</span>
+    <div class="sidebar-footer">
+      <div class="sync-indicator">
+        <div class="sync-dot" id="syncDot"></div>
+        <span id="syncText">Synchronisé</span>
+      </div>
+      <button class="btn-logout" onclick="logout()">⎋ Déconnexion</button>
     </div>
   </aside>
 
-  <!-- MAIN -->
   <main class="main">
-
     <!-- HOME -->
     <div class="view active" id="view-home">
       <div class="home-header">Bonjour 👋</div>
@@ -323,7 +312,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
         </div>
       </div>
     </div>
-
   </main>
 </div>
 
@@ -367,7 +355,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 
 <script>
 // ══════════════════════════════════════════════════════════════
-//  CONFIG — remplace par ton URL Apps Script après déploiement
+//  CONFIG
 // ══════════════════════════════════════════════════════════════
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxyiXnRtgUhAQLssT410eMbviJcSmN_ATMP1bI7URLBi7SLWmhfxQD5uNsXAFp9O830/exec';
 
@@ -378,6 +366,7 @@ let currentFilter = 'all';
 let editingProjectId = null;
 let editingCardId = null;
 let reviewQueue = [], reviewIndex = 0, reviewStats = {}, cardFlipped = false;
+let userToken = null;
 
 // ─── UTILS ───────────────────────────────────────────────────
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
@@ -399,16 +388,15 @@ function setSyncStatus(status) {
 
 // ─── API ─────────────────────────────────────────────────────
 async function apiGet(action) {
-  const r = await fetch(`${SCRIPT_URL}?action=${action}`, { credentials: 'include' });
+  const r = await fetch(`${SCRIPT_URL}?action=${action}&token=${encodeURIComponent(userToken)}`);
   return r.json();
 }
 
 async function apiPost(body) {
   const r = await fetch(SCRIPT_URL, {
     method: 'POST',
-    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
+    body: JSON.stringify({ ...body, token: userToken })
   });
   return r.json();
 }
@@ -416,7 +404,8 @@ async function apiPost(body) {
 async function syncToServer() {
   setSyncStatus('syncing');
   try {
-    await apiPost({ action: 'saveAll', data: state });
+    const res = await apiPost({ action: 'saveAll', data: state });
+    if (res.error) { setSyncStatus('error'); toast('Erreur : ' + res.error); return; }
     setSyncStatus('ok');
   } catch(e) {
     setSyncStatus('error');
@@ -424,40 +413,83 @@ async function syncToServer() {
   }
 }
 
-// ─── INIT ─────────────────────────────────────────────────────
+// ─── AUTH ─────────────────────────────────────────────────────
 async function init() {
-  document.getElementById('loadingText').textContent = 'Vérification de la connexion…';
-  try {
-    // Vérifier si connecté
-    const me = await apiGet('whoami');
-    if (me.error) { showAuthScreen(); return; }
-
-    document.getElementById('loadingText').textContent = 'Chargement des données…';
-    document.getElementById('userBadge').textContent = me.email;
-
-    // Charger les données
-    const data = await apiGet('getAll');
-    state = data;
-
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'flex';
-    renderSidebar();
-    renderHome();
-  } catch(e) {
-    showAuthScreen();
+  // Token en sessionStorage (perdu à la fermeture du navigateur)
+  const saved = sessionStorage.getItem('fd_token');
+  if (saved) {
+    userToken = saved;
+    await loadApp();
+  } else {
+    showAuth();
   }
 }
 
-function showAuthScreen() {
+function showAuth() {
   document.getElementById('loadingScreen').style.display = 'none';
-  const auth = document.getElementById('authScreen');
-  auth.style.display = 'flex';
-  // Redirige directement vers le script pour déclencher l'auth Google
-  document.getElementById('authLink').href = SCRIPT_URL + '?action=whoami';
-  document.getElementById('authLink').textContent = '🔐 Se connecter';
+  document.getElementById('authScreen').style.display = 'flex';
+  setTimeout(() => document.getElementById('tokenInput').focus(), 100);
 }
 
-// ─── RENDER SIDEBAR ───────────────────────────────────────────
+async function submitToken() {
+  const token = document.getElementById('tokenInput').value.trim();
+  if (!token) return;
+  userToken = token;
+  document.getElementById('authError').textContent = '';
+  document.getElementById('loadingScreen').style.display = 'flex';
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('loadingText').textContent = 'Vérification...';
+  try {
+    const data = await apiGet('getAll');
+    if (data.error) {
+      userToken = null;
+      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('authScreen').style.display = 'flex';
+      document.getElementById('authError').textContent = '❌ Token incorrect';
+      return;
+    }
+    // Token valide → on sauvegarde en session
+    sessionStorage.setItem('fd_token', token);
+    state = data;
+    showApp();
+  } catch(e) {
+    userToken = null;
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('authScreen').style.display = 'flex';
+    document.getElementById('authError').textContent = '❌ Erreur de connexion';
+  }
+}
+
+async function loadApp() {
+  document.getElementById('loadingText').textContent = 'Chargement des données...';
+  try {
+    const data = await apiGet('getAll');
+    if (data.error) { sessionStorage.removeItem('fd_token'); userToken = null; showAuth(); return; }
+    state = data;
+    showApp();
+  } catch(e) {
+    sessionStorage.removeItem('fd_token');
+    userToken = null;
+    showAuth();
+  }
+}
+
+function showApp() {
+  document.getElementById('loadingScreen').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'flex';
+  renderSidebar();
+  renderHome();
+}
+
+function logout() {
+  sessionStorage.removeItem('fd_token');
+  userToken = null;
+  document.getElementById('mainApp').style.display = 'none';
+  document.getElementById('tokenInput').value = '';
+  showAuth();
+}
+
+// ─── SIDEBAR ─────────────────────────────────────────────────
 function renderSidebar() {
   const list = document.getElementById('projectList');
   if (!state.projects || state.projects.length === 0) {
@@ -588,10 +620,9 @@ function markCard(status) {
   const p = currentProject();
   const card = (p.cards||[]).find(x=>x.id===c.id);
   if (card) { card.status=status; card.lastReviewed=Date.now(); }
-  reviewStats[status]++;
-  reviewIndex++;
+  reviewStats[status]++; reviewIndex++;
   showReviewCard();
-  syncToServer(); // sync après chaque réponse
+  syncToServer();
 }
 
 function nextCard() { reviewStats.skipped++; reviewIndex++; showReviewCard(); }
@@ -642,8 +673,7 @@ async function saveProject() {
     const p = state.projects.find(x=>x.id===editingProjectId);
     p.name=name; p.desc=desc;
   } else {
-    const p = { id:uid(), name, desc, cards:[], createdAt:Date.now() };
-    state.projects.push(p);
+    state.projects.push({ id:uid(), name, desc, cards:[], createdAt:Date.now() });
   }
   closeModal(); renderSidebar(); renderHome();
   await syncToServer();
@@ -700,6 +730,7 @@ function closeSidebar() { document.getElementById('sidebar').classList.remove('o
 
 // ─── KEYBOARD ─────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('authScreen').style.display === 'flex') { submitToken(); return; }
   if (document.getElementById('view-review').classList.contains('active') && !document.getElementById('modal').classList.contains('open')) {
     if (e.key===' '||e.key==='ArrowUp') { e.preventDefault(); flipCard(); }
     if (e.key==='ArrowRight') { if(cardFlipped) markCard('correct'); else nextCard(); }
