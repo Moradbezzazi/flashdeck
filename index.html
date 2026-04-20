@@ -388,7 +388,9 @@ function setSyncStatus(status) {
 
 // ─── API ─────────────────────────────────────────────────────
 async function apiGet(action) {
-  const r = await fetch(`${SCRIPT_URL}?action=${action}&token=${encodeURIComponent(userToken)}`);
+  const r = await fetch(`${SCRIPT_URL}?action=${action}&token=${encodeURIComponent(userToken)}`, {
+    redirect: 'follow'
+  });
   return r.json();
 }
 
