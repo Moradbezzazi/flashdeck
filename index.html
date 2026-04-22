@@ -1,1 +1,875 @@
-test
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlashDeck</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f0f11; --surface: #1a1a1f; --surface2: #22222a; --border: #2e2e3a;
+  --text: #e8e8f0; --muted: #6b6b80; --accent: #7c6af7; --accent2: #a78bfa;
+  --green: #34d399; --red: #f87171; --radius: 16px; --radius-sm: 10px;
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+/* ── LOADING ── */
+#loadingScreen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; gap: 16px; }
+.loading-logo { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--accent2); }
+.loading-spinner { width: 32px; height: 32px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; }
+.loading-text { font-size: 0.85rem; color: var(--muted); }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── CONFIG SCREEN ── */
+#configScreen { display: none; position: fixed; inset: 0; background: var(--bg); align-items: flex-start; justify-content: center; z-index: 997; overflow-y: auto; padding: 40px 20px; }
+.config-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px; max-width: 500px; width: 100%; margin: auto; }
+.config-logo { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--accent2); margin-bottom: 6px; }
+.config-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 8px; line-height: 1.6; }
+.config-help { font-size: 0.78rem; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 24px; line-height: 1.6; }
+.config-help a { color: var(--accent2); text-decoration: none; }
+.config-help a:hover { text-decoration: underline; }
+.config-error { color: var(--red); font-size: 0.82rem; margin-top: 12px; min-height: 20px; }
+.config-reset { font-size: 0.78rem; color: var(--muted); margin-top: 16px; text-align: center; cursor: pointer; text-decoration: underline; }
+.config-reset:hover { color: var(--red); }
+
+/* ── AUTH SCREEN ── */
+#authScreen { display: none; position: fixed; inset: 0; background: var(--bg); align-items: center; justify-content: center; z-index: 998; }
+.auth-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 52px 44px; text-align: center; max-width: 420px; width: 90%; }
+.auth-logo { font-family: 'DM Serif Display', serif; font-size: 2.4rem; color: var(--accent2); margin-bottom: 6px; }
+.auth-tagline { color: var(--muted); font-size: 0.88rem; margin-bottom: 36px; line-height: 1.6; }
+.btn-google { display: inline-flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 14px 24px; border-radius: var(--radius-sm); background: #fff; color: #1f1f1f; border: none; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: transform .15s, box-shadow .15s; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+.btn-google:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,.4); }
+.auth-change-config { font-size: 0.78rem; color: var(--muted); margin-top: 20px; cursor: pointer; text-decoration: underline; }
+.auth-change-config:hover { color: var(--accent2); }
+.auth-error { color: var(--red); font-size: 0.82rem; margin-top: 12px; min-height: 20px; }
+
+/* ── APP ── */
+.app { display: flex; min-height: 100vh; }
+
+/* ── SIDEBAR ── */
+.sidebar { width: 280px; min-height: 100vh; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 28px 20px; position: fixed; top: 0; left: 0; bottom: 0; z-index: 10; transition: transform .3s ease; }
+.sidebar-logo { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--accent2); display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
+.user-info { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface2); border-radius: var(--radius-sm); margin-bottom: 24px; overflow: hidden; }
+.user-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); flex-shrink: 0; }
+.user-avatar-placeholder { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 600; color: #fff; flex-shrink: 0; }
+.user-name { font-size: 0.82rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar-section-title { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.project-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+.project-item { padding: 10px 14px; border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: background .15s; font-size: 0.9rem; }
+.project-item:hover { background: var(--surface2); }
+.project-item.active { background: rgba(124,106,247,.18); color: var(--accent2); font-weight: 500; }
+.project-item-info { display: flex; align-items: center; gap: 10px; overflow: hidden; }
+.project-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.project-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.project-count { font-size: 0.72rem; color: var(--muted); background: var(--surface2); padding: 2px 8px; border-radius: 20px; flex-shrink: 0; }
+.btn-new-project { margin-top: 16px; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px dashed var(--border); background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; cursor: pointer; width: 100%; display: flex; align-items: center; gap: 8px; transition: border-color .2s, color .2s; }
+.btn-new-project:hover { border-color: var(--accent); color: var(--accent2); }
+.sidebar-footer { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
+.sync-indicator { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--muted); }
+.sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+.sync-dot.syncing { background: var(--accent); animation: pulse 1s infinite; }
+.sync-dot.error { background: var(--red); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.btn-logout { padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; cursor: pointer; text-align: left; transition: color .15s, border-color .15s; width: 100%; }
+.btn-logout:hover { color: var(--red); border-color: var(--red); }
+
+/* ── MAIN ── */
+.main { margin-left: 280px; flex: 1; padding: 40px; min-height: 100vh; }
+
+/* ── VIEWS ── */
+.view { display: none; animation: fadeIn .2s ease; }
+.view.active { display: block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+
+/* ── HOME ── */
+.home-header { font-family: 'DM Serif Display', serif; font-size: 2.2rem; margin-bottom: 6px; }
+.home-sub { color: var(--muted); font-size: 0.92rem; margin-bottom: 36px; }
+.stats-row { display: flex; gap: 16px; margin-bottom: 40px; flex-wrap: wrap; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; min-width: 130px; flex: 1; }
+.stat-value { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--accent2); }
+.stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 16px; }
+.project-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; cursor: pointer; transition: border-color .2s, transform .15s; position: relative; overflow: hidden; }
+.project-card::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; background:var(--accent); opacity:0; transition:opacity .2s; }
+.project-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.project-card:hover::before { opacity:1; }
+.project-card-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
+.project-card-meta { font-size: 0.82rem; color: var(--muted); display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; transition: width .4s; }
+
+/* ── PROJECT VIEW ── */
+.project-view-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
+.project-view-title { font-family: 'DM Serif Display', serif; font-size: 1.9rem; }
+.project-view-meta { font-size: 0.86rem; color: var(--muted); margin-top: 4px; }
+.project-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.filter-bar { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; cursor: pointer; transition: all .15s; }
+.filter-btn.active, .filter-btn:hover { background: rgba(124,106,247,.15); border-color: var(--accent); color: var(--accent2); }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 16px; }
+.card-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.card-item-front { font-weight: 500; margin-bottom: 8px; font-size: 0.95rem; }
+.card-item-back { font-size: 0.85rem; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.card-item-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+.card-status { font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; letter-spacing:.05em; text-transform: uppercase; }
+.card-status.correct { background: rgba(52,211,153,.15); color: var(--green); }
+.card-status.incorrect { background: rgba(248,113,113,.15); color: var(--red); }
+.card-status.unseen { background: rgba(107,107,128,.15); color: var(--muted); }
+.card-item-actions { display: flex; gap: 6px; }
+
+/* ── REVIEW ── */
+.review-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+.review-title { font-family: 'DM Serif Display', serif; font-size: 1.8rem; }
+.review-progress { margin-left: auto; text-align: right; }
+.review-count { font-size: 0.86rem; color: var(--muted); }
+.review-bar { height: 4px; width: 180px; background: var(--border); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+.review-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; transition: width .4s; }
+.flashcard-wrap { perspective: 1200px; width: 100%; max-width: 580px; margin: 0 auto 28px; cursor: pointer; user-select: none; }
+.flashcard { width: 100%; height: 300px; position: relative; transform-style: preserve-3d; transition: transform .5s cubic-bezier(.4,0,.2,1); border-radius: var(--radius); }
+.flashcard.flipped { transform: rotateY(180deg); }
+.flashcard-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; border: 1px solid var(--border); text-align: center; }
+.flashcard-front { background: var(--surface); }
+.flashcard-back { background: var(--surface2); transform: rotateY(180deg); border-color: var(--accent); }
+.card-face-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 16px; }
+.card-face-text { font-family: 'DM Serif Display', serif; font-size: 1.5rem; line-height: 1.4; }
+.flip-hint { font-size: 0.76rem; color: var(--muted); margin-top: 20px; }
+.review-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.review-btns button { display: flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: var(--radius-sm); border: 1px solid; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.92rem; font-weight: 600; transition: transform .15s; }
+.review-btns button:hover { transform: translateY(-2px); }
+.btn-correct { background: rgba(52,211,153,.12); color: var(--green); border-color: rgba(52,211,153,.3) !important; }
+.btn-incorrect { background: rgba(248,113,113,.12); color: var(--red); border-color: rgba(248,113,113,.3) !important; }
+.btn-skip { background: var(--surface); color: var(--muted); border-color: var(--border) !important; }
+.review-done { text-align: center; padding: 60px 20px; display: none; }
+.review-done-emoji { font-size: 3rem; margin-bottom: 16px; }
+.review-done-title { font-family: 'DM Serif Display', serif; font-size: 2rem; margin-bottom: 8px; }
+.review-done-sub { color: var(--muted); margin-bottom: 32px; }
+.review-done-stats { display: flex; justify-content: center; gap: 32px; margin-bottom: 32px; flex-wrap: wrap; }
+.done-stat-val { font-size: 1.8rem; font-weight: 700; }
+.done-stat-lbl { font-size: 0.78rem; color: var(--muted); }
+
+/* ── BUTTONS ── */
+.btn { padding: 9px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 6px; }
+.btn:hover { border-color: var(--accent); color: var(--accent2); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+.btn-danger:hover { border-color: var(--red); color: var(--red); }
+.btn-sm { padding: 5px 12px; font-size: 0.8rem; }
+
+/* ── MODAL ── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity .2s; backdrop-filter: blur(4px); }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; width: 100%; max-width: 460px; transform: translateY(16px); transition: transform .25s; max-height: 90vh; overflow-y: auto; }
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-title { font-family: 'DM Serif Display', serif; font-size: 1.4rem; margin-bottom: 24px; }
+.form-group { margin-bottom: 18px; }
+.form-label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing:.06em; }
+.form-input, .form-textarea { width: 100%; padding: 12px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.92rem; transition: border-color .2s; outline: none; }
+.form-textarea { resize: vertical; min-height: 88px; }
+.form-input:focus, .form-textarea:focus { border-color: var(--accent); }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+
+/* ── EMPTY ── */
+.empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+.empty-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.empty-title { font-size: 1.05rem; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+.empty-sub { font-size: 0.86rem; margin-bottom: 20px; }
+
+/* ── BACK BTN ── */
+.back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--muted); cursor: pointer; margin-bottom: 24px; transition: color .15s; background: none; border: none; font-family: 'DM Sans', sans-serif; padding: 0; }
+.back-btn:hover { color: var(--text); }
+
+/* ── TOAST ── */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 20px; font-size: 0.86rem; z-index: 999; transform: translateY(80px); transition: transform .3s; pointer-events: none; }
+.toast.show { transform: translateY(0); }
+
+.import-preview { margin-top: 12px; font-size: 0.82rem; color: var(--muted); }
+.import-preview-ok { color: var(--green); margin-bottom: 8px; font-weight: 500; }
+.import-preview-err { color: var(--red); margin-bottom: 8px; }
+.import-preview-list { max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+.import-preview-item { background: var(--surface2); border-radius: var(--radius-sm); padding: 6px 10px; font-size: 0.78rem; }
+
+
+/* ── MOBILE ── */
+.menu-toggle { display: none; position: fixed; top: 16px; left: 16px; z-index: 20; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; cursor: pointer; color: var(--text); font-size: 1.1rem; }
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 9; }
+@media (max-width: 700px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; padding: 20px; padding-top: 70px; }
+  .menu-toggle { display: flex; }
+  .sidebar-overlay { display: block; opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .sidebar-overlay.open { opacity: 1; pointer-events: all; }
+  .flashcard { height: 240px; }
+  .review-bar { width: 120px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loadingScreen">
+  <div class="loading-logo">🃏 FlashDeck</div>
+  <div class="loading-spinner"></div>
+  <div class="loading-text" id="loadingText">Chargement...</div>
+</div>
+
+<!-- CONFIG SCREEN -->
+<div id="configScreen">
+  <div class="config-card">
+    <div class="config-logo">🃏 FlashDeck</div>
+    <p class="config-sub">Entre ta configuration Firebase pour connecter ton projet.</p>
+    <div class="config-help">
+      📖 Où trouver ta config ?<br>
+      <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a>
+      → Ton projet → ⚙️ Paramètres → Tes applications → &lt;/&gt;
+    </div>
+    <div class="form-group">
+      <label class="form-label">API Key</label>
+      <input class="form-input" id="cfg_apiKey" placeholder="AIzaSy...">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Project ID</label>
+      <input class="form-input" id="cfg_projectId" placeholder="mon-projet-12345">
+    </div>
+    <div class="form-group">
+      <label class="form-label">App ID</label>
+      <input class="form-input" id="cfg_appId" placeholder="1:123456:web:abc123">
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px" onclick="submitConfig()">
+      Connecter →
+    </button>
+    <div class="config-error" id="configError"></div>
+    <div class="config-reset" onclick="resetConfig()">Effacer la config sauvegardée</div>
+  </div>
+</div>
+
+<!-- AUTH SCREEN -->
+<div id="authScreen">
+  <div class="auth-card">
+    <div class="auth-logo">🃏 FlashDeck</div>
+    <div class="auth-tagline">Connecte-toi avec ton compte Google<br>pour accéder à tes flashcards.</div>
+    <button class="btn-google" onclick="loginWithGoogle()">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continuer avec Google
+    </button>
+    <div class="auth-error" id="authError"></div>
+    <div class="auth-change-config" onclick="showConfigScreen()">⚙️ Changer de configuration Firebase</div>
+  </div>
+</div>
+
+<button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<div class="app" id="mainApp" style="display:none">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">🃏 FlashDeck</div>
+    <div class="user-info" id="userInfo"></div>
+    <div class="sidebar-section-title">Projets</div>
+    <div class="project-list" id="projectList"></div>
+    <button class="btn-new-project" onclick="openModal('project')">＋ Nouveau projet</button>
+    <div class="sidebar-footer">
+      <div class="sync-indicator">
+        <div class="sync-dot" id="syncDot"></div>
+        <span id="syncText">Synchronisé</span>
+      </div>
+      <button class="btn-logout" onclick="openModal('invite')">🔗 Lien d'invitation</button>
+      <button class="btn-logout" onclick="logout()">⎋ Déconnexion</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="view active" id="view-home">
+      <div class="home-header" id="homeHeader">Bonjour 👋</div>
+      <div class="home-sub">Révise tes flashcards et progresse chaque jour.</div>
+      <div class="stats-row" id="globalStats"></div>
+      <div class="projects-grid" id="projectsGrid"></div>
+    </div>
+
+    <div class="view" id="view-project">
+      <button class="back-btn" onclick="showView('home')">← Retour</button>
+      <div class="project-view-header">
+        <div>
+          <div class="project-view-title" id="pvTitle"></div>
+          <div class="project-view-meta" id="pvMeta"></div>
+        </div>
+        <div class="project-actions">
+          <button class="btn" onclick="startReview('all')">▶ Réviser tout</button>
+          <button class="btn" onclick="startReview('incorrect')">⚡ Erreurs</button>
+          <button class="btn" onclick="openModal('import')">⬆ Importer JSON</button>
+          <button class="btn btn-primary" onclick="openModal('card')">＋ Carte</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteCurrentProject()">✕</button>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterCards('all',this)">Toutes</button>
+        <button class="filter-btn" onclick="filterCards('unseen',this)">Non vues</button>
+        <button class="filter-btn" onclick="filterCards('correct',this)">✓ Correctes</button>
+        <button class="filter-btn" onclick="filterCards('incorrect',this)">✕ À revoir</button>
+      </div>
+      <div class="cards-grid" id="cardsGrid"></div>
+    </div>
+
+    <div class="view" id="view-review">
+      <button class="back-btn" onclick="exitReview()">← Quitter</button>
+      <div class="review-header">
+        <div class="review-title" id="rvTitle">Révision</div>
+        <div class="review-progress">
+          <div class="review-count" id="rvCount"></div>
+          <div class="review-bar"><div class="review-bar-fill" id="rvBarFill"></div></div>
+        </div>
+      </div>
+      <div id="reviewContent">
+        <div class="flashcard-wrap" onclick="flipCard()">
+          <div class="flashcard" id="flashcard">
+            <div class="flashcard-face flashcard-front">
+              <div class="card-face-label">Question</div>
+              <div class="card-face-text" id="cardFront"></div>
+              <div class="flip-hint">↻ Cliquer pour retourner</div>
+            </div>
+            <div class="flashcard-face flashcard-back">
+              <div class="card-face-label">Réponse</div>
+              <div class="card-face-text" id="cardBack"></div>
+            </div>
+          </div>
+        </div>
+        <div class="review-btns">
+          <button class="btn-incorrect" onclick="markCard('incorrect')">✕ Incorrect</button>
+          <button class="btn-skip" onclick="nextCard()">→ Passer</button>
+          <button class="btn-correct" onclick="markCard('correct')">✓ Correct</button>
+        </div>
+      </div>
+      <div class="review-done" id="reviewDone">
+        <div class="review-done-emoji">🎉</div>
+        <div class="review-done-title">Session terminée !</div>
+        <div class="review-done-sub">Voilà tes résultats.</div>
+        <div class="review-done-stats">
+          <div><div class="done-stat-val" id="doneCorrect" style="color:var(--green)"></div><div class="done-stat-lbl">Correctes</div></div>
+          <div><div class="done-stat-val" id="doneIncorrect" style="color:var(--red)"></div><div class="done-stat-lbl">À revoir</div></div>
+          <div><div class="done-stat-val" id="doneSkipped" style="color:var(--muted)"></div><div class="done-stat-lbl">Passées</div></div>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="startReview('all')">🔄 Recommencer</button>
+          <button class="btn" onclick="exitReview()">← Retour</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div id="modal-project-content">
+      <div class="modal-title" id="modalProjectTitle">Nouveau projet</div>
+      <div class="form-group">
+        <label class="form-label">Nom</label>
+        <input class="form-input" id="projectNameInput" placeholder="Ex: Vocabulaire espagnol" maxlength="60">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description (optionnel)</label>
+        <input class="form-input" id="projectDescInput" placeholder="Quelques mots…" maxlength="120">
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeModal()">Annuler</button>
+        <button class="btn btn-primary" onclick="saveProject()">Créer</button>
+      </div>
+    </div>
+    <div id="modal-invite-content" style="display:none">
+      <div class="modal-title">🔗 Lien d'invitation</div>
+      <p style="font-size:.86rem;color:var(--muted);margin-bottom:20px;line-height:1.6">
+        Partage ce lien avec un ami déjà autorisé dans tes règles Firestore. Il clique le lien → la config Firebase est chargée automatiquement → il se connecte avec son compte Google.
+      </p>
+      <div class="form-group">
+        <label class="form-label">Lien d'invitation</label>
+        <div style="display:flex;gap:8px">
+          <input class="form-input" id="inviteLink" readonly style="font-size:0.75rem;cursor:text">
+          <button class="btn btn-primary" onclick="copyInviteLink()" id="copyBtn" style="flex-shrink:0">Copier</button>
+        </div>
+      </div>
+      <div style="font-size:.75rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;line-height:1.6">
+        ⚠️ Ce lien contient ta config Firebase. Envoie-le uniquement à des personnes de confiance que tu as autorisées dans tes règles Firestore.
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeModal()">Fermer</button>
+      </div>
+    </div>
+    <div id="modal-import-content" style="display:none">
+      <div class="modal-title">Importer des cartes</div>
+      <div class="form-group">
+        <label class="form-label">Format JSON attendu</label>
+        <div style="font-size:.78rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;font-family:monospace;line-height:1.6">
+          [<br>
+          &nbsp;&nbsp;{"front": "Question 1", "back": "Réponse 1"},<br>
+          &nbsp;&nbsp;{"front": "Question 2", "back": "Réponse 2"}<br>
+          ]
+        </div>
+        <label class="form-label">Colle ton JSON ici</label>
+        <textarea class="form-textarea" id="importJsonInput" placeholder='[{"front": "...", "back": "..."}]' style="min-height:160px;font-family:monospace;font-size:0.82rem"></textarea>
+      </div>
+      <div class="import-preview" id="importPreview"></div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeModal()">Annuler</button>
+        <button class="btn" onclick="previewImport()">👁 Prévisualiser</button>
+        <button class="btn btn-primary" onclick="confirmImport()">⬆ Importer</button>
+      </div>
+    </div>
+    <div id="modal-card-content" style="display:none">
+      <div class="modal-title" id="modalCardTitle">Nouvelle carte</div>
+      <div class="form-group">
+        <label class="form-label">Recto (Question)</label>
+        <textarea class="form-textarea" id="cardFrontInput" placeholder="Ta question…"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Verso (Réponse)</label>
+        <textarea class="form-textarea" id="cardBackInput" placeholder="La réponse…"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeModal()">Annuler</button>
+        <button class="btn btn-primary" onclick="saveCard()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// ── STATE ─────────────────────────────────────────────────
+let auth, db, currentUser;
+let state = { projects: [] };
+let currentProjectId = null;
+let currentFilter = 'all';
+let editingProjectId = null;
+let editingCardId = null;
+let reviewQueue = [], reviewIndex = 0, reviewStats = {}, cardFlipped = false;
+
+// ── UTILS ─────────────────────────────────────────────────
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const currentProject = () => state.projects.find(p => p.id === currentProjectId);
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+function setSyncStatus(s) {
+  const dot = document.getElementById('syncDot');
+  const txt = document.getElementById('syncText');
+  dot.className = 'sync-dot'+(s==='syncing'?' syncing':s==='error'?' error':'');
+  txt.textContent = s==='syncing'?'Synchronisation…':s==='error'?'Erreur sync':'Synchronisé';
+}
+
+// ── CONFIG ────────────────────────────────────────────────
+const CONFIG_KEY = 'fd_firebase_config';
+
+function getSavedConfig() {
+  try { return JSON.parse(sessionStorage.getItem(CONFIG_KEY)); } catch { return null; }
+}
+function saveConfig(cfg) {
+  sessionStorage.setItem(CONFIG_KEY, JSON.stringify(cfg));
+}
+
+window.resetConfig = () => {
+  sessionStorage.removeItem(CONFIG_KEY);
+  location.reload();
+};
+
+window.showConfigScreen = () => {
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('configScreen').style.display = 'flex';
+};
+
+window.submitConfig = async () => {
+  const apiKey    = document.getElementById('cfg_apiKey').value.trim();
+  const projectId = document.getElementById('cfg_projectId').value.trim();
+  const appId     = document.getElementById('cfg_appId').value.trim();
+
+  if (!apiKey || !projectId || !appId) {
+    document.getElementById('configError').textContent = '❌ Remplis tous les champs';
+    return;
+  }
+
+  const config = {
+    apiKey,
+    projectId,
+    appId,
+    authDomain:        `${projectId}.firebaseapp.com`,
+    storageBucket:     `${projectId}.appspot.com`,
+    messagingSenderId: ''
+  };
+
+  document.getElementById('configError').textContent = '';
+  document.getElementById('loadingText').textContent = 'Connexion à Firebase…';
+  document.getElementById('configScreen').style.display = 'none';
+  document.getElementById('loadingScreen').style.display = 'flex';
+
+  try {
+    initFirebase(config);
+    saveConfig(config);
+  } catch(e) {
+    document.getElementById('configError').textContent = '❌ Config invalide, vérifie les valeurs';
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('configScreen').style.display = 'flex';
+  }
+};
+
+// ── FIREBASE INIT ─────────────────────────────────────────
+function initFirebase(config) {
+  const fbApp = initializeApp(config);
+  auth = getAuth(fbApp);
+  db   = getFirestore(fbApp);
+
+  onAuthStateChanged(auth, async user => {
+    if (user) {
+      currentUser = user;
+      document.getElementById('authScreen').style.display = 'none';
+      document.getElementById('loadingText').textContent = 'Chargement de tes données…';
+      document.getElementById('loadingScreen').style.display = 'flex';
+      await loadData();
+      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'flex';
+      renderUserInfo(); renderSidebar(); renderHome();
+    } else {
+      currentUser = null;
+      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'none';
+      document.getElementById('authScreen').style.display = 'flex';
+    }
+  });
+}
+
+// ── FIRESTORE ─────────────────────────────────────────────
+async function loadData() {
+  try {
+    const snap = await getDoc(doc(db, 'users', currentUser.uid));
+    state = snap.exists() ? snap.data() : { projects: [] };
+    if (!state.projects) state.projects = [];
+  } catch(e) {
+    toast('Erreur de chargement — vérifie tes règles Firestore');
+    state = { projects: [] };
+  }
+}
+async function saveData() {
+  setSyncStatus('syncing');
+  try {
+    await setDoc(doc(db, 'users', currentUser.uid), state);
+    setSyncStatus('ok');
+  } catch(e) {
+    setSyncStatus('error');
+    toast('Erreur de sauvegarde');
+  }
+}
+
+// ── AUTH ──────────────────────────────────────────────────
+window.loginWithGoogle = async () => {
+  document.getElementById('authError').textContent = '';
+  try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+  catch(e) { document.getElementById('authError').textContent = '❌ Connexion annulée ou bloquée'; }
+};
+window.logout = async () => {
+  await signOut(auth);
+  state = { projects: [] };
+  currentProjectId = null;
+  document.getElementById('mainApp').style.display = 'none';
+  document.getElementById('authScreen').style.display = 'flex';
+};
+
+// ── USER INFO ─────────────────────────────────────────────
+function renderUserInfo() {
+  const name = currentUser.displayName || currentUser.email;
+  const photo = currentUser.photoURL;
+  const firstName = name.split(' ')[0];
+  document.getElementById('homeHeader').textContent = `Bonjour, ${firstName} 👋`;
+  document.getElementById('userInfo').innerHTML = photo
+    ? `<img class="user-avatar" src="${photo}"><span class="user-name">${esc(name)}</span>`
+    : `<div class="user-avatar-placeholder">${name[0].toUpperCase()}</div><span class="user-name">${esc(name)}</span>`;
+}
+
+// ── SIDEBAR ───────────────────────────────────────────────
+function renderSidebar() {
+  const list = document.getElementById('projectList');
+  if (!state.projects?.length) {
+    list.innerHTML = '<div style="font-size:.8rem;color:var(--muted);padding:8px 14px">Aucun projet</div>';
+    return;
+  }
+  list.innerHTML = state.projects.map(p => `
+    <div class="project-item ${p.id===currentProjectId?'active':''}" onclick="openProject('${p.id}')">
+      <div class="project-item-info"><div class="project-dot"></div><span class="project-name">${esc(p.name)}</span></div>
+      <span class="project-count">${(p.cards||[]).length}</span>
+    </div>`).join('');
+}
+
+// ── HOME ──────────────────────────────────────────────────
+function renderHome() {
+  const projects = state.projects||[];
+  const tc = projects.reduce((a,p)=>a+(p.cards||[]).length,0);
+  const ok = projects.reduce((a,p)=>a+(p.cards||[]).filter(c=>c.status==='correct').length,0);
+  const ko = projects.reduce((a,p)=>a+(p.cards||[]).filter(c=>c.status==='incorrect').length,0);
+  document.getElementById('globalStats').innerHTML = `
+    <div class="stat-card"><div class="stat-value">${projects.length}</div><div class="stat-label">Projets</div></div>
+    <div class="stat-card"><div class="stat-value">${tc}</div><div class="stat-label">Cartes</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--green)">${ok}</div><div class="stat-label">Maîtrisées</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--red)">${ko}</div><div class="stat-label">À revoir</div></div>`;
+  const grid = document.getElementById('projectsGrid');
+  if (!projects.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📚</div><div class="empty-title">Aucun projet encore</div><div class="empty-sub">Crée ton premier projet !</div></div>`;
+    return;
+  }
+  grid.innerHTML = projects.map(p => {
+    const cards=p.cards||[], total=cards.length;
+    const correct=cards.filter(c=>c.status==='correct').length;
+    const incorrect=cards.filter(c=>c.status==='incorrect').length;
+    const pct=total?Math.round(correct/total*100):0;
+    return `<div class="project-card" onclick="openProject('${p.id}')">
+      <div class="project-card-title">${esc(p.name)}</div>
+      <div class="project-card-meta"><span>📋 ${total} carte${total!==1?'s':''}</span><span style="color:var(--green)">✓ ${correct}</span><span style="color:var(--red)">✕ ${incorrect}</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div style="font-size:.73rem;color:var(--muted);margin-top:6px">${pct}% maîtrisé</div>
+    </div>`;
+  }).join('');
+}
+
+// ── PROJECT ───────────────────────────────────────────────
+window.openProject = id => {
+  currentProjectId=id; currentFilter='all';
+  document.querySelectorAll('.filter-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  renderSidebar(); renderProjectView(); showView('project'); closeSidebar();
+};
+function renderProjectView() {
+  const p=currentProject(); if(!p) return;
+  document.getElementById('pvTitle').textContent=p.name;
+  const cards=p.cards||[];
+  document.getElementById('pvMeta').textContent=`${cards.length} cartes · ${cards.filter(c=>c.status==='correct').length} correctes · ${cards.filter(c=>c.status==='incorrect').length} à revoir · ${cards.filter(c=>c.status==='unseen').length} non vues`;
+  renderCardsGrid();
+}
+function renderCardsGrid() {
+  const p=currentProject(), grid=document.getElementById('cardsGrid');
+  let cards=p.cards||[];
+  if(currentFilter!=='all') cards=cards.filter(c=>c.status===currentFilter);
+  if(!cards.length) {
+    grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🃏</div><div class="empty-title">Aucune carte ici</div><div class="empty-sub">${currentFilter==='all'?'Ajoute ta première carte !':'Aucune carte dans ce filtre.'}</div></div>`;
+    return;
+  }
+  grid.innerHTML=cards.map(c=>`
+    <div class="card-item">
+      <div class="card-item-front">${esc(c.front)}</div>
+      <div class="card-item-back">${esc(c.back)}</div>
+      <div class="card-item-footer">
+        <span class="card-status ${c.status}">${{correct:'✓ Correct',incorrect:'✕ À revoir',unseen:'Non vue'}[c.status]}</span>
+        <div class="card-item-actions">
+          <button class="btn btn-sm" onclick="openModal('card','${c.id}')">✏</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteCard('${c.id}')">✕</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+window.filterCards=(f,btn)=>{ currentFilter=f; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderCardsGrid(); };
+
+// ── REVIEW ────────────────────────────────────────────────
+window.startReview = mode => {
+  const p=currentProject();
+  let cards=mode==='incorrect'?(p.cards||[]).filter(c=>c.status==='incorrect'):[...(p.cards||[])];
+  if(!cards.length){toast('Aucune carte à réviser !');return;}
+  for(let i=cards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]];}
+  reviewQueue=cards; reviewIndex=0; reviewStats={correct:0,incorrect:0,skipped:0};
+  document.getElementById('reviewContent').style.display='';
+  document.getElementById('reviewDone').style.display='none';
+  document.getElementById('rvTitle').textContent=p.name;
+  showView('review'); showReviewCard();
+};
+function showReviewCard() {
+  if(reviewIndex>=reviewQueue.length){endReview();return;}
+  const c=reviewQueue[reviewIndex];
+  document.getElementById('cardFront').textContent=c.front;
+  document.getElementById('cardBack').textContent=c.back;
+  cardFlipped=false; document.getElementById('flashcard').classList.remove('flipped');
+  document.getElementById('rvCount').textContent=`${reviewIndex+1} / ${reviewQueue.length}`;
+  document.getElementById('rvBarFill').style.width=`${(reviewIndex/reviewQueue.length)*100}%`;
+}
+window.flipCard=()=>{ cardFlipped=!cardFlipped; document.getElementById('flashcard').classList.toggle('flipped',cardFlipped); };
+window.markCard=async status=>{
+  const c=reviewQueue[reviewIndex], p=currentProject();
+  const card=(p.cards||[]).find(x=>x.id===c.id);
+  if(card){card.status=status;card.lastReviewed=Date.now();}
+  reviewStats[status]++; reviewIndex++; showReviewCard();
+  await saveData();
+};
+window.nextCard=()=>{reviewStats.skipped++;reviewIndex++;showReviewCard();};
+function endReview() {
+  document.getElementById('reviewContent').style.display='none';
+  document.getElementById('reviewDone').style.display='block';
+  document.getElementById('doneCorrect').textContent=reviewStats.correct;
+  document.getElementById('doneIncorrect').textContent=reviewStats.incorrect;
+  document.getElementById('doneSkipped').textContent=reviewStats.skipped;
+  renderProjectView();
+}
+window.exitReview=()=>{renderProjectView();showView('project');};
+
+// ── MODALS ────────────────────────────────────────────────
+window.openModal=(type,id)=>{
+  document.getElementById('modal-project-content').style.display=type==='project'?'':'none';
+  document.getElementById('modal-card-content').style.display=type==='card'?'':'none';
+  document.getElementById('modal-import-content').style.display=type==='import'?'':'none';
+  document.getElementById('modal-invite-content').style.display=type==='invite'?'':'none';
+  if(type==='invite'){
+    const cfg = getSavedConfig();
+    if(cfg) {
+      const encoded = btoa(JSON.stringify(cfg));
+      const link = `${location.origin}${location.pathname}?cfg=${encoded}`;
+      document.getElementById('inviteLink').value = link;
+      document.getElementById('copyBtn').textContent = 'Copier';
+    }
+  }
+  if(type==='import'){
+    document.getElementById('importJsonInput').value='';
+    document.getElementById('importPreview').innerHTML='';
+    setTimeout(()=>document.getElementById('importJsonInput').focus(),100);
+  }
+  if(type==='project'){
+    editingProjectId=id||null;
+    const p=id?state.projects.find(x=>x.id===id):null;
+    document.getElementById('modalProjectTitle').textContent=p?'Modifier le projet':'Nouveau projet';
+    document.getElementById('projectNameInput').value=p?.name||'';
+    document.getElementById('projectDescInput').value=p?.desc||'';
+    setTimeout(()=>document.getElementById('projectNameInput').focus(),100);
+  }
+  if(type==='card'){
+    editingCardId=id||null;
+    const p=currentProject();
+    const c=id?(p.cards||[]).find(x=>x.id===id):null;
+    document.getElementById('modalCardTitle').textContent=c?'Modifier la carte':'Nouvelle carte';
+    document.getElementById('cardFrontInput').value=c?.front||'';
+    document.getElementById('cardBackInput').value=c?.back||'';
+    setTimeout(()=>document.getElementById('cardFrontInput').focus(),100);
+  }
+  document.getElementById('modal').classList.add('open');
+};
+window.closeModal=()=>document.getElementById('modal').classList.remove('open');
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))window.closeModal();});
+
+window.previewImport = () => {
+  const raw = document.getElementById('importJsonInput').value.trim();
+  const preview = document.getElementById('importPreview');
+  try {
+    const cards = JSON.parse(raw);
+    if (!Array.isArray(cards)) throw new Error('Doit être un tableau []');
+    const valid = cards.filter(c => c.front && c.back);
+    const invalid = cards.length - valid.length;
+    preview.innerHTML = `
+      <div class="import-preview-ok">✓ ${valid.length} carte${valid.length!==1?'s':''} valide${valid.length!==1?'s':''}${invalid>0?` (${invalid} ignorée${invalid!==1?'s':''} — front/back manquant)`:''}</div>
+      <div class="import-preview-list">
+        ${valid.slice(0,5).map(c=>`<div class="import-preview-item"><strong>${esc(c.front)}</strong> → ${esc(c.back)}</div>`).join('')}
+        ${valid.length>5?`<div style="color:var(--muted);font-size:.75rem;padding:4px 10px">...et ${valid.length-5} autre${valid.length-5!==1?'s':''}</div>`:''}
+      </div>`;
+  } catch(e) {
+    preview.innerHTML = `<div class="import-preview-err">❌ JSON invalide : ${e.message}</div>`;
+  }
+};
+
+window.confirmImport = async () => {
+  const raw = document.getElementById('importJsonInput').value.trim();
+  try {
+    const cards = JSON.parse(raw);
+    if (!Array.isArray(cards)) throw new Error();
+    const valid = cards.filter(c => c.front && c.back);
+    if (!valid.length) { toast('Aucune carte valide trouvée !'); return; }
+    const p = currentProject();
+    if (!p.cards) p.cards = [];
+    valid.forEach(c => p.cards.push({
+      id: uid(), front: String(c.front), back: String(c.back),
+      status: 'unseen', createdAt: Date.now()
+    }));
+    window.closeModal(); renderProjectView(); renderSidebar();
+    await saveData();
+    toast(`✓ ${valid.length} carte${valid.length!==1?'s':''} importée${valid.length!==1?'s':''} !`);
+  } catch(e) {
+    toast('❌ JSON invalide');
+  }
+};
+
+window.saveProject=async()=>{
+  const name=document.getElementById('projectNameInput').value.trim();
+  const desc=document.getElementById('projectDescInput').value.trim();
+  if(!name){toast('Donne un nom au projet !');return;}
+  if(editingProjectId){const p=state.projects.find(x=>x.id===editingProjectId);p.name=name;p.desc=desc;}
+  else state.projects.push({id:uid(),name,desc,cards:[],createdAt:Date.now()});
+  window.closeModal(); renderSidebar(); renderHome();
+  await saveData(); toast('Projet sauvegardé ✓');
+};
+window.saveCard=async()=>{
+  const front=document.getElementById('cardFrontInput').value.trim();
+  const back=document.getElementById('cardBackInput').value.trim();
+  if(!front||!back){toast('Remplis les deux faces !');return;}
+  const p=currentProject();
+  if(editingCardId){const c=(p.cards||[]).find(x=>x.id===editingCardId);c.front=front;c.back=back;}
+  else{if(!p.cards)p.cards=[];p.cards.push({id:uid(),front,back,status:'unseen',createdAt:Date.now()});}
+  window.closeModal(); renderProjectView(); renderSidebar();
+  await saveData(); toast('Carte sauvegardée ✓');
+};
+window.deleteCard=async id=>{
+  if(!confirm('Supprimer cette carte ?'))return;
+  const p=currentProject(); p.cards=(p.cards||[]).filter(c=>c.id!==id);
+  renderProjectView(); renderSidebar(); await saveData(); toast('Carte supprimée');
+};
+window.deleteCurrentProject=async()=>{
+  if(!confirm('Supprimer ce projet et toutes ses cartes ?'))return;
+  state.projects=state.projects.filter(p=>p.id!==currentProjectId);
+  currentProjectId=null; renderSidebar(); renderHome(); showView('home');
+  await saveData(); toast('Projet supprimé');
+};
+
+// ── VIEWS ─────────────────────────────────────────────────
+window.showView=name=>{
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  if(name==='home'){currentProjectId=null;renderSidebar();renderHome();}
+};
+window.toggleSidebar=()=>{document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('open');};
+window.closeSidebar=()=>{document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('open');};
+
+// ── KEYBOARD ──────────────────────────────────────────────
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('view-review').classList.contains('active')&&!document.getElementById('modal').classList.contains('open')){
+    if(e.key===' '||e.key==='ArrowUp'){e.preventDefault();window.flipCard();}
+    if(e.key==='ArrowRight'){if(cardFlipped)window.markCard('correct');else window.nextCard();}
+    if(e.key==='ArrowLeft'){if(cardFlipped)window.markCard('incorrect');}
+  }
+  if(e.key==='Escape')window.closeModal();
+});
+
+window.copyInviteLink = () => {
+  const link = document.getElementById('inviteLink').value;
+  navigator.clipboard.writeText(link).then(() => {
+    document.getElementById('copyBtn').textContent = '✓ Copié !';
+    setTimeout(() => document.getElementById('copyBtn').textContent = 'Copier', 2000);
+  });
+};
+
+// ── BOOT ──────────────────────────────────────────────────
+// Vérifie d'abord si un lien d'invitation est dans l'URL
+const urlParams = new URLSearchParams(location.search);
+const cfgParam = urlParams.get('cfg');
+if (cfgParam) {
+  try {
+    const cfg = JSON.parse(atob(cfgParam));
+    saveConfig(cfg);
+    // Nettoie l'URL sans recharger
+    history.replaceState({}, '', location.pathname);
+  } catch(e) { /* config invalide, on ignore */ }
+}
+
+const saved = getSavedConfig();
+if (saved) {
+  initFirebase(saved);
+} else {
+  document.getElementById('loadingScreen').style.display = 'none';
+  document.getElementById('configScreen').style.display = 'flex';
+}
+</script>
+</body>
+</html>
