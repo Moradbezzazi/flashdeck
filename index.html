@@ -550,7 +550,12 @@ async function loadData() {
     state = snap.exists() ? snap.data() : { projects: [] };
     if (!state.projects) state.projects = [];
   } catch(e) {
-    toast('Erreur de chargement — vérifie tes règles Firestore');
+    // Accès refusé par les règles Firestore → compte non autorisé
+    await signOut(auth);
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'none';
+    document.getElementById('authScreen').style.display = 'flex';
+    document.getElementById('authError').textContent = '❌ Accès refusé — ce compte n\'est pas autorisé.';
     state = { projects: [] };
   }
 }
