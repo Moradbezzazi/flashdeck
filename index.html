@@ -21,19 +21,18 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .loading-text { font-size: 0.85rem; color: var(--muted); }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── CONFIG SCREEN ── */
+/* ── CONFIG ── */
 #configScreen { display: none; position: fixed; inset: 0; background: var(--bg); align-items: flex-start; justify-content: center; z-index: 997; overflow-y: auto; padding: 40px 20px; }
 .config-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px; max-width: 500px; width: 100%; margin: auto; }
 .config-logo { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--accent2); margin-bottom: 6px; }
 .config-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 8px; line-height: 1.6; }
 .config-help { font-size: 0.78rem; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 24px; line-height: 1.6; }
 .config-help a { color: var(--accent2); text-decoration: none; }
-.config-help a:hover { text-decoration: underline; }
 .config-error { color: var(--red); font-size: 0.82rem; margin-top: 12px; min-height: 20px; }
 .config-reset { font-size: 0.78rem; color: var(--muted); margin-top: 16px; text-align: center; cursor: pointer; text-decoration: underline; }
 .config-reset:hover { color: var(--red); }
 
-/* ── AUTH SCREEN ── */
+/* ── AUTH ── */
 #authScreen { display: none; position: fixed; inset: 0; background: var(--bg); align-items: center; justify-content: center; z-index: 998; }
 .auth-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 52px 44px; text-align: center; max-width: 420px; width: 90%; }
 .auth-logo { font-family: 'DM Serif Display', serif; font-size: 2.4rem; color: var(--accent2); margin-bottom: 6px; }
@@ -41,7 +40,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .btn-google { display: inline-flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 14px 24px; border-radius: var(--radius-sm); background: #fff; color: #1f1f1f; border: none; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: transform .15s, box-shadow .15s; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
 .btn-google:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,.4); }
 .auth-change-config { font-size: 0.78rem; color: var(--muted); margin-top: 20px; cursor: pointer; text-decoration: underline; }
-.auth-change-config:hover { color: var(--accent2); }
 .auth-error { color: var(--red); font-size: 0.82rem; margin-top: 12px; min-height: 20px; }
 
 /* ── APP ── */
@@ -55,24 +53,25 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .user-avatar-placeholder { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 600; color: #fff; flex-shrink: 0; }
 .user-name { font-size: 0.82rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sidebar-section-title { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-.project-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
-.project-item { padding: 10px 14px; border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: background .15s; font-size: 0.9rem; }
-.project-item:hover { background: var(--surface2); }
-.project-item.active { background: rgba(124,106,247,.18); color: var(--accent2); font-weight: 500; }
-.project-item-info { display: flex; align-items: center; gap: 10px; overflow: hidden; }
-.project-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
-.project-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.project-count { font-size: 0.72rem; color: var(--muted); background: var(--surface2); padding: 2px 8px; border-radius: 20px; flex-shrink: 0; }
-.btn-new-project { margin-top: 16px; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px dashed var(--border); background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; cursor: pointer; width: 100%; display: flex; align-items: center; gap: 8px; transition: border-color .2s, color .2s; }
-.btn-new-project:hover { border-color: var(--accent); color: var(--accent2); }
+.sujet-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+.sujet-item { padding: 10px 14px; border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: background .15s; font-size: 0.9rem; }
+.sujet-item:hover { background: var(--surface2); }
+.sujet-item.active { background: rgba(124,106,247,.18); color: var(--accent2); font-weight: 500; }
+.sujet-item-info { display: flex; align-items: center; gap: 10px; overflow: hidden; }
+.sujet-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.sujet-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sujet-count { font-size: 0.72rem; color: var(--muted); background: var(--surface2); padding: 2px 8px; border-radius: 20px; flex-shrink: 0; }
+.btn-new-sujet { margin-top: 16px; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px dashed var(--border); background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; cursor: pointer; width: 100%; display: flex; align-items: center; gap: 8px; transition: border-color .2s, color .2s; }
+.btn-new-sujet:hover { border-color: var(--accent); color: var(--accent2); }
 .sidebar-footer { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
 .sync-indicator { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--muted); }
 .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
 .sync-dot.syncing { background: var(--accent); animation: pulse 1s infinite; }
 .sync-dot.error { background: var(--red); }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-.btn-logout { padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; cursor: pointer; text-align: left; transition: color .15s, border-color .15s; width: 100%; }
-.btn-logout:hover { color: var(--red); border-color: var(--red); }
+.btn-sidebar { padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; cursor: pointer; text-align: left; transition: color .15s, border-color .15s; width: 100%; }
+.btn-sidebar:hover { color: var(--accent2); border-color: var(--accent); }
+.btn-sidebar.danger:hover { color: var(--red); border-color: var(--red); }
 
 /* ── MAIN ── */
 .main { margin-left: 280px; flex: 1; padding: 40px; min-height: 100vh; }
@@ -89,21 +88,41 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; min-width: 130px; flex: 1; }
 .stat-value { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--accent2); }
 .stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
-.projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 16px; }
-.project-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; cursor: pointer; transition: border-color .2s, transform .15s; position: relative; overflow: hidden; }
-.project-card::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; background:var(--accent); opacity:0; transition:opacity .2s; }
-.project-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-.project-card:hover::before { opacity:1; }
-.project-card-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
-.project-card-meta { font-size: 0.82rem; color: var(--muted); display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.home-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.select-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.select-count { font-size: 0.85rem; color: var(--muted); }
+.sujets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 16px; }
+
+/* ── SUJET CARD ── */
+.sujet-card-wrap { position: relative; }
+.sujet-checkbox { position: absolute; top: 14px; right: 14px; z-index: 2; width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--border); background: var(--surface2); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.sujet-checkbox.checked { background: var(--accent); border-color: var(--accent); }
+.sujet-checkbox.checked::after { content: '✓'; color: #fff; font-size: 0.75rem; font-weight: 700; }
+.sujet-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; cursor: pointer; transition: border-color .2s, transform .15s; position: relative; overflow: hidden; }
+.sujet-card::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; background:var(--accent); opacity:0; transition:opacity .2s; }
+.sujet-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.sujet-card:hover::before { opacity:1; }
+.sujet-card.selected { border-color: var(--accent); }
+.sujet-card.selected::before { opacity:1; }
+.sujet-card-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
+.sujet-card-meta { font-size: 0.82rem; color: var(--muted); display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
 .progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
 .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; transition: width .4s; }
 
-/* ── PROJECT VIEW ── */
-.project-view-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
-.project-view-title { font-family: 'DM Serif Display', serif; font-size: 1.9rem; }
-.project-view-meta { font-size: 0.86rem; color: var(--muted); margin-top: 4px; }
-.project-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+/* ── LAUNCH BAR ── */
+.launch-bar { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--accent); border-radius: var(--radius); padding: 16px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; box-shadow: 0 8px 32px rgba(124,106,247,.3); z-index: 50; animation: slideUp .2s ease; }
+@keyframes slideUp { from{opacity:0;transform:translateX(-50%) translateY(20px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+.launch-bar-text { font-size: 0.88rem; color: var(--muted); }
+.launch-bar-text strong { color: var(--text); }
+.order-toggle { display: flex; gap: 4px; background: var(--surface2); border-radius: var(--radius-sm); padding: 3px; }
+.order-btn { padding: 5px 12px; border-radius: 7px; border: none; background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.8rem; cursor: pointer; transition: all .15s; }
+.order-btn.active { background: var(--accent); color: #fff; }
+
+/* ── SUJET VIEW ── */
+.sujet-view-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
+.sujet-view-title { font-family: 'DM Serif Display', serif; font-size: 1.9rem; }
+.sujet-view-meta { font-size: 0.86rem; color: var(--muted); margin-top: 4px; }
+.sujet-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .filter-bar { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
 .filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; cursor: pointer; transition: all .15s; }
 .filter-btn.active, .filter-btn:hover { background: rgba(124,106,247,.15); border-color: var(--accent); color: var(--accent2); }
@@ -133,6 +152,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .flashcard-back { background: var(--surface2); transform: rotateY(180deg); border-color: var(--accent); }
 .card-face-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 16px; }
 .card-face-text { font-family: 'DM Serif Display', serif; font-size: 1.5rem; line-height: 1.4; }
+.card-face-subject { font-size: 0.72rem; color: var(--muted); margin-top: 12px; }
 .flip-hint { font-size: 0.76rem; color: var(--muted); margin-top: 20px; }
 .review-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
 .review-btns button { display: flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: var(--radius-sm); border: 1px solid; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.92rem; font-weight: 600; transition: transform .15s; }
@@ -169,6 +189,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
 .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
 
+/* ── IMPORT PREVIEW ── */
+.import-preview { margin-top: 12px; font-size: 0.82rem; }
+.import-preview-ok { color: var(--green); margin-bottom: 8px; font-weight: 500; }
+.import-preview-err { color: var(--red); margin-bottom: 8px; }
+.import-preview-list { max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+.import-preview-item { background: var(--surface2); border-radius: var(--radius-sm); padding: 6px 10px; font-size: 0.78rem; }
+
 /* ── EMPTY ── */
 .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
 .empty-icon { font-size: 2.5rem; margin-bottom: 12px; }
@@ -183,12 +210,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 20px; font-size: 0.86rem; z-index: 999; transform: translateY(80px); transition: transform .3s; pointer-events: none; }
 .toast.show { transform: translateY(0); }
 
-.import-preview { margin-top: 12px; font-size: 0.82rem; color: var(--muted); }
-.import-preview-ok { color: var(--green); margin-bottom: 8px; font-weight: 500; }
-.import-preview-err { color: var(--red); margin-bottom: 8px; }
-.import-preview-list { max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
-.import-preview-item { background: var(--surface2); border-radius: var(--radius-sm); padding: 6px 10px; font-size: 0.78rem; }
-
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
 /* ── MOBILE ── */
 .menu-toggle { display: none; position: fixed; top: 16px; left: 16px; z-index: 20; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; cursor: pointer; color: var(--text); font-size: 1.1rem; }
@@ -202,6 +225,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   .sidebar-overlay.open { opacity: 1; pointer-events: all; }
   .flashcard { height: 240px; }
   .review-bar { width: 120px; }
+  .launch-bar { width: 90%; justify-content: center; }
 }
 </style>
 </head>
@@ -214,7 +238,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   <div class="loading-text" id="loadingText">Chargement...</div>
 </div>
 
-<!-- CONFIG SCREEN -->
+<!-- CONFIG -->
 <div id="configScreen">
   <div class="config-card">
     <div class="config-logo">🃏 FlashDeck</div>
@@ -236,15 +260,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
       <label class="form-label">App ID</label>
       <input class="form-input" id="cfg_appId" placeholder="1:123456:web:abc123">
     </div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px" onclick="submitConfig()">
-      Connecter →
-    </button>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px" onclick="submitConfig()">Connecter →</button>
     <div class="config-error" id="configError"></div>
     <div class="config-reset" onclick="resetConfig()">Effacer la config sauvegardée</div>
   </div>
 </div>
 
-<!-- AUTH SCREEN -->
+<!-- AUTH -->
 <div id="authScreen">
   <div class="auth-card">
     <div class="auth-logo">🃏 FlashDeck</div>
@@ -265,53 +287,74 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">🃏 FlashDeck</div>
     <div class="user-info" id="userInfo"></div>
-    <div class="sidebar-section-title">Projets</div>
-    <div class="project-list" id="projectList"></div>
-    <button class="btn-new-project" onclick="openModal('project')">＋ Nouveau projet</button>
+    <div class="sidebar-section-title">Sujets</div>
+    <div class="sujet-list" id="sujetList"></div>
+    <button class="btn-new-sujet" onclick="openModal('sujet')">＋ Nouveau sujet</button>
     <div class="sidebar-footer">
       <div class="sync-indicator">
         <div class="sync-dot" id="syncDot"></div>
         <span id="syncText">Synchronisé</span>
       </div>
-      <button class="btn-logout" onclick="openModal('invite')">🔗 Lien d'invitation</button>
-      <button class="btn-logout" onclick="logout()">⎋ Déconnexion</button>
+      <button class="btn-sidebar" onclick="openModal('invite')">🔗 Lien d'invitation</button>
+      <button class="btn-sidebar danger" onclick="logout()">⎋ Déconnexion</button>
     </div>
   </aside>
 
   <main class="main">
+
+    <!-- HOME -->
     <div class="view active" id="view-home">
       <div class="home-header" id="homeHeader">Bonjour 👋</div>
       <div class="home-sub">Révise tes flashcards et progresse chaque jour.</div>
       <div class="stats-row" id="globalStats"></div>
-      <div class="projects-grid" id="projectsGrid"></div>
+      <div class="home-toolbar">
+        <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--muted)">Mes sujets</div>
+        <div class="select-actions" id="selectActions" style="display:none">
+          <span class="select-count" id="selectCount">0 sélectionné</span>
+          <button class="btn btn-sm" onclick="clearSelection()">✕ Désélectionner tout</button>
+        </div>
+      </div>
+      <div class="sujets-grid" id="sujetsGrid"></div>
+      <div class="launch-bar" id="launchBar" style="display:none">
+        <span class="launch-bar-text"><strong id="launchCount">0</strong> sujet(s)</span>
+        <div class="order-toggle">
+          <button class="order-btn active" id="orderRandom" onclick="setOrder('random')">🔀 Aléatoire</button>
+          <button class="order-btn" id="orderSeq" onclick="setOrder('sequential')">↓ En ordre</button>
+        </div>
+        <button class="btn btn-primary" onclick="lancerRevisionMulti()">▶ Réviser</button>
+      </div>
     </div>
 
-    <div class="view" id="view-project">
+    <!-- SUJET VIEW -->
+    <div class="view" id="view-sujet">
       <button class="back-btn" onclick="showView('home')">← Retour</button>
-      <div class="project-view-header">
+      <div class="sujet-view-header">
         <div>
-          <div class="project-view-title" id="pvTitle"></div>
-          <div class="project-view-meta" id="pvMeta"></div>
+          <div class="sujet-view-title" id="svTitle"></div>
+          <div class="sujet-view-meta" id="svMeta"></div>
         </div>
-        <div class="project-actions">
-          <button class="btn" onclick="startReview('all')">▶ Réviser tout</button>
-          <button class="btn" onclick="startReview('incorrect')">⚡ Erreurs</button>
-          <button class="btn" onclick="openModal('import')">⬆ Importer JSON</button>
-          <button class="btn btn-primary" onclick="openModal('card')">＋ Carte</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteCurrentProject()">✕</button>
+        <div class="sujet-actions">
+          <button class="btn" onclick="lancerRevision('all','random')">🔀 Aléatoire</button>
+          <button class="btn" onclick="lancerRevision('all','sequential')">↓ En ordre</button>
+          <button class="btn" onclick="lancerRevision('incorrect','random')">⚡ Erreurs</button>
+          <button class="btn btn-primary" onclick="openModal('carte')">＋ Carte</button>
+          <button class="btn" onclick="openModal('import')">⬆ JSON</button>
+          <button class="btn" onclick="exporterSujet()">⬇ Export</button>
+          <button class="btn btn-danger btn-sm" onclick="supprimerSujetCourant()">✕</button>
         </div>
       </div>
       <div class="filter-bar">
-        <button class="filter-btn active" onclick="filterCards('all',this)">Toutes</button>
-        <button class="filter-btn" onclick="filterCards('unseen',this)">Non vues</button>
-        <button class="filter-btn" onclick="filterCards('correct',this)">✓ Correctes</button>
-        <button class="filter-btn" onclick="filterCards('incorrect',this)">✕ À revoir</button>
+        <button class="filter-btn active" onclick="filtrerCartes('all',this)">Toutes</button>
+        <button class="filter-btn" onclick="filtrerCartes('unseen',this)">Non vues</button>
+        <button class="filter-btn" onclick="filtrerCartes('correct',this)">✓ Correctes</button>
+        <button class="filter-btn" onclick="filtrerCartes('incorrect',this)">✕ À revoir</button>
       </div>
       <div class="cards-grid" id="cardsGrid"></div>
     </div>
 
-    <div class="view" id="view-review">
-      <button class="back-btn" onclick="exitReview()">← Quitter</button>
+    <!-- REVIEW -->
+    <div class="view" id="view-revision">
+      <button class="back-btn" onclick="quitterRevision()">← Quitter</button>
       <div class="review-header">
         <div class="review-title" id="rvTitle">Révision</div>
         <div class="review-progress">
@@ -319,27 +362,28 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
           <div class="review-bar"><div class="review-bar-fill" id="rvBarFill"></div></div>
         </div>
       </div>
-      <div id="reviewContent">
-        <div class="flashcard-wrap" onclick="flipCard()">
+      <div id="revisionContent">
+        <div class="flashcard-wrap" onclick="retournerCarte()">
           <div class="flashcard" id="flashcard">
             <div class="flashcard-face flashcard-front">
               <div class="card-face-label">Question</div>
-              <div class="card-face-text" id="cardFront"></div>
+              <div class="card-face-text" id="carteFront"></div>
+              <div class="card-face-subject" id="carteSubject"></div>
               <div class="flip-hint">↻ Cliquer pour retourner</div>
             </div>
             <div class="flashcard-face flashcard-back">
               <div class="card-face-label">Réponse</div>
-              <div class="card-face-text" id="cardBack"></div>
+              <div class="card-face-text" id="carteBack"></div>
             </div>
           </div>
         </div>
         <div class="review-btns">
-          <button class="btn-incorrect" onclick="markCard('incorrect')">✕ Incorrect</button>
-          <button class="btn-skip" onclick="nextCard()">→ Passer</button>
-          <button class="btn-correct" onclick="markCard('correct')">✓ Correct</button>
+          <button class="btn-incorrect" onclick="marquerCarte('incorrect')">✕ Incorrect</button>
+          <button class="btn-skip" onclick="cartesSuivante()">→ Passer</button>
+          <button class="btn-correct" onclick="marquerCarte('correct')">✓ Correct</button>
         </div>
       </div>
-      <div class="review-done" id="reviewDone">
+      <div class="review-done" id="revisionDone">
         <div class="review-done-emoji">🎉</div>
         <div class="review-done-title">Session terminée !</div>
         <div class="review-done-sub">Voilà tes résultats.</div>
@@ -349,85 +393,91 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
           <div><div class="done-stat-val" id="doneSkipped" style="color:var(--muted)"></div><div class="done-stat-lbl">Passées</div></div>
         </div>
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-          <button class="btn btn-primary" onclick="startReview('all')">🔄 Recommencer</button>
-          <button class="btn" onclick="exitReview()">← Retour</button>
+          <button class="btn btn-primary" onclick="lancerRevision('all','random')">🔄 Recommencer</button>
+          <button class="btn" onclick="quitterRevision()">← Retour</button>
         </div>
       </div>
     </div>
+
   </main>
 </div>
 
+<!-- MODALS -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
-    <div id="modal-project-content">
-      <div class="modal-title" id="modalProjectTitle">Nouveau projet</div>
+
+    <!-- SUJET -->
+    <div id="modal-sujet-content">
+      <div class="modal-title" id="modalSujetTitle">Nouveau sujet</div>
       <div class="form-group">
-        <label class="form-label">Nom</label>
-        <input class="form-input" id="projectNameInput" placeholder="Ex: Vocabulaire espagnol" maxlength="60">
+        <label class="form-label">Nom du sujet</label>
+        <input class="form-input" id="sujetNomInput" placeholder="Ex: Vocabulaire espagnol" maxlength="60">
       </div>
       <div class="form-group">
         <label class="form-label">Description (optionnel)</label>
-        <input class="form-input" id="projectDescInput" placeholder="Quelques mots…" maxlength="120">
+        <input class="form-input" id="sujetDescInput" placeholder="Quelques mots…" maxlength="120">
       </div>
       <div class="modal-actions">
         <button class="btn" onclick="closeModal()">Annuler</button>
-        <button class="btn btn-primary" onclick="saveProject()">Créer</button>
+        <button class="btn btn-primary" onclick="sauvegarderSujet()">Créer</button>
       </div>
     </div>
-    <div id="modal-invite-content" style="display:none">
-      <div class="modal-title">🔗 Lien d'invitation</div>
-      <p style="font-size:.86rem;color:var(--muted);margin-bottom:20px;line-height:1.6">
-        Partage ce lien avec un ami déjà autorisé dans tes règles Firestore. Il clique le lien → la config Firebase est chargée automatiquement → il se connecte avec son compte Google.
-      </p>
+
+    <!-- CARTE -->
+    <div id="modal-carte-content" style="display:none">
+      <div class="modal-title" id="modalCarteTitle">Nouvelle carte</div>
       <div class="form-group">
-        <label class="form-label">Lien d'invitation</label>
-        <div style="display:flex;gap:8px">
-          <input class="form-input" id="inviteLink" readonly style="font-size:0.75rem;cursor:text">
-          <button class="btn btn-primary" onclick="copyInviteLink()" id="copyBtn" style="flex-shrink:0">Copier</button>
-        </div>
+        <label class="form-label">Recto (Question)</label>
+        <textarea class="form-textarea" id="carteFrontInput" placeholder="Ta question…"></textarea>
       </div>
-      <div style="font-size:.75rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;line-height:1.6">
-        ⚠️ Ce lien contient ta config Firebase. Envoie-le uniquement à des personnes de confiance que tu as autorisées dans tes règles Firestore.
+      <div class="form-group">
+        <label class="form-label">Verso (Réponse)</label>
+        <textarea class="form-textarea" id="carteBackInput" placeholder="La réponse…"></textarea>
       </div>
       <div class="modal-actions">
-        <button class="btn" onclick="closeModal()">Fermer</button>
+        <button class="btn" onclick="closeModal()">Annuler</button>
+        <button class="btn btn-primary" onclick="sauvegarderCarte()">Enregistrer</button>
       </div>
     </div>
+
+    <!-- IMPORT JSON -->
     <div id="modal-import-content" style="display:none">
       <div class="modal-title">Importer des cartes</div>
       <div class="form-group">
-        <label class="form-label">Format JSON attendu</label>
+        <label class="form-label">Format attendu</label>
         <div style="font-size:.78rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;font-family:monospace;line-height:1.6">
-          [<br>
-          &nbsp;&nbsp;{"front": "Question 1", "back": "Réponse 1"},<br>
-          &nbsp;&nbsp;{"front": "Question 2", "back": "Réponse 2"}<br>
-          ]
+          [<br>&nbsp;&nbsp;{"front": "Question", "back": "Réponse"}<br>]
         </div>
-        <label class="form-label">Colle ton JSON ici</label>
-        <textarea class="form-textarea" id="importJsonInput" placeholder='[{"front": "...", "back": "..."}]' style="min-height:160px;font-family:monospace;font-size:0.82rem"></textarea>
+        <label class="form-label">Colle ton JSON</label>
+        <textarea class="form-textarea" id="importJsonInput" placeholder='[{"front":"...","back":"..."}]' style="min-height:140px;font-family:monospace;font-size:0.82rem"></textarea>
       </div>
       <div class="import-preview" id="importPreview"></div>
       <div class="modal-actions">
         <button class="btn" onclick="closeModal()">Annuler</button>
         <button class="btn" onclick="previewImport()">👁 Prévisualiser</button>
-        <button class="btn btn-primary" onclick="confirmImport()">⬆ Importer</button>
+        <button class="btn btn-primary" onclick="confirmerImport()">⬆ Importer</button>
       </div>
     </div>
-    <div id="modal-card-content" style="display:none">
-      <div class="modal-title" id="modalCardTitle">Nouvelle carte</div>
+
+    <!-- INVITE -->
+    <div id="modal-invite-content" style="display:none">
+      <div class="modal-title">🔗 Lien d'invitation</div>
+      <p style="font-size:.86rem;color:var(--muted);margin-bottom:20px;line-height:1.6">Partage ce lien avec un ami autorisé dans tes règles Firestore. Il clique → config chargée automatiquement → connexion Google.</p>
       <div class="form-group">
-        <label class="form-label">Recto (Question)</label>
-        <textarea class="form-textarea" id="cardFrontInput" placeholder="Ta question…"></textarea>
+        <label class="form-label">Lien d'invitation</label>
+        <div style="display:flex;gap:8px">
+          <input class="form-input" id="inviteLink" readonly style="font-size:0.75rem">
+          <button class="btn btn-primary" onclick="copierLien()" id="copyBtn" style="flex-shrink:0">Copier</button>
+        </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Verso (Réponse)</label>
-        <textarea class="form-textarea" id="cardBackInput" placeholder="La réponse…"></textarea>
+      <div style="font-size:.75rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;line-height:1.6">
+        ⚠️ Envoie ce lien uniquement à des personnes de confiance autorisées dans tes règles Firestore.
       </div>
       <div class="modal-actions">
-        <button class="btn" onclick="closeModal()">Annuler</button>
-        <button class="btn btn-primary" onclick="saveCard()">Enregistrer</button>
+        <button class="btn" onclick="closeModal()">Fermer</button>
       </div>
     </div>
+
   </div>
 </div>
 
@@ -439,18 +489,27 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChang
 import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 // ── STATE ─────────────────────────────────────────────────
-let auth, db, currentUser;
-let state = { projects: [] };
-let currentProjectId = null;
-let currentFilter = 'all';
-let editingProjectId = null;
-let editingCardId = null;
-let reviewQueue = [], reviewIndex = 0, reviewStats = {}, cardFlipped = false;
+let auth, db, utilisateurCourant;
+
+// Structure BDD : { sujets: [ { id, nom, desc, createdAt, cartes: [ { id, recto, verso, statut, derniereRevision, createdAt } ] } ] }
+let etat = { sujets: [] };
+
+let sujetCourantId = null;
+let filtreCourant = 'all';
+let editSujetId = null;
+let editCarteId = null;
+
+// Révision
+let fileRevision = [], indexRevision = 0, statsRevision = {}, carteRetournee = false;
+
+// Multi-select
+let sujetsSelectionnes = new Set();
+let ordreRevision = 'random';
 
 // ── UTILS ─────────────────────────────────────────────────
-const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
+const genId = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-const currentProject = () => state.projects.find(p => p.id === currentProjectId);
+const sujetCourant = () => etat.sujets.find(s => s.id === sujetCourantId);
 
 function toast(msg) {
   const t = document.getElementById('toast');
@@ -466,76 +525,49 @@ function setSyncStatus(s) {
 
 // ── CONFIG ────────────────────────────────────────────────
 const CONFIG_KEY = 'fd_firebase_config';
+function getConfig() { try { return JSON.parse(sessionStorage.getItem(CONFIG_KEY)); } catch { return null; } }
+function saveConfig(cfg) { sessionStorage.setItem(CONFIG_KEY, JSON.stringify(cfg)); }
 
-function getSavedConfig() {
-  try { return JSON.parse(sessionStorage.getItem(CONFIG_KEY)); } catch { return null; }
-}
-function saveConfig(cfg) {
-  sessionStorage.setItem(CONFIG_KEY, JSON.stringify(cfg));
-}
-
-window.resetConfig = () => {
-  sessionStorage.removeItem(CONFIG_KEY);
-  location.reload();
-};
-
+window.resetConfig = () => { sessionStorage.removeItem(CONFIG_KEY); location.reload(); };
 window.showConfigScreen = () => {
   document.getElementById('authScreen').style.display = 'none';
   document.getElementById('configScreen').style.display = 'flex';
 };
-
 window.submitConfig = async () => {
-  const apiKey    = document.getElementById('cfg_apiKey').value.trim();
+  const apiKey = document.getElementById('cfg_apiKey').value.trim();
   const projectId = document.getElementById('cfg_projectId').value.trim();
-  const appId     = document.getElementById('cfg_appId').value.trim();
-
-  if (!apiKey || !projectId || !appId) {
-    document.getElementById('configError').textContent = '❌ Remplis tous les champs';
-    return;
-  }
-
-  const config = {
-    apiKey,
-    projectId,
-    appId,
-    authDomain:        `${projectId}.firebaseapp.com`,
-    storageBucket:     `${projectId}.appspot.com`,
-    messagingSenderId: ''
-  };
-
+  const appId = document.getElementById('cfg_appId').value.trim();
+  if (!apiKey || !projectId || !appId) { document.getElementById('configError').textContent = '❌ Remplis tous les champs'; return; }
+  const cfg = { apiKey, projectId, appId, authDomain:`${projectId}.firebaseapp.com`, storageBucket:`${projectId}.appspot.com`, messagingSenderId:'' };
   document.getElementById('configError').textContent = '';
-  document.getElementById('loadingText').textContent = 'Connexion à Firebase…';
   document.getElementById('configScreen').style.display = 'none';
   document.getElementById('loadingScreen').style.display = 'flex';
-
-  try {
-    initFirebase(config);
-    saveConfig(config);
-  } catch(e) {
-    document.getElementById('configError').textContent = '❌ Config invalide, vérifie les valeurs';
+  document.getElementById('loadingText').textContent = 'Connexion à Firebase…';
+  try { initFirebase(cfg); saveConfig(cfg); }
+  catch(e) {
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('configScreen').style.display = 'flex';
+    document.getElementById('configError').textContent = '❌ Config invalide';
   }
 };
 
-// ── FIREBASE INIT ─────────────────────────────────────────
-function initFirebase(config) {
-  const fbApp = initializeApp(config);
+// ── FIREBASE ──────────────────────────────────────────────
+function initFirebase(cfg) {
+  const fbApp = initializeApp(cfg);
   auth = getAuth(fbApp);
   db   = getFirestore(fbApp);
-
-  onAuthStateChanged(auth, async user => {
-    if (user) {
-      currentUser = user;
+  onAuthStateChanged(auth, async utilisateur => {
+    if (utilisateur) {
+      utilisateurCourant = utilisateur;
       document.getElementById('authScreen').style.display = 'none';
       document.getElementById('loadingText').textContent = 'Chargement de tes données…';
       document.getElementById('loadingScreen').style.display = 'flex';
-      await loadData();
+      await chargerDonnees();
       document.getElementById('loadingScreen').style.display = 'none';
       document.getElementById('mainApp').style.display = 'flex';
-      renderUserInfo(); renderSidebar(); renderHome();
+      afficherInfoUtilisateur(); renderSidebar(); renderHome();
     } else {
-      currentUser = null;
+      utilisateurCourant = null;
       document.getElementById('loadingScreen').style.display = 'none';
       document.getElementById('mainApp').style.display = 'none';
       document.getElementById('authScreen').style.display = 'flex';
@@ -544,25 +576,25 @@ function initFirebase(config) {
 }
 
 // ── FIRESTORE ─────────────────────────────────────────────
-async function loadData() {
+async function chargerDonnees() {
   try {
-    const snap = await getDoc(doc(db, 'users', currentUser.uid));
-    state = snap.exists() ? snap.data() : { projects: [] };
-    if (!state.projects) state.projects = [];
+    const snap = await getDoc(doc(db, 'utilisateurs', utilisateurCourant.uid));
+    etat = snap.exists() ? snap.data() : { sujets: [] };
+    if (!etat.sujets) etat.sujets = [];
   } catch(e) {
-    // Accès refusé par les règles Firestore → compte non autorisé
     await signOut(auth);
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('mainApp').style.display = 'none';
     document.getElementById('authScreen').style.display = 'flex';
-    document.getElementById('authError').textContent = '❌ Accès refusé — ce compte n\'est pas autorisé.';
-    state = { projects: [] };
+    document.getElementById('authError').textContent = '❌ Accès refusé — compte non autorisé';
+    etat = { sujets: [] };
   }
 }
-async function saveData() {
+
+async function sauvegarderDonnees() {
   setSyncStatus('syncing');
   try {
-    await setDoc(doc(db, 'users', currentUser.uid), state);
+    await setDoc(doc(db, 'utilisateurs', utilisateurCourant.uid), etat);
     setSyncStatus('ok');
   } catch(e) {
     setSyncStatus('error');
@@ -574,306 +606,398 @@ async function saveData() {
 window.loginWithGoogle = async () => {
   document.getElementById('authError').textContent = '';
   try { await signInWithPopup(auth, new GoogleAuthProvider()); }
-  catch(e) { document.getElementById('authError').textContent = '❌ Connexion annulée ou bloquée'; }
+  catch(e) { document.getElementById('authError').textContent = '❌ Connexion annulée'; }
 };
 window.logout = async () => {
   await signOut(auth);
-  state = { projects: [] };
-  currentProjectId = null;
+  etat = { sujets: [] }; sujetCourantId = null;
   document.getElementById('mainApp').style.display = 'none';
   document.getElementById('authScreen').style.display = 'flex';
 };
 
 // ── USER INFO ─────────────────────────────────────────────
-function renderUserInfo() {
-  const name = currentUser.displayName || currentUser.email;
-  const photo = currentUser.photoURL;
-  const firstName = name.split(' ')[0];
-  document.getElementById('homeHeader').textContent = `Bonjour, ${firstName} 👋`;
+function afficherInfoUtilisateur() {
+  const nom = utilisateurCourant.displayName || utilisateurCourant.email;
+  const photo = utilisateurCourant.photoURL;
+  const prenom = nom.split(' ')[0];
+  document.getElementById('homeHeader').textContent = `Bonjour, ${prenom} 👋`;
   document.getElementById('userInfo').innerHTML = photo
-    ? `<img class="user-avatar" src="${photo}"><span class="user-name">${esc(name)}</span>`
-    : `<div class="user-avatar-placeholder">${name[0].toUpperCase()}</div><span class="user-name">${esc(name)}</span>`;
+    ? `<img class="user-avatar" src="${photo}"><span class="user-name">${esc(nom)}</span>`
+    : `<div class="user-avatar-placeholder">${nom[0].toUpperCase()}</div><span class="user-name">${esc(nom)}</span>`;
 }
 
 // ── SIDEBAR ───────────────────────────────────────────────
 function renderSidebar() {
-  const list = document.getElementById('projectList');
-  if (!state.projects?.length) {
-    list.innerHTML = '<div style="font-size:.8rem;color:var(--muted);padding:8px 14px">Aucun projet</div>';
+  const list = document.getElementById('sujetList');
+  if (!etat.sujets?.length) {
+    list.innerHTML = '<div style="font-size:.8rem;color:var(--muted);padding:8px 14px">Aucun sujet</div>';
     return;
   }
-  list.innerHTML = state.projects.map(p => `
-    <div class="project-item ${p.id===currentProjectId?'active':''}" onclick="openProject('${p.id}')">
-      <div class="project-item-info"><div class="project-dot"></div><span class="project-name">${esc(p.name)}</span></div>
-      <span class="project-count">${(p.cards||[]).length}</span>
+  list.innerHTML = etat.sujets.map(s => `
+    <div class="sujet-item ${s.id===sujetCourantId?'active':''}" onclick="ouvrirSujet('${s.id}')">
+      <div class="sujet-item-info"><div class="sujet-dot"></div><span class="sujet-name">${esc(s.nom)}</span></div>
+      <span class="sujet-count">${(s.cartes||[]).length}</span>
     </div>`).join('');
 }
 
+// ── MULTI-SELECT ──────────────────────────────────────────
+window.setOrder = mode => {
+  ordreRevision = mode;
+  document.getElementById('orderRandom').classList.toggle('active', mode==='random');
+  document.getElementById('orderSeq').classList.toggle('active', mode==='sequential');
+};
+window.toggleSelectSujet = (id, e) => {
+  e.stopPropagation();
+  if (sujetsSelectionnes.has(id)) sujetsSelectionnes.delete(id);
+  else sujetsSelectionnes.add(id);
+  updateSelectionUI();
+};
+function updateSelectionUI() {
+  const n = sujetsSelectionnes.size;
+  document.getElementById('launchBar').style.display = n > 0 ? 'flex' : 'none';
+  document.getElementById('selectActions').style.display = n > 0 ? 'flex' : 'none';
+  document.getElementById('launchCount').textContent = n;
+  document.getElementById('selectCount').textContent = `${n} sélectionné${n!==1?'s':''}`;
+  document.querySelectorAll('.sujet-card').forEach(card => {
+    const id = card.dataset.id;
+    card.classList.toggle('selected', sujetsSelectionnes.has(id));
+    const cb = card.closest('.sujet-card-wrap')?.querySelector('.sujet-checkbox');
+    if (cb) cb.classList.toggle('checked', sujetsSelectionnes.has(id));
+  });
+}
+window.clearSelection = () => { sujetsSelectionnes.clear(); updateSelectionUI(); };
+window.lancerRevisionMulti = () => {
+  const sujets = etat.sujets.filter(s => sujetsSelectionnes.has(s.id));
+  let cartes = sujets.flatMap(s => (s.cartes||[]).map(c => ({...c, _sujetId: s.id, _sujetNom: s.nom})));
+  if (!cartes.length) { toast('Aucune carte dans les sujets sélectionnés !'); return; }
+  if (ordreRevision === 'random') melangerTableau(cartes);
+  const titres = sujets.map(s=>s.nom).join(', ');
+  demarrerRevision(cartes, titres);
+};
+
 // ── HOME ──────────────────────────────────────────────────
 function renderHome() {
-  const projects = state.projects||[];
-  const tc = projects.reduce((a,p)=>a+(p.cards||[]).length,0);
-  const ok = projects.reduce((a,p)=>a+(p.cards||[]).filter(c=>c.status==='correct').length,0);
-  const ko = projects.reduce((a,p)=>a+(p.cards||[]).filter(c=>c.status==='incorrect').length,0);
+  const sujets = etat.sujets||[];
+  const total = sujets.reduce((a,s)=>a+(s.cartes||[]).length,0);
+  const ok    = sujets.reduce((a,s)=>a+(s.cartes||[]).filter(c=>c.statut==='correct').length,0);
+  const ko    = sujets.reduce((a,s)=>a+(s.cartes||[]).filter(c=>c.statut==='incorrect').length,0);
   document.getElementById('globalStats').innerHTML = `
-    <div class="stat-card"><div class="stat-value">${projects.length}</div><div class="stat-label">Projets</div></div>
-    <div class="stat-card"><div class="stat-value">${tc}</div><div class="stat-label">Cartes</div></div>
+    <div class="stat-card"><div class="stat-value">${sujets.length}</div><div class="stat-label">Sujets</div></div>
+    <div class="stat-card"><div class="stat-value">${total}</div><div class="stat-label">Cartes</div></div>
     <div class="stat-card"><div class="stat-value" style="color:var(--green)">${ok}</div><div class="stat-label">Maîtrisées</div></div>
     <div class="stat-card"><div class="stat-value" style="color:var(--red)">${ko}</div><div class="stat-label">À revoir</div></div>`;
-  const grid = document.getElementById('projectsGrid');
-  if (!projects.length) {
-    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📚</div><div class="empty-title">Aucun projet encore</div><div class="empty-sub">Crée ton premier projet !</div></div>`;
+  const grid = document.getElementById('sujetsGrid');
+  if (!sujets.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📚</div><div class="empty-title">Aucun sujet encore</div><div class="empty-sub">Crée ton premier sujet !</div></div>`;
     return;
   }
-  grid.innerHTML = projects.map(p => {
-    const cards=p.cards||[], total=cards.length;
-    const correct=cards.filter(c=>c.status==='correct').length;
-    const incorrect=cards.filter(c=>c.status==='incorrect').length;
-    const pct=total?Math.round(correct/total*100):0;
-    return `<div class="project-card" onclick="openProject('${p.id}')">
-      <div class="project-card-title">${esc(p.name)}</div>
-      <div class="project-card-meta"><span>📋 ${total} carte${total!==1?'s':''}</span><span style="color:var(--green)">✓ ${correct}</span><span style="color:var(--red)">✕ ${incorrect}</span></div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-      <div style="font-size:.73rem;color:var(--muted);margin-top:6px">${pct}% maîtrisé</div>
+  grid.innerHTML = sujets.map(s => {
+    const cartes=s.cartes||[], n=cartes.length;
+    const correct=cartes.filter(c=>c.statut==='correct').length;
+    const incorrect=cartes.filter(c=>c.statut==='incorrect').length;
+    const pct=n?Math.round(correct/n*100):0;
+    const sel = sujetsSelectionnes.has(s.id);
+    return `<div class="sujet-card-wrap">
+      <div class="sujet-checkbox ${sel?'checked':''}" onclick="toggleSelectSujet('${s.id}',event)"></div>
+      <div class="sujet-card ${sel?'selected':''}" data-id="${s.id}" onclick="ouvrirSujet('${s.id}')">
+        <div class="sujet-card-title">${esc(s.nom)}</div>
+        <div class="sujet-card-meta">
+          <span>📋 ${n} carte${n!==1?'s':''}</span>
+          <span style="color:var(--green)">✓ ${correct}</span>
+          <span style="color:var(--red)">✕ ${incorrect}</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+        <div style="font-size:.73rem;color:var(--muted);margin-top:6px">${pct}% maîtrisé</div>
+      </div>
     </div>`;
   }).join('');
 }
 
-// ── PROJECT ───────────────────────────────────────────────
-window.openProject = id => {
-  currentProjectId=id; currentFilter='all';
+// ── SUJET VIEW ────────────────────────────────────────────
+window.ouvrirSujet = id => {
+  sujetCourantId=id; filtreCourant='all';
   document.querySelectorAll('.filter-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
-  renderSidebar(); renderProjectView(); showView('project'); closeSidebar();
+  renderSidebar(); renderSujetView(); showView('sujet'); closeSidebar();
 };
-function renderProjectView() {
-  const p=currentProject(); if(!p) return;
-  document.getElementById('pvTitle').textContent=p.name;
-  const cards=p.cards||[];
-  document.getElementById('pvMeta').textContent=`${cards.length} cartes · ${cards.filter(c=>c.status==='correct').length} correctes · ${cards.filter(c=>c.status==='incorrect').length} à revoir · ${cards.filter(c=>c.status==='unseen').length} non vues`;
+function renderSujetView() {
+  const s=sujetCourant(); if(!s) return;
+  document.getElementById('svTitle').textContent=s.nom;
+  const cartes=s.cartes||[];
+  document.getElementById('svMeta').textContent=
+    `${cartes.length} cartes · ${cartes.filter(c=>c.statut==='correct').length} correctes · ${cartes.filter(c=>c.statut==='incorrect').length} à revoir · ${cartes.filter(c=>c.statut==='unseen').length} non vues`;
   renderCardsGrid();
 }
 function renderCardsGrid() {
-  const p=currentProject(), grid=document.getElementById('cardsGrid');
-  let cards=p.cards||[];
-  if(currentFilter!=='all') cards=cards.filter(c=>c.status===currentFilter);
-  if(!cards.length) {
-    grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🃏</div><div class="empty-title">Aucune carte ici</div><div class="empty-sub">${currentFilter==='all'?'Ajoute ta première carte !':'Aucune carte dans ce filtre.'}</div></div>`;
+  const s=sujetCourant(), grid=document.getElementById('cardsGrid');
+  let cartes=s.cartes||[];
+  if(filtreCourant!=='all') cartes=cartes.filter(c=>c.statut===filtreCourant);
+  if(!cartes.length) {
+    grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🃏</div><div class="empty-title">Aucune carte ici</div><div class="empty-sub">${filtreCourant==='all'?'Ajoute ta première carte !':'Aucune carte dans ce filtre.'}</div></div>`;
     return;
   }
-  grid.innerHTML=cards.map(c=>`
+  grid.innerHTML=cartes.map(c=>`
     <div class="card-item">
-      <div class="card-item-front">${esc(c.front)}</div>
-      <div class="card-item-back">${esc(c.back)}</div>
+      <div class="card-item-front">${esc(c.recto)}</div>
+      <div class="card-item-back">${esc(c.verso)}</div>
       <div class="card-item-footer">
-        <span class="card-status ${c.status}">${{correct:'✓ Correct',incorrect:'✕ À revoir',unseen:'Non vue'}[c.status]}</span>
+        <span class="card-status ${c.statut}">${{correct:'✓ Correct',incorrect:'✕ À revoir',unseen:'Non vue'}[c.statut]}</span>
         <div class="card-item-actions">
-          <button class="btn btn-sm" onclick="openModal('card','${c.id}')">✏</button>
-          <button class="btn btn-sm btn-danger" onclick="deleteCard('${c.id}')">✕</button>
+          <button class="btn btn-sm" onclick="openModal('carte','${c.id}')">✏</button>
+          <button class="btn btn-sm btn-danger" onclick="supprimerCarte('${c.id}')">✕</button>
         </div>
       </div>
     </div>`).join('');
 }
-window.filterCards=(f,btn)=>{ currentFilter=f; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderCardsGrid(); };
+window.filtrerCartes=(f,btn)=>{
+  filtreCourant=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); renderCardsGrid();
+};
 
-// ── REVIEW ────────────────────────────────────────────────
-window.startReview = mode => {
-  const p=currentProject();
-  let cards=mode==='incorrect'?(p.cards||[]).filter(c=>c.status==='incorrect'):[...(p.cards||[])];
-  if(!cards.length){toast('Aucune carte à réviser !');return;}
-  for(let i=cards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]];}
-  reviewQueue=cards; reviewIndex=0; reviewStats={correct:0,incorrect:0,skipped:0};
-  document.getElementById('reviewContent').style.display='';
-  document.getElementById('reviewDone').style.display='none';
-  document.getElementById('rvTitle').textContent=p.name;
-  showView('review'); showReviewCard();
+// ── EXPORT ────────────────────────────────────────────────
+window.exporterSujet = () => {
+  const s = sujetCourant(); if(!s) return;
+  const data = (s.cartes||[]).map(c => ({ front: c.recto, back: c.verso, statut: c.statut }));
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = `${s.nom.replace(/[^a-z0-9]/gi,'_')}_flashdeck.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('✓ Export téléchargé !');
 };
-function showReviewCard() {
-  if(reviewIndex>=reviewQueue.length){endReview();return;}
-  const c=reviewQueue[reviewIndex];
-  document.getElementById('cardFront').textContent=c.front;
-  document.getElementById('cardBack').textContent=c.back;
-  cardFlipped=false; document.getElementById('flashcard').classList.remove('flipped');
-  document.getElementById('rvCount').textContent=`${reviewIndex+1} / ${reviewQueue.length}`;
-  document.getElementById('rvBarFill').style.width=`${(reviewIndex/reviewQueue.length)*100}%`;
-}
-window.flipCard=()=>{ cardFlipped=!cardFlipped; document.getElementById('flashcard').classList.toggle('flipped',cardFlipped); };
-window.markCard=async status=>{
-  const c=reviewQueue[reviewIndex], p=currentProject();
-  const card=(p.cards||[]).find(x=>x.id===c.id);
-  if(card){card.status=status;card.lastReviewed=Date.now();}
-  reviewStats[status]++; reviewIndex++; showReviewCard();
-  await saveData();
+
+// ── REVISION ──────────────────────────────────────────────
+window.lancerRevision = (mode, ordre='random') => {
+  const s=sujetCourant();
+  let cartes = mode==='incorrect'
+    ? (s.cartes||[]).filter(c=>c.statut==='incorrect')
+    : [...(s.cartes||[])];
+  cartes = cartes.map(c => ({...c, _sujetId: s.id, _sujetNom: s.nom}));
+  if(!cartes.length){toast('Aucune carte à réviser !');return;}
+  if(ordre==='random') melangerTableau(cartes);
+  demarrerRevision(cartes, s.nom);
 };
-window.nextCard=()=>{reviewStats.skipped++;reviewIndex++;showReviewCard();};
-function endReview() {
-  document.getElementById('reviewContent').style.display='none';
-  document.getElementById('reviewDone').style.display='block';
-  document.getElementById('doneCorrect').textContent=reviewStats.correct;
-  document.getElementById('doneIncorrect').textContent=reviewStats.incorrect;
-  document.getElementById('doneSkipped').textContent=reviewStats.skipped;
-  renderProjectView();
+
+function melangerTableau(arr) {
+  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
 }
-window.exitReview=()=>{renderProjectView();showView('project');};
+
+function demarrerRevision(cartes, titre) {
+  fileRevision=cartes; indexRevision=0; statsRevision={correct:0,incorrect:0,skipped:0};
+  document.getElementById('revisionContent').style.display='';
+  document.getElementById('revisionDone').style.display='none';
+  document.getElementById('rvTitle').textContent=titre;
+  showView('revision'); afficherCarteCourante();
+}
+
+function afficherCarteCourante() {
+  if(indexRevision>=fileRevision.length){terminerRevision();return;}
+  const c=fileRevision[indexRevision];
+  document.getElementById('carteFront').textContent=c.recto;
+  document.getElementById('carteBack').textContent=c.verso;
+  const sujetLabel = document.getElementById('carteSubject');
+  if(c._sujetNom) { sujetLabel.textContent = `📂 ${c._sujetNom}`; sujetLabel.style.display=''; }
+  else sujetLabel.style.display='none';
+  carteRetournee=false; document.getElementById('flashcard').classList.remove('flipped');
+  document.getElementById('rvCount').textContent=`${indexRevision+1} / ${fileRevision.length}`;
+  document.getElementById('rvBarFill').style.width=`${(indexRevision/fileRevision.length)*100}%`;
+}
+
+window.retournerCarte=()=>{ carteRetournee=!carteRetournee; document.getElementById('flashcard').classList.toggle('flipped',carteRetournee); };
+
+window.marquerCarte=async statut=>{
+  const c=fileRevision[indexRevision];
+  // Mettre à jour dans l'état local
+  const sujet=etat.sujets.find(s=>s.id===c._sujetId);
+  const carte=(sujet?.cartes||[]).find(x=>x.id===c.id);
+  if(carte){carte.statut=statut;carte.derniereRevision=Date.now();}
+  statsRevision[statut]++; indexRevision++; afficherCarteCourante();
+  await sauvegarderDonnees();
+};
+
+window.cartesSuivante=()=>{statsRevision.skipped++;indexRevision++;afficherCarteCourante();};
+
+function terminerRevision() {
+  document.getElementById('revisionContent').style.display='none';
+  document.getElementById('revisionDone').style.display='block';
+  document.getElementById('doneCorrect').textContent=statsRevision.correct;
+  document.getElementById('doneIncorrect').textContent=statsRevision.incorrect;
+  document.getElementById('doneSkipped').textContent=statsRevision.skipped;
+  if(sujetCourantId) renderSujetView();
+}
+window.quitterRevision=()=>{
+  if(sujetCourantId){renderSujetView();showView('sujet');}
+  else showView('home');
+};
 
 // ── MODALS ────────────────────────────────────────────────
 window.openModal=(type,id)=>{
-  document.getElementById('modal-project-content').style.display=type==='project'?'':'none';
-  document.getElementById('modal-card-content').style.display=type==='card'?'':'none';
-  document.getElementById('modal-import-content').style.display=type==='import'?'':'none';
-  document.getElementById('modal-invite-content').style.display=type==='invite'?'':'none';
-  if(type==='invite'){
-    const cfg = getSavedConfig();
-    if(cfg) {
-      const encoded = btoa(JSON.stringify(cfg));
-      const link = `${location.origin}${location.pathname}?cfg=${encoded}`;
-      document.getElementById('inviteLink').value = link;
-      document.getElementById('copyBtn').textContent = 'Copier';
-    }
+  ['sujet','carte','import','invite'].forEach(t=>
+    document.getElementById(`modal-${t}-content`).style.display=type===t?'':'none'
+  );
+  if(type==='sujet'){
+    editSujetId=id||null;
+    const s=id?etat.sujets.find(x=>x.id===id):null;
+    document.getElementById('modalSujetTitle').textContent=s?'Modifier le sujet':'Nouveau sujet';
+    document.getElementById('sujetNomInput').value=s?.nom||'';
+    document.getElementById('sujetDescInput').value=s?.desc||'';
+    setTimeout(()=>document.getElementById('sujetNomInput').focus(),100);
+  }
+  if(type==='carte'){
+    editCarteId=id||null;
+    const s=sujetCourant();
+    const c=id?(s?.cartes||[]).find(x=>x.id===id):null;
+    document.getElementById('modalCarteTitle').textContent=c?'Modifier la carte':'Nouvelle carte';
+    document.getElementById('carteFrontInput').value=c?.recto||'';
+    document.getElementById('carteBackInput').value=c?.verso||'';
+    setTimeout(()=>document.getElementById('carteFrontInput').focus(),100);
   }
   if(type==='import'){
     document.getElementById('importJsonInput').value='';
     document.getElementById('importPreview').innerHTML='';
     setTimeout(()=>document.getElementById('importJsonInput').focus(),100);
   }
-  if(type==='project'){
-    editingProjectId=id||null;
-    const p=id?state.projects.find(x=>x.id===id):null;
-    document.getElementById('modalProjectTitle').textContent=p?'Modifier le projet':'Nouveau projet';
-    document.getElementById('projectNameInput').value=p?.name||'';
-    document.getElementById('projectDescInput').value=p?.desc||'';
-    setTimeout(()=>document.getElementById('projectNameInput').focus(),100);
-  }
-  if(type==='card'){
-    editingCardId=id||null;
-    const p=currentProject();
-    const c=id?(p.cards||[]).find(x=>x.id===id):null;
-    document.getElementById('modalCardTitle').textContent=c?'Modifier la carte':'Nouvelle carte';
-    document.getElementById('cardFrontInput').value=c?.front||'';
-    document.getElementById('cardBackInput').value=c?.back||'';
-    setTimeout(()=>document.getElementById('cardFrontInput').focus(),100);
+  if(type==='invite'){
+    const cfg=getConfig();
+    if(cfg){
+      const encoded=btoa(JSON.stringify(cfg));
+      document.getElementById('inviteLink').value=`${location.origin}${location.pathname}?cfg=${encoded}`;
+      document.getElementById('copyBtn').textContent='Copier';
+    }
   }
   document.getElementById('modal').classList.add('open');
 };
 window.closeModal=()=>document.getElementById('modal').classList.remove('open');
 document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))window.closeModal();});
 
-window.previewImport = () => {
-  const raw = document.getElementById('importJsonInput').value.trim();
-  const preview = document.getElementById('importPreview');
+window.sauvegarderSujet=async()=>{
+  const nom=document.getElementById('sujetNomInput').value.trim();
+  const desc=document.getElementById('sujetDescInput').value.trim();
+  if(!nom){toast('Donne un nom au sujet !');return;}
+  if(editSujetId){
+    const s=etat.sujets.find(x=>x.id===editSujetId);
+    s.nom=nom; s.desc=desc;
+  } else {
+    etat.sujets.push({id:genId(),nom,desc,cartes:[],createdAt:Date.now()});
+  }
+  window.closeModal(); renderSidebar(); renderHome();
+  await sauvegarderDonnees(); toast('Sujet sauvegardé ✓');
+};
+
+window.sauvegarderCarte=async()=>{
+  const recto=document.getElementById('carteFrontInput').value.trim();
+  const verso=document.getElementById('carteBackInput').value.trim();
+  if(!recto||!verso){toast('Remplis les deux faces !');return;}
+  const s=sujetCourant();
+  if(editCarteId){
+    const c=(s.cartes||[]).find(x=>x.id===editCarteId);
+    c.recto=recto; c.verso=verso;
+  } else {
+    if(!s.cartes)s.cartes=[];
+    s.cartes.push({id:genId(),recto,verso,statut:'unseen',createdAt:Date.now()});
+  }
+  window.closeModal(); renderSujetView(); renderSidebar();
+  await sauvegarderDonnees(); toast('Carte sauvegardée ✓');
+};
+
+window.supprimerCarte=async id=>{
+  if(!confirm('Supprimer cette carte ?'))return;
+  const s=sujetCourant(); s.cartes=(s.cartes||[]).filter(c=>c.id!==id);
+  renderSujetView(); renderSidebar(); await sauvegarderDonnees(); toast('Carte supprimée');
+};
+
+window.supprimerSujetCourant=async()=>{
+  if(!confirm('Supprimer ce sujet et toutes ses cartes ?'))return;
+  etat.sujets=etat.sujets.filter(s=>s.id!==sujetCourantId);
+  sujetCourantId=null; renderSidebar(); renderHome(); showView('home');
+  await sauvegarderDonnees(); toast('Sujet supprimé');
+};
+
+// ── IMPORT ────────────────────────────────────────────────
+window.previewImport=()=>{
+  const raw=document.getElementById('importJsonInput').value.trim();
+  const preview=document.getElementById('importPreview');
   try {
-    const cards = JSON.parse(raw);
-    if (!Array.isArray(cards)) throw new Error('Doit être un tableau []');
-    const valid = cards.filter(c => c.front && c.back);
-    const invalid = cards.length - valid.length;
-    preview.innerHTML = `
-      <div class="import-preview-ok">✓ ${valid.length} carte${valid.length!==1?'s':''} valide${valid.length!==1?'s':''}${invalid>0?` (${invalid} ignorée${invalid!==1?'s':''} — front/back manquant)`:''}</div>
+    const cartes=JSON.parse(raw);
+    if(!Array.isArray(cartes))throw new Error('Doit être un tableau []');
+    const valid=cartes.filter(c=>c.front&&c.back);
+    const invalid=cartes.length-valid.length;
+    preview.innerHTML=`
+      <div class="import-preview-ok">✓ ${valid.length} carte${valid.length!==1?'s':''} valide${valid.length!==1?'s':''}${invalid>0?` (${invalid} ignorée${invalid!==1?'s':''})`:''}</div>
       <div class="import-preview-list">
         ${valid.slice(0,5).map(c=>`<div class="import-preview-item"><strong>${esc(c.front)}</strong> → ${esc(c.back)}</div>`).join('')}
         ${valid.length>5?`<div style="color:var(--muted);font-size:.75rem;padding:4px 10px">...et ${valid.length-5} autre${valid.length-5!==1?'s':''}</div>`:''}
       </div>`;
   } catch(e) {
-    preview.innerHTML = `<div class="import-preview-err">❌ JSON invalide : ${e.message}</div>`;
+    preview.innerHTML=`<div class="import-preview-err">❌ JSON invalide : ${e.message}</div>`;
   }
 };
 
-window.confirmImport = async () => {
-  const raw = document.getElementById('importJsonInput').value.trim();
+window.confirmerImport=async()=>{
+  const raw=document.getElementById('importJsonInput').value.trim();
   try {
-    const cards = JSON.parse(raw);
-    if (!Array.isArray(cards)) throw new Error();
-    const valid = cards.filter(c => c.front && c.back);
-    if (!valid.length) { toast('Aucune carte valide trouvée !'); return; }
-    const p = currentProject();
-    if (!p.cards) p.cards = [];
-    valid.forEach(c => p.cards.push({
-      id: uid(), front: String(c.front), back: String(c.back),
-      status: 'unseen', createdAt: Date.now()
-    }));
-    window.closeModal(); renderProjectView(); renderSidebar();
-    await saveData();
+    const cartes=JSON.parse(raw);
+    if(!Array.isArray(cartes))throw new Error();
+    const valid=cartes.filter(c=>c.front&&c.back);
+    if(!valid.length){toast('Aucune carte valide !');return;}
+    const s=sujetCourant();
+    if(!s.cartes)s.cartes=[];
+    valid.forEach(c=>s.cartes.push({id:genId(),recto:String(c.front),verso:String(c.back),statut:'unseen',createdAt:Date.now()}));
+    window.closeModal(); renderSujetView(); renderSidebar();
+    await sauvegarderDonnees();
     toast(`✓ ${valid.length} carte${valid.length!==1?'s':''} importée${valid.length!==1?'s':''} !`);
-  } catch(e) {
-    toast('❌ JSON invalide');
-  }
+  } catch(e){ toast('❌ JSON invalide'); }
 };
 
-window.saveProject=async()=>{
-  const name=document.getElementById('projectNameInput').value.trim();
-  const desc=document.getElementById('projectDescInput').value.trim();
-  if(!name){toast('Donne un nom au projet !');return;}
-  if(editingProjectId){const p=state.projects.find(x=>x.id===editingProjectId);p.name=name;p.desc=desc;}
-  else state.projects.push({id:uid(),name,desc,cards:[],createdAt:Date.now()});
-  window.closeModal(); renderSidebar(); renderHome();
-  await saveData(); toast('Projet sauvegardé ✓');
-};
-window.saveCard=async()=>{
-  const front=document.getElementById('cardFrontInput').value.trim();
-  const back=document.getElementById('cardBackInput').value.trim();
-  if(!front||!back){toast('Remplis les deux faces !');return;}
-  const p=currentProject();
-  if(editingCardId){const c=(p.cards||[]).find(x=>x.id===editingCardId);c.front=front;c.back=back;}
-  else{if(!p.cards)p.cards=[];p.cards.push({id:uid(),front,back,status:'unseen',createdAt:Date.now()});}
-  window.closeModal(); renderProjectView(); renderSidebar();
-  await saveData(); toast('Carte sauvegardée ✓');
-};
-window.deleteCard=async id=>{
-  if(!confirm('Supprimer cette carte ?'))return;
-  const p=currentProject(); p.cards=(p.cards||[]).filter(c=>c.id!==id);
-  renderProjectView(); renderSidebar(); await saveData(); toast('Carte supprimée');
-};
-window.deleteCurrentProject=async()=>{
-  if(!confirm('Supprimer ce projet et toutes ses cartes ?'))return;
-  state.projects=state.projects.filter(p=>p.id!==currentProjectId);
-  currentProjectId=null; renderSidebar(); renderHome(); showView('home');
-  await saveData(); toast('Projet supprimé');
+// ── INVITE ────────────────────────────────────────────────
+window.copierLien=()=>{
+  navigator.clipboard.writeText(document.getElementById('inviteLink').value).then(()=>{
+    document.getElementById('copyBtn').textContent='✓ Copié !';
+    setTimeout(()=>document.getElementById('copyBtn').textContent='Copier',2000);
+  });
 };
 
 // ── VIEWS ─────────────────────────────────────────────────
 window.showView=name=>{
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+name).classList.add('active');
-  if(name==='home'){currentProjectId=null;renderSidebar();renderHome();}
+  if(name==='home'){
+    sujetCourantId=null; sujetsSelectionnes.clear();
+    document.getElementById('launchBar').style.display='none';
+    document.getElementById('selectActions').style.display='none';
+    renderSidebar(); renderHome();
+  }
 };
+
+// ── MOBILE ────────────────────────────────────────────────
 window.toggleSidebar=()=>{document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('open');};
 window.closeSidebar=()=>{document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('open');};
 
 // ── KEYBOARD ──────────────────────────────────────────────
 document.addEventListener('keydown',e=>{
-  if(document.getElementById('view-review').classList.contains('active')&&!document.getElementById('modal').classList.contains('open')){
-    if(e.key===' '||e.key==='ArrowUp'){e.preventDefault();window.flipCard();}
-    if(e.key==='ArrowRight'){if(cardFlipped)window.markCard('correct');else window.nextCard();}
-    if(e.key==='ArrowLeft'){if(cardFlipped)window.markCard('incorrect');}
+  if(document.getElementById('view-revision').classList.contains('active')&&!document.getElementById('modal').classList.contains('open')){
+    if(e.key===' '||e.key==='ArrowUp'){e.preventDefault();window.retournerCarte();}
+    if(e.key==='ArrowRight'){if(carteRetournee)window.marquerCarte('correct');else window.cartesSuivante();}
+    if(e.key==='ArrowLeft'){if(carteRetournee)window.marquerCarte('incorrect');}
   }
   if(e.key==='Escape')window.closeModal();
 });
 
-window.copyInviteLink = () => {
-  const link = document.getElementById('inviteLink').value;
-  navigator.clipboard.writeText(link).then(() => {
-    document.getElementById('copyBtn').textContent = '✓ Copié !';
-    setTimeout(() => document.getElementById('copyBtn').textContent = 'Copier', 2000);
-  });
-};
-
 // ── BOOT ──────────────────────────────────────────────────
-// Vérifie d'abord si un lien d'invitation est dans l'URL
-const urlParams = new URLSearchParams(location.search);
-const cfgParam = urlParams.get('cfg');
-if (cfgParam) {
-  try {
-    const cfg = JSON.parse(atob(cfgParam));
-    saveConfig(cfg);
-    // Nettoie l'URL sans recharger
-    history.replaceState({}, '', location.pathname);
-  } catch(e) { /* config invalide, on ignore */ }
+const urlParams=new URLSearchParams(location.search);
+const cfgParam=urlParams.get('cfg');
+if(cfgParam){
+  try{const cfg=JSON.parse(atob(cfgParam));saveConfig(cfg);history.replaceState({},'',location.pathname);}
+  catch(e){}
 }
-
-const saved = getSavedConfig();
-if (saved) {
-  initFirebase(saved);
-} else {
-  document.getElementById('loadingScreen').style.display = 'none';
-  document.getElementById('configScreen').style.display = 'flex';
+const savedCfg=getConfig();
+if(savedCfg){initFirebase(savedCfg);}
+else{
+  document.getElementById('loadingScreen').style.display='none';
+  document.getElementById('configScreen').style.display='flex';
 }
 </script>
 </body>
