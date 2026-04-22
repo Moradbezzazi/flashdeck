@@ -406,6 +406,21 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 <div class="modal-overlay" id="modal">
   <div class="modal">
 
+    <!-- EXPORT -->
+    <div id="modal-export-content" style="display:none">
+      <div class="modal-title">⬇ Exporter les cartes</div>
+      <div class="form-group">
+        <label class="form-label">JSON — format compatible import</label>
+        <textarea class="form-textarea" id="exportJson" readonly style="min-height:160px;font-family:monospace;font-size:0.78rem"></textarea>
+      </div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:16px" id="exportFilename"></div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeModal()">Fermer</button>
+        <button class="btn" id="exportCopyBtn" onclick="copierExport()">Copier</button>
+        <button class="btn btn-primary" onclick="telechargerExport()">⬇ Télécharger</button>
+      </div>
+    </div>
+
     <!-- SUJET -->
     <div id="modal-sujet-content">
       <div class="modal-title" id="modalSujetTitle">Nouveau sujet</div>
@@ -566,6 +581,7 @@ function initFirebase(cfg) {
       document.getElementById('loadingScreen').style.display = 'none';
       document.getElementById('mainApp').style.display = 'flex';
       afficherInfoUtilisateur(); renderSidebar(); renderHome();
+    history.replaceState({ view: 'home', sujetId: null }, '');
     } else {
       utilisateurCourant = null;
       document.getElementById('loadingScreen').style.display = 'none';
@@ -717,7 +733,10 @@ function renderHome() {
 window.ouvrirSujet = id => {
   sujetCourantId=id; filtreCourant='all';
   document.querySelectorAll('.filter-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
-  renderSidebar(); renderSujetView(); showView('sujet'); closeSidebar();
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-sujet').classList.add('active');
+  history.pushState({ view: 'sujet', sujetId: id }, '');
+  renderSidebar(); renderSujetView(); closeSidebar();
 };
 function renderSujetView() {
   const s=sujetCourant(); if(!s) return;
@@ -757,16 +776,30 @@ window.filtrerCartes=(f,btn)=>{
 // ── EXPORT ────────────────────────────────────────────────
 window.exporterSujet = () => {
   const s = sujetCourant(); if(!s) return;
-  const data = (s.cartes||[]).map(c => ({ front: c.recto, back: c.verso, statut: c.statut }));
+  const data = (s.cartes||[]).map(c => ({ front: c.recto, back: c.verso }));
   const json = JSON.stringify(data, null, 2);
+  document.getElementById('exportJson').value = json;
+  document.getElementById('exportFilename').textContent = `${s.nom.replace(/[^a-z0-9]/gi,'_')}_flashdeck.json`;
+  document.getElementById('exportCopyBtn').textContent = 'Copier';
+  openModal('export');
+};
+
+window.copierExport = () => {
+  navigator.clipboard.writeText(document.getElementById('exportJson').value).then(() => {
+    document.getElementById('exportCopyBtn').textContent = '✓ Copié !';
+    setTimeout(() => document.getElementById('exportCopyBtn').textContent = 'Copier', 2000);
+  });
+};
+
+window.telechargerExport = () => {
+  const json = document.getElementById('exportJson').value;
+  const nom  = document.getElementById('exportFilename').textContent;
   const blob = new Blob([json], { type: 'application/json' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
-  a.href = url;
-  a.download = `${s.nom.replace(/[^a-z0-9]/gi,'_')}_flashdeck.json`;
-  a.click();
+  a.href = url; a.download = nom; a.click();
   URL.revokeObjectURL(url);
-  toast('✓ Export téléchargé !');
+  toast('✓ Fichier téléchargé !');
 };
 
 // ── REVISION ──────────────────────────────────────────────
@@ -790,7 +823,10 @@ function demarrerRevision(cartes, titre) {
   document.getElementById('revisionContent').style.display='';
   document.getElementById('revisionDone').style.display='none';
   document.getElementById('rvTitle').textContent=titre;
-  showView('revision'); afficherCarteCourante();
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-revision').classList.add('active');
+  history.pushState({ view: 'revision', sujetId: sujetCourantId }, '');
+  afficherCarteCourante();
 }
 
 function afficherCarteCourante() {
@@ -835,7 +871,7 @@ window.quitterRevision=()=>{
 
 // ── MODALS ────────────────────────────────────────────────
 window.openModal=(type,id)=>{
-  ['sujet','carte','import','invite'].forEach(t=>
+  ['sujet','carte','import','invite','export'].forEach(t=>
     document.getElementById(`modal-${t}-content`).style.display=type===t?'':'none'
   );
   if(type==='sujet'){
@@ -964,6 +1000,7 @@ window.copierLien=()=>{
 window.showView=name=>{
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+name).classList.add('active');
+  history.pushState({ view: name, sujetId: sujetCourantId }, '');
   if(name==='home'){
     sujetCourantId=null; sujetsSelectionnes.clear();
     document.getElementById('launchBar').style.display='none';
@@ -971,6 +1008,28 @@ window.showView=name=>{
     renderSidebar(); renderHome();
   }
 };
+
+window.addEventListener('popstate', e => {
+  const s = e.state;
+  if (!s) { showView('home'); return; }
+  if (s.view === 'home') {
+    sujetCourantId=null; sujetsSelectionnes.clear();
+    document.getElementById('launchBar').style.display='none';
+    document.getElementById('selectActions').style.display='none';
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-home').classList.add('active');
+    renderSidebar(); renderHome();
+  } else if (s.view === 'sujet' && s.sujetId) {
+    sujetCourantId = s.sujetId;
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-sujet').classList.add('active');
+    renderSidebar(); renderSujetView();
+  } else if (s.view === 'revision') {
+    window.quitterRevision();
+  } else {
+    showView('home');
+  }
+});
 
 // ── MOBILE ────────────────────────────────────────────────
 window.toggleSidebar=()=>{document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('open');};
