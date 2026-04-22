@@ -10,7 +10,8 @@
 :root {
   --bg: #0f0f11; --surface: #1a1a1f; --surface2: #22222a; --border: #2e2e3a;
   --text: #e8e8f0; --muted: #6b6b80; --accent: #7c6af7; --accent2: #a78bfa;
-  --green: #34d399; --red: #f87171; --radius: 16px; --radius-sm: 10px;
+  --green: #34d399; --red: #f87171; --yellow: #fbbf24;
+  --radius: 16px; --radius-sm: 10px;
 }
 body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
@@ -48,22 +49,29 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 /* ── SIDEBAR ── */
 .sidebar { width: 280px; min-height: 100vh; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 28px 20px; position: fixed; top: 0; left: 0; bottom: 0; z-index: 10; transition: transform .3s ease; }
 .sidebar-logo { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--accent2); display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
-.user-info { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface2); border-radius: var(--radius-sm); margin-bottom: 24px; overflow: hidden; }
+.user-info { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface2); border-radius: var(--radius-sm); margin-bottom: 20px; overflow: hidden; }
 .user-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); flex-shrink: 0; }
 .user-avatar-placeholder { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 600; color: #fff; flex-shrink: 0; }
 .user-name { font-size: 0.82rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.sidebar-section-title { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-.sujet-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
-.sujet-item { padding: 10px 14px; border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: background .15s; font-size: 0.9rem; }
+.sidebar-section-title { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.sujet-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
+.sujet-item { padding: 9px 14px; border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: background .15s; font-size: 0.88rem; }
 .sujet-item:hover { background: var(--surface2); }
 .sujet-item.active { background: rgba(124,106,247,.18); color: var(--accent2); font-weight: 500; }
 .sujet-item-info { display: flex; align-items: center; gap: 10px; overflow: hidden; }
 .sujet-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
 .sujet-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sujet-count { font-size: 0.72rem; color: var(--muted); background: var(--surface2); padding: 2px 8px; border-radius: 20px; flex-shrink: 0; }
-.btn-new-sujet { margin-top: 16px; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px dashed var(--border); background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; cursor: pointer; width: 100%; display: flex; align-items: center; gap: 8px; transition: border-color .2s, color .2s; }
+.btn-new-sujet { padding: 9px 14px; border-radius: var(--radius-sm); border: 1px dashed var(--border); background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; width: 100%; display: flex; align-items: center; gap: 8px; transition: border-color .2s, color .2s; margin-bottom: 16px; }
 .btn-new-sujet:hover { border-color: var(--accent); color: var(--accent2); }
-.sidebar-footer { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
+
+/* ── SIDEBAR NAV ── */
+.sidebar-nav { display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px; border-top: 1px solid var(--border); padding-top: 16px; }
+.sidebar-nav-item { padding: 9px 14px; border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.88rem; color: var(--muted); transition: background .15s, color .15s; border: none; background: none; font-family: 'DM Sans', sans-serif; width: 100%; text-align: left; }
+.sidebar-nav-item:hover { background: var(--surface2); color: var(--text); }
+.sidebar-nav-item.active { background: rgba(124,106,247,.18); color: var(--accent2); font-weight: 500; }
+
+.sidebar-footer { padding-top: 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
 .sync-indicator { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--muted); }
 .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
 .sync-dot.syncing { background: var(--accent); animation: pulse 1s infinite; }
@@ -106,6 +114,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .sujet-card.selected::before { opacity:1; }
 .sujet-card-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
 .sujet-card-meta { font-size: 0.82rem; color: var(--muted); display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.sujet-card-notes { font-size: 0.78rem; color: var(--yellow); margin-top: 8px; }
 .progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
 .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; transition: width .4s; }
 
@@ -119,10 +128,16 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .order-btn.active { background: var(--accent); color: #fff; }
 
 /* ── SUJET VIEW ── */
-.sujet-view-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
+.sujet-view-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
 .sujet-view-title { font-family: 'DM Serif Display', serif; font-size: 1.9rem; }
 .sujet-view-meta { font-size: 0.86rem; color: var(--muted); margin-top: 4px; }
-.sujet-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.sujet-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ── TABS ── */
+.tab-bar { display: flex; gap: 4px; background: var(--surface2); border-radius: var(--radius-sm); padding: 4px; margin-bottom: 24px; width: fit-content; }
+.tab-btn { padding: 7px 18px; border-radius: 8px; border: none; background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; cursor: pointer; transition: all .15s; }
+.tab-btn.active { background: var(--surface); color: var(--text); font-weight: 500; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+
 .filter-bar { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
 .filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; cursor: pointer; transition: all .15s; }
 .filter-btn.active, .filter-btn:hover { background: rgba(124,106,247,.15); border-color: var(--accent); color: var(--accent2); }
@@ -136,6 +151,45 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .card-status.incorrect { background: rgba(248,113,113,.15); color: var(--red); }
 .card-status.unseen { background: rgba(107,107,128,.15); color: var(--muted); }
 .card-item-actions { display: flex; gap: 6px; }
+
+/* ── NOTES ── */
+.notes-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 16px; }
+.note-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; cursor: pointer; transition: border-color .2s, transform .15s; position: relative; overflow: hidden; }
+.note-card::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; background:var(--yellow); opacity:0; transition:opacity .2s; }
+.note-card:hover { border-color: var(--yellow); transform: translateY(-2px); }
+.note-card:hover::before { opacity:1; }
+.note-card-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 8px; }
+.note-card-preview { font-size: 0.82rem; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5; margin-bottom: 12px; }
+.note-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.note-card-sujets { display: flex; gap: 4px; flex-wrap: wrap; }
+.note-sujet-tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; background: rgba(124,106,247,.15); color: var(--accent2); }
+.note-card-actions { display: flex; gap: 6px; }
+.note-date { font-size: 0.72rem; color: var(--muted); }
+
+/* ── NOTE VIEW (lecture) ── */
+.note-view-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+.note-view-title { font-family: 'DM Serif Display', serif; font-size: 1.9rem; }
+.note-view-sujets { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.note-view-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.note-content { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; line-height: 1.8; font-size: 0.95rem; }
+
+/* ── MARKDOWN RENDER ── */
+.md h1 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; margin: 0 0 16px; }
+.md h2 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; margin: 24px 0 12px; }
+.md h3 { font-size: 1.1rem; font-weight: 600; margin: 20px 0 10px; }
+.md p { margin-bottom: 14px; }
+.md ul, .md ol { margin: 0 0 14px 24px; }
+.md li { margin-bottom: 4px; }
+.md code { background: var(--surface2); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.85em; color: var(--accent2); }
+.md pre { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; overflow-x: auto; margin-bottom: 14px; }
+.md pre code { background: none; padding: 0; color: var(--text); }
+.md strong { font-weight: 600; color: var(--text); }
+.md em { font-style: italic; color: var(--muted); }
+.md blockquote { border-left: 3px solid var(--accent); padding-left: 16px; color: var(--muted); margin: 0 0 14px; }
+.md hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+.md a { color: var(--accent2); text-decoration: none; }
+.md a:hover { text-decoration: underline; }
 
 /* ── REVIEW ── */
 .review-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
@@ -154,12 +208,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .card-face-text { font-family: 'DM Serif Display', serif; font-size: 1.5rem; line-height: 1.4; }
 .card-face-subject { font-size: 0.72rem; color: var(--muted); margin-top: 12px; }
 .flip-hint { font-size: 0.76rem; color: var(--muted); margin-top: 20px; }
-.review-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.review-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
 .review-btns button { display: flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: var(--radius-sm); border: 1px solid; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.92rem; font-weight: 600; transition: transform .15s; }
 .review-btns button:hover { transform: translateY(-2px); }
 .btn-correct { background: rgba(52,211,153,.12); color: var(--green); border-color: rgba(52,211,153,.3) !important; }
 .btn-incorrect { background: rgba(248,113,113,.12); color: var(--red); border-color: rgba(248,113,113,.3) !important; }
 .btn-skip { background: var(--surface); color: var(--muted); border-color: var(--border) !important; }
+.btn-note-revision { background: rgba(251,191,36,.1); color: var(--yellow); border-color: rgba(251,191,36,.3) !important; font-size: 0.82rem; padding: 8px 16px; }
 .review-done { text-align: center; padding: 60px 20px; display: none; }
 .review-done-emoji { font-size: 3rem; margin-bottom: 16px; }
 .review-done-title { font-family: 'DM Serif Display', serif; font-size: 2rem; margin-bottom: 8px; }
@@ -179,7 +234,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 /* ── MODAL ── */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity .2s; backdrop-filter: blur(4px); }
 .modal-overlay.open { opacity: 1; pointer-events: all; }
-.modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; width: 100%; max-width: 460px; transform: translateY(16px); transition: transform .25s; max-height: 90vh; overflow-y: auto; }
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; width: 100%; max-width: 560px; transform: translateY(16px); transition: transform .25s; max-height: 90vh; overflow-y: auto; }
 .modal-overlay.open .modal { transform: translateY(0); }
 .modal-title { font-family: 'DM Serif Display', serif; font-size: 1.4rem; margin-bottom: 24px; }
 .form-group { margin-bottom: 18px; }
@@ -188,6 +243,11 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .form-textarea { resize: vertical; min-height: 88px; }
 .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
 .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+
+/* ── SUJETS CHECKBOXES (dans modal note) ── */
+.sujets-picker { display: flex; flex-wrap: wrap; gap: 8px; }
+.sujet-pick-btn { padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; cursor: pointer; transition: all .15s; }
+.sujet-pick-btn.selected { background: rgba(124,106,247,.2); border-color: var(--accent); color: var(--accent2); }
 
 /* ── IMPORT PREVIEW ── */
 .import-preview { margin-top: 12px; font-size: 0.82rem; }
@@ -231,42 +291,26 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 </head>
 <body>
 
-<!-- LOADING -->
 <div id="loadingScreen">
   <div class="loading-logo">🃏 FlashDeck</div>
   <div class="loading-spinner"></div>
   <div class="loading-text" id="loadingText">Chargement...</div>
 </div>
 
-<!-- CONFIG -->
 <div id="configScreen">
   <div class="config-card">
     <div class="config-logo">🃏 FlashDeck</div>
     <p class="config-sub">Entre ta configuration Firebase pour connecter ton projet.</p>
-    <div class="config-help">
-      📖 Où trouver ta config ?<br>
-      <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a>
-      → Ton projet → ⚙️ Paramètres → Tes applications → &lt;/&gt;
-    </div>
-    <div class="form-group">
-      <label class="form-label">API Key</label>
-      <input class="form-input" id="cfg_apiKey" placeholder="AIzaSy...">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Project ID</label>
-      <input class="form-input" id="cfg_projectId" placeholder="mon-projet-12345">
-    </div>
-    <div class="form-group">
-      <label class="form-label">App ID</label>
-      <input class="form-input" id="cfg_appId" placeholder="1:123456:web:abc123">
-    </div>
+    <div class="config-help">📖 console.firebase.google.com → Ton projet → ⚙️ Paramètres → Tes applications → &lt;/&gt;</div>
+    <div class="form-group"><label class="form-label">API Key</label><input class="form-input" id="cfg_apiKey" placeholder="AIzaSy..."></div>
+    <div class="form-group"><label class="form-label">Project ID</label><input class="form-input" id="cfg_projectId" placeholder="mon-projet-12345"></div>
+    <div class="form-group"><label class="form-label">App ID</label><input class="form-input" id="cfg_appId" placeholder="1:123456:web:abc123"></div>
     <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px" onclick="submitConfig()">Connecter →</button>
     <div class="config-error" id="configError"></div>
     <div class="config-reset" onclick="resetConfig()">Effacer la config sauvegardée</div>
   </div>
 </div>
 
-<!-- AUTH -->
 <div id="authScreen">
   <div class="auth-card">
     <div class="auth-logo">🃏 FlashDeck</div>
@@ -290,6 +334,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <div class="sidebar-section-title">Sujets</div>
     <div class="sujet-list" id="sujetList"></div>
     <button class="btn-new-sujet" onclick="openModal('sujet')">＋ Nouveau sujet</button>
+    <div class="sidebar-nav">
+      <button class="sidebar-nav-item" id="nav-notes" onclick="showView('notes')">📝 Notes</button>
+    </div>
     <div class="sidebar-footer">
       <div class="sync-indicator">
         <div class="sync-dot" id="syncDot"></div>
@@ -343,16 +390,60 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
           <button class="btn btn-danger btn-sm" onclick="supprimerSujetCourant()">✕</button>
         </div>
       </div>
-      <div class="filter-bar">
-        <button class="filter-btn active" onclick="filtrerCartes('all',this)">Toutes</button>
-        <button class="filter-btn" onclick="filtrerCartes('unseen',this)">Non vues</button>
-        <button class="filter-btn" onclick="filtrerCartes('correct',this)">✓ Correctes</button>
-        <button class="filter-btn" onclick="filtrerCartes('incorrect',this)">✕ À revoir</button>
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-cartes" onclick="switchTab('cartes')">🃏 Cartes</button>
+        <button class="tab-btn" id="tab-notes-sujet" onclick="switchTab('notes-sujet')">📝 Notes <span id="notesCountBadge" style="font-size:.7rem;color:var(--yellow)"></span></button>
       </div>
-      <div class="cards-grid" id="cardsGrid"></div>
+      <!-- TAB CARTES -->
+      <div id="tab-content-cartes">
+        <div class="filter-bar">
+          <button class="filter-btn active" onclick="filtrerCartes('all',this)">Toutes</button>
+          <button class="filter-btn" onclick="filtrerCartes('unseen',this)">Non vues</button>
+          <button class="filter-btn" onclick="filtrerCartes('correct',this)">✓ Correctes</button>
+          <button class="filter-btn" onclick="filtrerCartes('incorrect',this)">✕ À revoir</button>
+        </div>
+        <div class="cards-grid" id="cardsGrid"></div>
+      </div>
+      <!-- TAB NOTES -->
+      <div id="tab-content-notes-sujet" style="display:none">
+        <div class="notes-header">
+          <div style="color:var(--muted);font-size:.88rem">Notes liées à ce sujet</div>
+          <button class="btn btn-primary" onclick="openModal('note', null, sujetCourantId)">＋ Nouvelle note</button>
+        </div>
+        <div class="notes-grid" id="notesSujetGrid"></div>
+      </div>
     </div>
 
-    <!-- REVIEW -->
+    <!-- NOTES VIEW -->
+    <div class="view" id="view-notes">
+      <div class="notes-header">
+        <div>
+          <div style="font-family:'DM Serif Display',serif;font-size:2rem;margin-bottom:4px">📝 Notes</div>
+          <div style="color:var(--muted);font-size:.88rem">Toutes tes notes de révision</div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('note')">＋ Nouvelle note</button>
+      </div>
+      <div class="notes-grid" id="notesGrid"></div>
+    </div>
+
+    <!-- NOTE VIEW (lecture) -->
+    <div class="view" id="view-note">
+      <button class="back-btn" id="noteBackBtn" onclick="retourDepuisNote()">← Retour</button>
+      <div class="note-view-header">
+        <div>
+          <div class="note-view-title" id="nvTitle"></div>
+          <div class="note-view-sujets" id="nvSujets"></div>
+          <div class="note-date" id="nvDate" style="margin-top:6px"></div>
+        </div>
+        <div class="note-view-actions">
+          <button class="btn" onclick="openModal('note', noteCouranteId)">✏ Modifier</button>
+          <button class="btn btn-danger btn-sm" onclick="supprimerNote(noteCouranteId)">✕</button>
+        </div>
+      </div>
+      <div class="note-content md" id="nvContent"></div>
+    </div>
+
+    <!-- REVISION -->
     <div class="view" id="view-revision">
       <button class="back-btn" onclick="quitterRevision()">← Quitter</button>
       <div class="review-header">
@@ -381,6 +472,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
           <button class="btn-incorrect" onclick="marquerCarte('incorrect')">✕ Incorrect</button>
           <button class="btn-skip" onclick="cartesSuivante()">→ Passer</button>
           <button class="btn-correct" onclick="marquerCarte('correct')">✓ Correct</button>
+        </div>
+        <div style="display:flex;justify-content:center;margin-top:8px">
+          <button class="btn btn-note-revision" onclick="openModal('note', null, sujetRevisionId)">📝 Ajouter une note</button>
         </div>
       </div>
       <div class="review-done" id="revisionDone">
@@ -422,16 +516,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     </div>
 
     <!-- SUJET -->
-    <div id="modal-sujet-content">
+    <div id="modal-sujet-content" style="display:none">
       <div class="modal-title" id="modalSujetTitle">Nouveau sujet</div>
-      <div class="form-group">
-        <label class="form-label">Nom du sujet</label>
-        <input class="form-input" id="sujetNomInput" placeholder="Ex: Vocabulaire espagnol" maxlength="60">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Description (optionnel)</label>
-        <input class="form-input" id="sujetDescInput" placeholder="Quelques mots…" maxlength="120">
-      </div>
+      <div class="form-group"><label class="form-label">Nom du sujet</label><input class="form-input" id="sujetNomInput" placeholder="Ex: Vocabulaire espagnol" maxlength="60"></div>
+      <div class="form-group"><label class="form-label">Description (optionnel)</label><input class="form-input" id="sujetDescInput" placeholder="Quelques mots…" maxlength="120"></div>
       <div class="modal-actions">
         <button class="btn" onclick="closeModal()">Annuler</button>
         <button class="btn btn-primary" onclick="sauvegarderSujet()">Créer</button>
@@ -441,28 +529,38 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <!-- CARTE -->
     <div id="modal-carte-content" style="display:none">
       <div class="modal-title" id="modalCarteTitle">Nouvelle carte</div>
-      <div class="form-group">
-        <label class="form-label">Recto (Question)</label>
-        <textarea class="form-textarea" id="carteFrontInput" placeholder="Ta question…"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Verso (Réponse)</label>
-        <textarea class="form-textarea" id="carteBackInput" placeholder="La réponse…"></textarea>
-      </div>
+      <div class="form-group"><label class="form-label">Recto (Question)</label><textarea class="form-textarea" id="carteFrontInput" placeholder="Ta question…"></textarea></div>
+      <div class="form-group"><label class="form-label">Verso (Réponse)</label><textarea class="form-textarea" id="carteBackInput" placeholder="La réponse…"></textarea></div>
       <div class="modal-actions">
         <button class="btn" onclick="closeModal()">Annuler</button>
         <button class="btn btn-primary" onclick="sauvegarderCarte()">Enregistrer</button>
       </div>
     </div>
 
-    <!-- IMPORT JSON -->
+    <!-- NOTE -->
+    <div id="modal-note-content" style="display:none">
+      <div class="modal-title" id="modalNoteTitle">Nouvelle note</div>
+      <div class="form-group"><label class="form-label">Titre</label><input class="form-input" id="noteTitreInput" placeholder="Titre de la note…" maxlength="80"></div>
+      <div class="form-group">
+        <label class="form-label">Contenu — Markdown supporté</label>
+        <textarea class="form-textarea" id="noteContenuInput" placeholder="Écris ta note en Markdown…&#10;&#10;**Gras**, *italique*, # Titre, - liste, `code`…" style="min-height:200px;font-family:monospace;font-size:0.88rem"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Associer à des sujets</label>
+        <div class="sujets-picker" id="sujetsPicker"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeModal()">Annuler</button>
+        <button class="btn btn-primary" onclick="sauvegarderNote()">Enregistrer</button>
+      </div>
+    </div>
+
+    <!-- IMPORT -->
     <div id="modal-import-content" style="display:none">
       <div class="modal-title">Importer des cartes</div>
       <div class="form-group">
         <label class="form-label">Format attendu</label>
-        <div style="font-size:.78rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;font-family:monospace;line-height:1.6">
-          [<br>&nbsp;&nbsp;{"front": "Question", "back": "Réponse"}<br>]
-        </div>
+        <div style="font-size:.78rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;font-family:monospace;line-height:1.6">[<br>&nbsp;&nbsp;{"front": "Question", "back": "Réponse"}<br>]</div>
         <label class="form-label">Colle ton JSON</label>
         <textarea class="form-textarea" id="importJsonInput" placeholder='[{"front":"...","back":"..."}]' style="min-height:140px;font-family:monospace;font-size:0.82rem"></textarea>
       </div>
@@ -477,7 +575,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <!-- INVITE -->
     <div id="modal-invite-content" style="display:none">
       <div class="modal-title">🔗 Lien d'invitation</div>
-      <p style="font-size:.86rem;color:var(--muted);margin-bottom:20px;line-height:1.6">Partage ce lien avec un ami autorisé dans tes règles Firestore. Il clique → config chargée automatiquement → connexion Google.</p>
+      <p style="font-size:.86rem;color:var(--muted);margin-bottom:20px;line-height:1.6">Partage ce lien avec un compte autorisé dans tes règles Firestore.</p>
       <div class="form-group">
         <label class="form-label">Lien d'invitation</label>
         <div style="display:flex;gap:8px">
@@ -485,12 +583,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
           <button class="btn btn-primary" onclick="copierLien()" id="copyBtn" style="flex-shrink:0">Copier</button>
         </div>
       </div>
-      <div style="font-size:.75rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;line-height:1.6">
-        ⚠️ Envoie ce lien uniquement à des personnes de confiance autorisées dans tes règles Firestore.
-      </div>
-      <div class="modal-actions">
-        <button class="btn" onclick="closeModal()">Fermer</button>
-      </div>
+      <div style="font-size:.75rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;line-height:1.6">⚠️ Envoie ce lien uniquement à des comptes autorisés dans tes règles Firestore.</div>
+      <div class="modal-actions"><button class="btn" onclick="closeModal()">Fermer</button></div>
     </div>
 
   </div>
@@ -505,19 +599,17 @@ import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/fireb
 
 // ── STATE ─────────────────────────────────────────────────
 let auth, db, utilisateurCourant;
-
-// Structure BDD : { sujets: [ { id, nom, desc, createdAt, cartes: [ { id, recto, verso, statut, derniereRevision, createdAt } ] } ] }
-let etat = { sujets: [] };
-
+// BDD : { sujets: [...], notes: [...] }
+let etat = { sujets: [], notes: [] };
 let sujetCourantId = null;
+let noteCouranteId = null;
+let sujetRevisionId = null; // sujet actif pendant la révision
+let notePreSelectSujetId = null; // sujet pré-sélectionné quand on crée une note depuis révision/sujet
 let filtreCourant = 'all';
-let editSujetId = null;
-let editCarteId = null;
-
-// Révision
+let ongletCourant = 'cartes';
+let vueAvantNote = 'notes'; // pour le bouton retour depuis une note
+let editSujetId = null, editCarteId = null, editNoteId = null;
 let fileRevision = [], indexRevision = 0, statsRevision = {}, carteRetournee = false;
-
-// Multi-select
 let sujetsSelectionnes = new Set();
 let ordreRevision = 'random';
 
@@ -525,6 +617,7 @@ let ordreRevision = 'random';
 const genId = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const sujetCourant = () => etat.sujets.find(s => s.id === sujetCourantId);
+const noteCourante = () => etat.notes.find(n => n.id === noteCouranteId);
 
 function toast(msg) {
   const t = document.getElementById('toast');
@@ -532,61 +625,82 @@ function toast(msg) {
   setTimeout(() => t.classList.remove('show'), 2200);
 }
 function setSyncStatus(s) {
-  const dot = document.getElementById('syncDot');
-  const txt = document.getElementById('syncText');
+  const dot = document.getElementById('syncDot'), txt = document.getElementById('syncText');
   dot.className = 'sync-dot'+(s==='syncing'?' syncing':s==='error'?' error':'');
   txt.textContent = s==='syncing'?'Synchronisation…':s==='error'?'Erreur sync':'Synchronisé';
+}
+
+// ── MARKDOWN RENDERER ─────────────────────────────────────
+function renderMd(text) {
+  if (!text) return '';
+  let html = esc(text);
+  // Blocs code
+  html = html.replace(/```([\s\S]*?)```/g, (_,c) => `<pre><code>${c.trim()}</code></pre>`);
+  // Titres
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+  // Gras / italique
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  // Code inline
+  html = html.replace(/`(.+?)`/g, '<code>$1</code>');
+  // Blockquote
+  html = html.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
+  // Listes
+  html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
+  // HR
+  html = html.replace(/^---$/gm, '<hr>');
+  // Liens
+  html = html.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank">$1</a>');
+  // Paragraphes
+  html = html.split(/\n\n+/).map(p => {
+    if (p.startsWith('<h') || p.startsWith('<ul') || p.startsWith('<pre') || p.startsWith('<blockquote') || p.startsWith('<hr')) return p;
+    return `<p>${p.replace(/\n/g, '<br>')}</p>`;
+  }).join('');
+  return html;
 }
 
 // ── CONFIG ────────────────────────────────────────────────
 const CONFIG_KEY = 'fd_firebase_config';
 function getConfig() { try { return JSON.parse(sessionStorage.getItem(CONFIG_KEY)); } catch { return null; } }
 function saveConfig(cfg) { sessionStorage.setItem(CONFIG_KEY, JSON.stringify(cfg)); }
-
 window.resetConfig = () => { sessionStorage.removeItem(CONFIG_KEY); location.reload(); };
-window.showConfigScreen = () => {
-  document.getElementById('authScreen').style.display = 'none';
-  document.getElementById('configScreen').style.display = 'flex';
-};
+window.showConfigScreen = () => { document.getElementById('authScreen').style.display='none'; document.getElementById('configScreen').style.display='flex'; };
 window.submitConfig = async () => {
-  const apiKey = document.getElementById('cfg_apiKey').value.trim();
-  const projectId = document.getElementById('cfg_projectId').value.trim();
-  const appId = document.getElementById('cfg_appId').value.trim();
-  if (!apiKey || !projectId || !appId) { document.getElementById('configError').textContent = '❌ Remplis tous les champs'; return; }
-  const cfg = { apiKey, projectId, appId, authDomain:`${projectId}.firebaseapp.com`, storageBucket:`${projectId}.appspot.com`, messagingSenderId:'' };
-  document.getElementById('configError').textContent = '';
-  document.getElementById('configScreen').style.display = 'none';
-  document.getElementById('loadingScreen').style.display = 'flex';
-  document.getElementById('loadingText').textContent = 'Connexion à Firebase…';
-  try { initFirebase(cfg); saveConfig(cfg); }
-  catch(e) {
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('configScreen').style.display = 'flex';
-    document.getElementById('configError').textContent = '❌ Config invalide';
-  }
+  const apiKey=document.getElementById('cfg_apiKey').value.trim();
+  const projectId=document.getElementById('cfg_projectId').value.trim();
+  const appId=document.getElementById('cfg_appId').value.trim();
+  if(!apiKey||!projectId||!appId){document.getElementById('configError').textContent='❌ Remplis tous les champs';return;}
+  const cfg={apiKey,projectId,appId,authDomain:`${projectId}.firebaseapp.com`,storageBucket:`${projectId}.appspot.com`,messagingSenderId:''};
+  document.getElementById('configError').textContent='';
+  document.getElementById('configScreen').style.display='none';
+  document.getElementById('loadingScreen').style.display='flex';
+  document.getElementById('loadingText').textContent='Connexion à Firebase…';
+  try{initFirebase(cfg);saveConfig(cfg);}
+  catch(e){document.getElementById('loadingScreen').style.display='none';document.getElementById('configScreen').style.display='flex';document.getElementById('configError').textContent='❌ Config invalide';}
 };
 
 // ── FIREBASE ──────────────────────────────────────────────
 function initFirebase(cfg) {
-  const fbApp = initializeApp(cfg);
-  auth = getAuth(fbApp);
-  db   = getFirestore(fbApp);
-  onAuthStateChanged(auth, async utilisateur => {
-    if (utilisateur) {
-      utilisateurCourant = utilisateur;
-      document.getElementById('authScreen').style.display = 'none';
-      document.getElementById('loadingText').textContent = 'Chargement de tes données…';
-      document.getElementById('loadingScreen').style.display = 'flex';
+  const fbApp=initializeApp(cfg); auth=getAuth(fbApp); db=getFirestore(fbApp);
+  onAuthStateChanged(auth, async u => {
+    if(u){
+      utilisateurCourant=u;
+      document.getElementById('authScreen').style.display='none';
+      document.getElementById('loadingText').textContent='Chargement de tes données…';
+      document.getElementById('loadingScreen').style.display='flex';
       await chargerDonnees();
-      document.getElementById('loadingScreen').style.display = 'none';
-      document.getElementById('mainApp').style.display = 'flex';
+      document.getElementById('loadingScreen').style.display='none';
+      document.getElementById('mainApp').style.display='flex';
       afficherInfoUtilisateur(); renderSidebar(); renderHome();
-    history.replaceState({ view: 'home', sujetId: null }, '');
+      history.replaceState({view:'home',sujetId:null},'');
     } else {
-      utilisateurCourant = null;
-      document.getElementById('loadingScreen').style.display = 'none';
-      document.getElementById('mainApp').style.display = 'none';
-      document.getElementById('authScreen').style.display = 'flex';
+      utilisateurCourant=null;
+      document.getElementById('loadingScreen').style.display='none';
+      document.getElementById('mainApp').style.display='none';
+      document.getElementById('authScreen').style.display='flex';
     }
   });
 }
@@ -594,166 +708,151 @@ function initFirebase(cfg) {
 // ── FIRESTORE ─────────────────────────────────────────────
 async function chargerDonnees() {
   try {
-    const snap = await getDoc(doc(db, 'utilisateurs', utilisateurCourant.uid));
-    etat = snap.exists() ? snap.data() : { sujets: [] };
-    if (!etat.sujets) etat.sujets = [];
+    const snap=await getDoc(doc(db,'utilisateurs',utilisateurCourant.uid));
+    etat=snap.exists()?snap.data():{sujets:[],notes:[]};
+    if(!etat.sujets)etat.sujets=[];
+    if(!etat.notes)etat.notes=[];
   } catch(e) {
     await signOut(auth);
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'none';
-    document.getElementById('authScreen').style.display = 'flex';
-    document.getElementById('authError').textContent = '❌ Accès refusé — compte non autorisé';
-    etat = { sujets: [] };
+    document.getElementById('loadingScreen').style.display='none';
+    document.getElementById('mainApp').style.display='none';
+    document.getElementById('authScreen').style.display='flex';
+    document.getElementById('authError').textContent="❌ Accès refusé — compte non autorisé";
+    etat={sujets:[],notes:[]};
   }
 }
-
 async function sauvegarderDonnees() {
   setSyncStatus('syncing');
-  try {
-    await setDoc(doc(db, 'utilisateurs', utilisateurCourant.uid), etat);
-    setSyncStatus('ok');
-  } catch(e) {
-    setSyncStatus('error');
-    toast('Erreur de sauvegarde');
-  }
+  try{await setDoc(doc(db,'utilisateurs',utilisateurCourant.uid),etat);setSyncStatus('ok');}
+  catch(e){setSyncStatus('error');toast('Erreur de sauvegarde');}
 }
 
 // ── AUTH ──────────────────────────────────────────────────
-window.loginWithGoogle = async () => {
-  document.getElementById('authError').textContent = '';
-  try { await signInWithPopup(auth, new GoogleAuthProvider()); }
-  catch(e) { document.getElementById('authError').textContent = '❌ Connexion annulée'; }
-};
-window.logout = async () => {
-  await signOut(auth);
-  etat = { sujets: [] }; sujetCourantId = null;
-  document.getElementById('mainApp').style.display = 'none';
-  document.getElementById('authScreen').style.display = 'flex';
-};
+window.loginWithGoogle=async()=>{document.getElementById('authError').textContent='';try{await signInWithPopup(auth,new GoogleAuthProvider());}catch(e){document.getElementById('authError').textContent='❌ Connexion annulée';}};
+window.logout=async()=>{await signOut(auth);etat={sujets:[],notes:[]};sujetCourantId=null;document.getElementById('mainApp').style.display='none';document.getElementById('authScreen').style.display='flex';};
 
 // ── USER INFO ─────────────────────────────────────────────
 function afficherInfoUtilisateur() {
-  const nom = utilisateurCourant.displayName || utilisateurCourant.email;
-  const photo = utilisateurCourant.photoURL;
-  const prenom = nom.split(' ')[0];
-  document.getElementById('homeHeader').textContent = `Bonjour, ${prenom} 👋`;
-  document.getElementById('userInfo').innerHTML = photo
-    ? `<img class="user-avatar" src="${photo}"><span class="user-name">${esc(nom)}</span>`
-    : `<div class="user-avatar-placeholder">${nom[0].toUpperCase()}</div><span class="user-name">${esc(nom)}</span>`;
+  const nom=utilisateurCourant.displayName||utilisateurCourant.email;
+  const photo=utilisateurCourant.photoURL, prenom=nom.split(' ')[0];
+  document.getElementById('homeHeader').textContent=`Bonjour, ${prenom} 👋`;
+  document.getElementById('userInfo').innerHTML=photo
+    ?`<img class="user-avatar" src="${photo}"><span class="user-name">${esc(nom)}</span>`
+    :`<div class="user-avatar-placeholder">${nom[0].toUpperCase()}</div><span class="user-name">${esc(nom)}</span>`;
 }
 
 // ── SIDEBAR ───────────────────────────────────────────────
 function renderSidebar() {
-  const list = document.getElementById('sujetList');
-  if (!etat.sujets?.length) {
-    list.innerHTML = '<div style="font-size:.8rem;color:var(--muted);padding:8px 14px">Aucun sujet</div>';
-    return;
-  }
-  list.innerHTML = etat.sujets.map(s => `
+  const list=document.getElementById('sujetList');
+  if(!etat.sujets?.length){list.innerHTML='<div style="font-size:.8rem;color:var(--muted);padding:8px 14px">Aucun sujet</div>';return;}
+  list.innerHTML=etat.sujets.map(s=>`
     <div class="sujet-item ${s.id===sujetCourantId?'active':''}" onclick="ouvrirSujet('${s.id}')">
       <div class="sujet-item-info"><div class="sujet-dot"></div><span class="sujet-name">${esc(s.nom)}</span></div>
       <span class="sujet-count">${(s.cartes||[]).length}</span>
     </div>`).join('');
+  // Active nav notes si vue notes
+  document.getElementById('nav-notes').classList.toggle('active',
+    document.getElementById('view-notes').classList.contains('active') ||
+    document.getElementById('view-note').classList.contains('active')
+  );
 }
-
-// ── MULTI-SELECT ──────────────────────────────────────────
-window.setOrder = mode => {
-  ordreRevision = mode;
-  document.getElementById('orderRandom').classList.toggle('active', mode==='random');
-  document.getElementById('orderSeq').classList.toggle('active', mode==='sequential');
-};
-window.toggleSelectSujet = (id, e) => {
-  e.stopPropagation();
-  if (sujetsSelectionnes.has(id)) sujetsSelectionnes.delete(id);
-  else sujetsSelectionnes.add(id);
-  updateSelectionUI();
-};
-function updateSelectionUI() {
-  const n = sujetsSelectionnes.size;
-  document.getElementById('launchBar').style.display = n > 0 ? 'flex' : 'none';
-  document.getElementById('selectActions').style.display = n > 0 ? 'flex' : 'none';
-  document.getElementById('launchCount').textContent = n;
-  document.getElementById('selectCount').textContent = `${n} sélectionné${n!==1?'s':''}`;
-  document.querySelectorAll('.sujet-card').forEach(card => {
-    const id = card.dataset.id;
-    card.classList.toggle('selected', sujetsSelectionnes.has(id));
-    const cb = card.closest('.sujet-card-wrap')?.querySelector('.sujet-checkbox');
-    if (cb) cb.classList.toggle('checked', sujetsSelectionnes.has(id));
-  });
-}
-window.clearSelection = () => { sujetsSelectionnes.clear(); updateSelectionUI(); };
-window.lancerRevisionMulti = () => {
-  const sujets = etat.sujets.filter(s => sujetsSelectionnes.has(s.id));
-  let cartes = sujets.flatMap(s => (s.cartes||[]).map(c => ({...c, _sujetId: s.id, _sujetNom: s.nom})));
-  if (!cartes.length) { toast('Aucune carte dans les sujets sélectionnés !'); return; }
-  if (ordreRevision === 'random') melangerTableau(cartes);
-  const titres = sujets.map(s=>s.nom).join(', ');
-  demarrerRevision(cartes, titres);
-};
 
 // ── HOME ──────────────────────────────────────────────────
 function renderHome() {
-  const sujets = etat.sujets||[];
-  const total = sujets.reduce((a,s)=>a+(s.cartes||[]).length,0);
-  const ok    = sujets.reduce((a,s)=>a+(s.cartes||[]).filter(c=>c.statut==='correct').length,0);
-  const ko    = sujets.reduce((a,s)=>a+(s.cartes||[]).filter(c=>c.statut==='incorrect').length,0);
-  document.getElementById('globalStats').innerHTML = `
+  const sujets=etat.sujets||[];
+  const total=sujets.reduce((a,s)=>a+(s.cartes||[]).length,0);
+  const ok=sujets.reduce((a,s)=>a+(s.cartes||[]).filter(c=>c.statut==='correct').length,0);
+  const ko=sujets.reduce((a,s)=>a+(s.cartes||[]).filter(c=>c.statut==='incorrect').length,0);
+  const nbNotes=(etat.notes||[]).length;
+  document.getElementById('globalStats').innerHTML=`
     <div class="stat-card"><div class="stat-value">${sujets.length}</div><div class="stat-label">Sujets</div></div>
     <div class="stat-card"><div class="stat-value">${total}</div><div class="stat-label">Cartes</div></div>
     <div class="stat-card"><div class="stat-value" style="color:var(--green)">${ok}</div><div class="stat-label">Maîtrisées</div></div>
-    <div class="stat-card"><div class="stat-value" style="color:var(--red)">${ko}</div><div class="stat-label">À revoir</div></div>`;
-  const grid = document.getElementById('sujetsGrid');
-  if (!sujets.length) {
-    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📚</div><div class="empty-title">Aucun sujet encore</div><div class="empty-sub">Crée ton premier sujet !</div></div>`;
-    return;
-  }
-  grid.innerHTML = sujets.map(s => {
+    <div class="stat-card"><div class="stat-value" style="color:var(--yellow)">${nbNotes}</div><div class="stat-label">Notes</div></div>`;
+  const grid=document.getElementById('sujetsGrid');
+  if(!sujets.length){grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📚</div><div class="empty-title">Aucun sujet encore</div><div class="empty-sub">Crée ton premier sujet !</div></div>`;return;}
+  grid.innerHTML=sujets.map(s=>{
     const cartes=s.cartes||[], n=cartes.length;
     const correct=cartes.filter(c=>c.statut==='correct').length;
     const incorrect=cartes.filter(c=>c.statut==='incorrect').length;
     const pct=n?Math.round(correct/n*100):0;
-    const sel = sujetsSelectionnes.has(s.id);
+    const sel=sujetsSelectionnes.has(s.id);
+    const nbNotesS=(etat.notes||[]).filter(note=>(note.sujetIds||[]).includes(s.id)).length;
     return `<div class="sujet-card-wrap">
       <div class="sujet-checkbox ${sel?'checked':''}" onclick="toggleSelectSujet('${s.id}',event)"></div>
       <div class="sujet-card ${sel?'selected':''}" data-id="${s.id}" onclick="ouvrirSujet('${s.id}')">
         <div class="sujet-card-title">${esc(s.nom)}</div>
-        <div class="sujet-card-meta">
-          <span>📋 ${n} carte${n!==1?'s':''}</span>
-          <span style="color:var(--green)">✓ ${correct}</span>
-          <span style="color:var(--red)">✕ ${incorrect}</span>
-        </div>
+        <div class="sujet-card-meta"><span>📋 ${n} carte${n!==1?'s':''}</span><span style="color:var(--green)">✓ ${correct}</span><span style="color:var(--red)">✕ ${incorrect}</span></div>
         <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
         <div style="font-size:.73rem;color:var(--muted);margin-top:6px">${pct}% maîtrisé</div>
+        ${nbNotesS>0?`<div class="sujet-card-notes">📝 ${nbNotesS} note${nbNotesS>1?'s':''}</div>`:''}
       </div>
     </div>`;
   }).join('');
 }
 
+// ── MULTI-SELECT ──────────────────────────────────────────
+window.setOrder=mode=>{ordreRevision=mode;document.getElementById('orderRandom').classList.toggle('active',mode==='random');document.getElementById('orderSeq').classList.toggle('active',mode==='sequential');};
+window.toggleSelectSujet=(id,e)=>{e.stopPropagation();if(sujetsSelectionnes.has(id))sujetsSelectionnes.delete(id);else sujetsSelectionnes.add(id);updateSelectionUI();};
+function updateSelectionUI(){
+  const n=sujetsSelectionnes.size;
+  document.getElementById('launchBar').style.display=n>0?'flex':'none';
+  document.getElementById('selectActions').style.display=n>0?'flex':'none';
+  document.getElementById('launchCount').textContent=n;
+  document.getElementById('selectCount').textContent=`${n} sélectionné${n!==1?'s':''}`;
+  document.querySelectorAll('.sujet-card').forEach(card=>{
+    const id=card.dataset.id;card.classList.toggle('selected',sujetsSelectionnes.has(id));
+    const cb=card.closest('.sujet-card-wrap')?.querySelector('.sujet-checkbox');
+    if(cb)cb.classList.toggle('checked',sujetsSelectionnes.has(id));
+  });
+}
+window.clearSelection=()=>{sujetsSelectionnes.clear();updateSelectionUI();};
+window.lancerRevisionMulti=()=>{
+  const sujets=etat.sujets.filter(s=>sujetsSelectionnes.has(s.id));
+  let cartes=sujets.flatMap(s=>(s.cartes||[]).map(c=>({...c,_sujetId:s.id,_sujetNom:s.nom})));
+  if(!cartes.length){toast('Aucune carte dans les sujets sélectionnés !');return;}
+  if(ordreRevision==='random')melangerTableau(cartes);
+  sujetRevisionId=null; // multi-sujets
+  demarrerRevision(cartes, sujets.map(s=>s.nom).join(', '));
+};
+
 // ── SUJET VIEW ────────────────────────────────────────────
-window.ouvrirSujet = id => {
-  sujetCourantId=id; filtreCourant='all';
+window.ouvrirSujet=id=>{
+  sujetCourantId=id; filtreCourant='all'; ongletCourant='cartes';
   document.querySelectorAll('.filter-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  document.getElementById('tab-content-cartes').style.display='';
+  document.getElementById('tab-content-notes-sujet').style.display='none';
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-sujet').classList.add('active');
-  history.pushState({ view: 'sujet', sujetId: id }, '');
+  history.pushState({view:'sujet',sujetId:id},'');
   renderSidebar(); renderSujetView(); closeSidebar();
 };
-function renderSujetView() {
+
+window.switchTab=tab=>{
+  ongletCourant=tab;
+  document.getElementById('tab-cartes').classList.toggle('active',tab==='cartes');
+  document.getElementById('tab-notes-sujet').classList.toggle('active',tab==='notes-sujet');
+  document.getElementById('tab-content-cartes').style.display=tab==='cartes'?'':'none';
+  document.getElementById('tab-content-notes-sujet').style.display=tab==='notes-sujet'?'':'none';
+  if(tab==='notes-sujet') renderNotesSujet();
+};
+
+function renderSujetView(){
   const s=sujetCourant(); if(!s) return;
   document.getElementById('svTitle').textContent=s.nom;
   const cartes=s.cartes||[];
-  document.getElementById('svMeta').textContent=
-    `${cartes.length} cartes · ${cartes.filter(c=>c.statut==='correct').length} correctes · ${cartes.filter(c=>c.statut==='incorrect').length} à revoir · ${cartes.filter(c=>c.statut==='unseen').length} non vues`;
+  document.getElementById('svMeta').textContent=`${cartes.length} cartes · ${cartes.filter(c=>c.statut==='correct').length} correctes · ${cartes.filter(c=>c.statut==='incorrect').length} à revoir · ${cartes.filter(c=>c.statut==='unseen').length} non vues`;
+  const nbNotes=(etat.notes||[]).filter(n=>(n.sujetIds||[]).includes(sujetCourantId)).length;
+  document.getElementById('notesCountBadge').textContent=nbNotes>0?`(${nbNotes})`:'';
   renderCardsGrid();
 }
-function renderCardsGrid() {
+
+function renderCardsGrid(){
   const s=sujetCourant(), grid=document.getElementById('cardsGrid');
   let cartes=s.cartes||[];
-  if(filtreCourant!=='all') cartes=cartes.filter(c=>c.statut===filtreCourant);
-  if(!cartes.length) {
-    grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🃏</div><div class="empty-title">Aucune carte ici</div><div class="empty-sub">${filtreCourant==='all'?'Ajoute ta première carte !':'Aucune carte dans ce filtre.'}</div></div>`;
-    return;
-  }
+  if(filtreCourant!=='all')cartes=cartes.filter(c=>c.statut===filtreCourant);
+  if(!cartes.length){grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🃏</div><div class="empty-title">Aucune carte ici</div><div class="empty-sub">${filtreCourant==='all'?'Ajoute ta première carte !':'Aucune carte dans ce filtre.'}</div></div>`;return;}
   grid.innerHTML=cartes.map(c=>`
     <div class="card-item">
       <div class="card-item-front">${esc(c.recto)}</div>
@@ -767,268 +866,293 @@ function renderCardsGrid() {
       </div>
     </div>`).join('');
 }
-window.filtrerCartes=(f,btn)=>{
-  filtreCourant=f;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active'); renderCardsGrid();
+
+window.filtrerCartes=(f,btn)=>{filtreCourant=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderCardsGrid();};
+
+// ── NOTES ─────────────────────────────────────────────────
+function renderNotesGrid(notes, containerId) {
+  const grid=document.getElementById(containerId);
+  if(!notes.length){grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📝</div><div class="empty-title">Aucune note</div><div class="empty-sub">Crée ta première note !</div></div>`;return;}
+  grid.innerHTML=notes.map(n=>{
+    const sujetsLies=(n.sujetIds||[]).map(id=>etat.sujets.find(s=>s.id===id)).filter(Boolean);
+    const preview=n.contenu.replace(/[#*`_\[\]]/g,'').slice(0,120);
+    const date=new Date(n.updatedAt||n.createdAt).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
+    return `<div class="note-card" onclick="ouvrirNote('${n.id}')">
+      <div class="note-card-title">${esc(n.titre||'Sans titre')}</div>
+      <div class="note-card-preview">${esc(preview)}${n.contenu.length>120?'…':''}</div>
+      <div class="note-card-footer">
+        <div class="note-card-sujets">${sujetsLies.map(s=>`<span class="note-sujet-tag">${esc(s.nom)}</span>`).join('')}</div>
+        <div class="note-card-actions">
+          <button class="btn btn-sm" onclick="openModal('note','${n.id}');event.stopPropagation()">✏</button>
+          <button class="btn btn-sm btn-danger" onclick="supprimerNote('${n.id}');event.stopPropagation()">✕</button>
+        </div>
+      </div>
+      <div class="note-date" style="margin-top:8px">${date}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderNotesView(){
+  renderNotesGrid(etat.notes||[], 'notesGrid');
+}
+
+function renderNotesSujet(){
+  const notes=(etat.notes||[]).filter(n=>(n.sujetIds||[]).includes(sujetCourantId));
+  renderNotesGrid(notes, 'notesSujetGrid');
+}
+
+window.ouvrirNote=id=>{
+  noteCouranteId=id;
+  const n=etat.notes.find(x=>x.id===id); if(!n) return;
+  const vueActive=document.querySelector('.view.active');
+  vueAvantNote=vueActive?vueActive.id.replace('view-',''):'notes';
+  document.getElementById('nvTitle').textContent=n.titre||'Sans titre';
+  const sujetsLies=(n.sujetIds||[]).map(id=>etat.sujets.find(s=>s.id===id)).filter(Boolean);
+  document.getElementById('nvSujets').innerHTML=sujetsLies.map(s=>`<span class="note-sujet-tag">${esc(s.nom)}</span>`).join('');
+  const date=new Date(n.updatedAt||n.createdAt).toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
+  document.getElementById('nvDate').textContent=date;
+  document.getElementById('nvContent').innerHTML=renderMd(n.contenu);
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-note').classList.add('active');
+  history.pushState({view:'note',noteId:id,vueAvant:vueAvantNote},'');
+  renderSidebar();
+};
+
+window.retourDepuisNote=()=>{
+  if(vueAvantNote==='sujet'&&sujetCourantId){
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-sujet').classList.add('active');
+    if(ongletCourant==='notes-sujet')renderNotesSujet();
+  } else {
+    showView('notes');
+  }
+};
+
+window.supprimerNote=async id=>{
+  if(!confirm('Supprimer cette note ?'))return;
+  etat.notes=(etat.notes||[]).filter(n=>n.id!==id);
+  if(noteCouranteId===id){noteCouranteId=null;retourDepuisNote();}
+  else{renderNotesView();if(ongletCourant==='notes-sujet')renderNotesSujet();}
+  renderHome();
+  await sauvegarderDonnees(); toast('Note supprimée');
 };
 
 // ── EXPORT ────────────────────────────────────────────────
-window.exporterSujet = () => {
-  const s = sujetCourant(); if(!s) return;
-  const data = (s.cartes||[]).map(c => ({ front: c.recto, back: c.verso }));
-  const json = JSON.stringify(data, null, 2);
-  document.getElementById('exportJson').value = json;
-  document.getElementById('exportFilename').textContent = `${s.nom.replace(/[^a-z0-9]/gi,'_')}_flashdeck.json`;
-  document.getElementById('exportCopyBtn').textContent = 'Copier';
+window.exporterSujet=()=>{
+  const s=sujetCourant(); if(!s) return;
+  const data=(s.cartes||[]).map(c=>({front:c.recto,back:c.verso}));
+  document.getElementById('exportJson').value=JSON.stringify(data,null,2);
+  document.getElementById('exportFilename').textContent=`${s.nom.replace(/[^a-z0-9]/gi,'_')}_flashdeck.json`;
+  document.getElementById('exportCopyBtn').textContent='Copier';
   openModal('export');
 };
-
-window.copierExport = () => {
-  navigator.clipboard.writeText(document.getElementById('exportJson').value).then(() => {
-    document.getElementById('exportCopyBtn').textContent = '✓ Copié !';
-    setTimeout(() => document.getElementById('exportCopyBtn').textContent = 'Copier', 2000);
-  });
-};
-
-window.telechargerExport = () => {
-  const json = document.getElementById('exportJson').value;
-  const nom  = document.getElementById('exportFilename').textContent;
-  const blob = new Blob([json], { type: 'application/json' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url; a.download = nom; a.click();
-  URL.revokeObjectURL(url);
-  toast('✓ Fichier téléchargé !');
+window.copierExport=()=>{navigator.clipboard.writeText(document.getElementById('exportJson').value).then(()=>{document.getElementById('exportCopyBtn').textContent='✓ Copié!';setTimeout(()=>document.getElementById('exportCopyBtn').textContent='Copier',2000);});};
+window.telechargerExport=()=>{
+  const json=document.getElementById('exportJson').value, nom=document.getElementById('exportFilename').textContent;
+  const blob=new Blob([json],{type:'application/json'}), url=URL.createObjectURL(blob), a=document.createElement('a');
+  a.href=url;a.download=nom;a.click();URL.revokeObjectURL(url);toast('✓ Fichier téléchargé !');
 };
 
 // ── REVISION ──────────────────────────────────────────────
-window.lancerRevision = (mode, ordre='random') => {
+window.lancerRevision=(mode,ordre='random')=>{
   const s=sujetCourant();
-  let cartes = mode==='incorrect'
-    ? (s.cartes||[]).filter(c=>c.statut==='incorrect')
-    : [...(s.cartes||[])];
-  cartes = cartes.map(c => ({...c, _sujetId: s.id, _sujetNom: s.nom}));
+  let cartes=mode==='incorrect'?(s.cartes||[]).filter(c=>c.statut==='incorrect'):[...(s.cartes||[])];
+  cartes=cartes.map(c=>({...c,_sujetId:s.id,_sujetNom:s.nom}));
   if(!cartes.length){toast('Aucune carte à réviser !');return;}
-  if(ordre==='random') melangerTableau(cartes);
-  demarrerRevision(cartes, s.nom);
+  if(ordre==='random')melangerTableau(cartes);
+  sujetRevisionId=s.id;
+  demarrerRevision(cartes,s.nom);
 };
-
-function melangerTableau(arr) {
-  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
-}
-
-function demarrerRevision(cartes, titre) {
-  fileRevision=cartes; indexRevision=0; statsRevision={correct:0,incorrect:0,skipped:0};
+function melangerTableau(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}}
+function demarrerRevision(cartes,titre){
+  fileRevision=cartes;indexRevision=0;statsRevision={correct:0,incorrect:0,skipped:0};
   document.getElementById('revisionContent').style.display='';
   document.getElementById('revisionDone').style.display='none';
   document.getElementById('rvTitle').textContent=titre;
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-revision').classList.add('active');
-  history.pushState({ view: 'revision', sujetId: sujetCourantId }, '');
+  history.pushState({view:'revision',sujetId:sujetCourantId},'');
   afficherCarteCourante();
 }
-
-function afficherCarteCourante() {
+function afficherCarteCourante(){
   if(indexRevision>=fileRevision.length){terminerRevision();return;}
   const c=fileRevision[indexRevision];
   document.getElementById('carteFront').textContent=c.recto;
   document.getElementById('carteBack').textContent=c.verso;
-  const sujetLabel = document.getElementById('carteSubject');
-  if(c._sujetNom) { sujetLabel.textContent = `📂 ${c._sujetNom}`; sujetLabel.style.display=''; }
-  else sujetLabel.style.display='none';
-  carteRetournee=false; document.getElementById('flashcard').classList.remove('flipped');
+  const sl=document.getElementById('carteSubject');
+  if(c._sujetNom){sl.textContent=`📂 ${c._sujetNom}`;sl.style.display='';}else sl.style.display='none';
+  carteRetournee=false;document.getElementById('flashcard').classList.remove('flipped');
   document.getElementById('rvCount').textContent=`${indexRevision+1} / ${fileRevision.length}`;
   document.getElementById('rvBarFill').style.width=`${(indexRevision/fileRevision.length)*100}%`;
 }
-
-window.retournerCarte=()=>{ carteRetournee=!carteRetournee; document.getElementById('flashcard').classList.toggle('flipped',carteRetournee); };
-
+window.retournerCarte=()=>{carteRetournee=!carteRetournee;document.getElementById('flashcard').classList.toggle('flipped',carteRetournee);};
 window.marquerCarte=async statut=>{
   const c=fileRevision[indexRevision];
-  // Mettre à jour dans l'état local
   const sujet=etat.sujets.find(s=>s.id===c._sujetId);
   const carte=(sujet?.cartes||[]).find(x=>x.id===c.id);
   if(carte){carte.statut=statut;carte.derniereRevision=Date.now();}
-  statsRevision[statut]++; indexRevision++; afficherCarteCourante();
+  statsRevision[statut]++;indexRevision++;afficherCarteCourante();
   await sauvegarderDonnees();
 };
-
 window.cartesSuivante=()=>{statsRevision.skipped++;indexRevision++;afficherCarteCourante();};
-
-function terminerRevision() {
+function terminerRevision(){
   document.getElementById('revisionContent').style.display='none';
   document.getElementById('revisionDone').style.display='block';
   document.getElementById('doneCorrect').textContent=statsRevision.correct;
   document.getElementById('doneIncorrect').textContent=statsRevision.incorrect;
   document.getElementById('doneSkipped').textContent=statsRevision.skipped;
-  if(sujetCourantId) renderSujetView();
+  if(sujetCourantId)renderSujetView();
 }
-window.quitterRevision=()=>{
-  if(sujetCourantId){renderSujetView();showView('sujet');}
-  else showView('home');
-};
+window.quitterRevision=()=>{if(sujetCourantId){renderSujetView();showView('sujet');}else showView('home');};
 
 // ── MODALS ────────────────────────────────────────────────
-window.openModal=(type,id)=>{
-  ['sujet','carte','import','invite','export'].forEach(t=>
+window.openModal=(type,id=null,preSelectSujetId=null)=>{
+  ['export','sujet','carte','note','import','invite'].forEach(t=>
     document.getElementById(`modal-${t}-content`).style.display=type===t?'':'none'
   );
   if(type==='sujet'){
-    editSujetId=id||null;
-    const s=id?etat.sujets.find(x=>x.id===id):null;
+    editSujetId=id;const s=id?etat.sujets.find(x=>x.id===id):null;
     document.getElementById('modalSujetTitle').textContent=s?'Modifier le sujet':'Nouveau sujet';
     document.getElementById('sujetNomInput').value=s?.nom||'';
     document.getElementById('sujetDescInput').value=s?.desc||'';
     setTimeout(()=>document.getElementById('sujetNomInput').focus(),100);
   }
   if(type==='carte'){
-    editCarteId=id||null;
-    const s=sujetCourant();
-    const c=id?(s?.cartes||[]).find(x=>x.id===id):null;
+    editCarteId=id;const s=sujetCourant();const c=id?(s?.cartes||[]).find(x=>x.id===id):null;
     document.getElementById('modalCarteTitle').textContent=c?'Modifier la carte':'Nouvelle carte';
     document.getElementById('carteFrontInput').value=c?.recto||'';
     document.getElementById('carteBackInput').value=c?.verso||'';
     setTimeout(()=>document.getElementById('carteFrontInput').focus(),100);
   }
-  if(type==='import'){
-    document.getElementById('importJsonInput').value='';
-    document.getElementById('importPreview').innerHTML='';
-    setTimeout(()=>document.getElementById('importJsonInput').focus(),100);
+  if(type==='note'){
+    editNoteId=id;const n=id?(etat.notes||[]).find(x=>x.id===id):null;
+    document.getElementById('modalNoteTitle').textContent=n?'Modifier la note':'Nouvelle note';
+    document.getElementById('noteTitreInput').value=n?.titre||'';
+    document.getElementById('noteContenuInput').value=n?.contenu||'';
+    // Sujets picker
+    const defaultSujetIds=n?.sujetIds||(preSelectSujetId?[preSelectSujetId]:sujetCourantId?[sujetCourantId]:[]);
+    document.getElementById('sujetsPicker').innerHTML=(etat.sujets||[]).map(s=>
+      `<button class="sujet-pick-btn ${defaultSujetIds.includes(s.id)?'selected':''}" data-id="${s.id}" onclick="toggleSujetPick(this)">${esc(s.nom)}</button>`
+    ).join('');
+    setTimeout(()=>document.getElementById('noteTitreInput').focus(),100);
   }
+  if(type==='import'){document.getElementById('importJsonInput').value='';document.getElementById('importPreview').innerHTML='';setTimeout(()=>document.getElementById('importJsonInput').focus(),100);}
   if(type==='invite'){
     const cfg=getConfig();
-    if(cfg){
-      const encoded=btoa(JSON.stringify(cfg));
-      document.getElementById('inviteLink').value=`${location.origin}${location.pathname}?cfg=${encoded}`;
-      document.getElementById('copyBtn').textContent='Copier';
-    }
+    if(cfg){const enc=btoa(JSON.stringify(cfg));document.getElementById('inviteLink').value=`${location.origin}${location.pathname}?cfg=${enc}`;document.getElementById('copyBtn').textContent='Copier';}
   }
   document.getElementById('modal').classList.add('open');
 };
 window.closeModal=()=>document.getElementById('modal').classList.remove('open');
 document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))window.closeModal();});
 
+window.toggleSujetPick=btn=>btn.classList.toggle('selected');
+
+// ── SAVE SUJET ────────────────────────────────────────────
 window.sauvegarderSujet=async()=>{
   const nom=document.getElementById('sujetNomInput').value.trim();
   const desc=document.getElementById('sujetDescInput').value.trim();
   if(!nom){toast('Donne un nom au sujet !');return;}
-  if(editSujetId){
-    const s=etat.sujets.find(x=>x.id===editSujetId);
-    s.nom=nom; s.desc=desc;
-  } else {
-    etat.sujets.push({id:genId(),nom,desc,cartes:[],createdAt:Date.now()});
-  }
-  window.closeModal(); renderSidebar(); renderHome();
-  await sauvegarderDonnees(); toast('Sujet sauvegardé ✓');
+  if(editSujetId){const s=etat.sujets.find(x=>x.id===editSujetId);s.nom=nom;s.desc=desc;}
+  else etat.sujets.push({id:genId(),nom,desc,cartes:[],createdAt:Date.now()});
+  window.closeModal();renderSidebar();renderHome();
+  await sauvegarderDonnees();toast('Sujet sauvegardé ✓');
 };
 
+// ── SAVE CARTE ────────────────────────────────────────────
 window.sauvegarderCarte=async()=>{
   const recto=document.getElementById('carteFrontInput').value.trim();
   const verso=document.getElementById('carteBackInput').value.trim();
   if(!recto||!verso){toast('Remplis les deux faces !');return;}
   const s=sujetCourant();
-  if(editCarteId){
-    const c=(s.cartes||[]).find(x=>x.id===editCarteId);
-    c.recto=recto; c.verso=verso;
-  } else {
-    if(!s.cartes)s.cartes=[];
-    s.cartes.push({id:genId(),recto,verso,statut:'unseen',createdAt:Date.now()});
-  }
-  window.closeModal(); renderSujetView(); renderSidebar();
-  await sauvegarderDonnees(); toast('Carte sauvegardée ✓');
+  if(editCarteId){const c=(s.cartes||[]).find(x=>x.id===editCarteId);c.recto=recto;c.verso=verso;}
+  else{if(!s.cartes)s.cartes=[];s.cartes.push({id:genId(),recto,verso,statut:'unseen',createdAt:Date.now()});}
+  window.closeModal();renderSujetView();renderSidebar();
+  await sauvegarderDonnees();toast('Carte sauvegardée ✓');
 };
 
+// ── SAVE NOTE ─────────────────────────────────────────────
+window.sauvegarderNote=async()=>{
+  const titre=document.getElementById('noteTitreInput').value.trim();
+  const contenu=document.getElementById('noteContenuInput').value.trim();
+  if(!contenu){toast('La note est vide !');return;}
+  const sujetIds=[...document.querySelectorAll('.sujet-pick-btn.selected')].map(b=>b.dataset.id);
+  const now=Date.now();
+  if(editNoteId){
+    const n=(etat.notes||[]).find(x=>x.id===editNoteId);
+    n.titre=titre||'Sans titre';n.contenu=contenu;n.sujetIds=sujetIds;n.updatedAt=now;
+    // Si on est en vue note, refresh
+    if(noteCouranteId===editNoteId)ouvrirNote(editNoteId);
+  } else {
+    if(!etat.notes)etat.notes=[];
+    etat.notes.push({id:genId(),titre:titre||'Sans titre',contenu,sujetIds,createdAt:now,updatedAt:now});
+  }
+  window.closeModal();
+  renderHome();renderSidebar();
+  if(document.getElementById('view-notes').classList.contains('active'))renderNotesView();
+  if(ongletCourant==='notes-sujet')renderNotesSujet();
+  if(sujetCourantId)renderSujetView();
+  await sauvegarderDonnees();toast('Note sauvegardée ✓');
+};
+
+// ── DELETE ────────────────────────────────────────────────
 window.supprimerCarte=async id=>{
   if(!confirm('Supprimer cette carte ?'))return;
-  const s=sujetCourant(); s.cartes=(s.cartes||[]).filter(c=>c.id!==id);
-  renderSujetView(); renderSidebar(); await sauvegarderDonnees(); toast('Carte supprimée');
+  const s=sujetCourant();s.cartes=(s.cartes||[]).filter(c=>c.id!==id);
+  renderSujetView();renderSidebar();await sauvegarderDonnees();toast('Carte supprimée');
 };
-
 window.supprimerSujetCourant=async()=>{
   if(!confirm('Supprimer ce sujet et toutes ses cartes ?'))return;
   etat.sujets=etat.sujets.filter(s=>s.id!==sujetCourantId);
-  sujetCourantId=null; renderSidebar(); renderHome(); showView('home');
-  await sauvegarderDonnees(); toast('Sujet supprimé');
+  // Retirer ce sujet des notes
+  (etat.notes||[]).forEach(n=>{n.sujetIds=(n.sujetIds||[]).filter(id=>id!==sujetCourantId);});
+  sujetCourantId=null;renderSidebar();renderHome();showView('home');
+  await sauvegarderDonnees();toast('Sujet supprimé');
 };
 
 // ── IMPORT ────────────────────────────────────────────────
 window.previewImport=()=>{
   const raw=document.getElementById('importJsonInput').value.trim();
   const preview=document.getElementById('importPreview');
-  try {
-    const cartes=JSON.parse(raw);
-    if(!Array.isArray(cartes))throw new Error('Doit être un tableau []');
-    const valid=cartes.filter(c=>c.front&&c.back);
-    const invalid=cartes.length-valid.length;
-    preview.innerHTML=`
-      <div class="import-preview-ok">✓ ${valid.length} carte${valid.length!==1?'s':''} valide${valid.length!==1?'s':''}${invalid>0?` (${invalid} ignorée${invalid!==1?'s':''})`:''}</div>
-      <div class="import-preview-list">
-        ${valid.slice(0,5).map(c=>`<div class="import-preview-item"><strong>${esc(c.front)}</strong> → ${esc(c.back)}</div>`).join('')}
-        ${valid.length>5?`<div style="color:var(--muted);font-size:.75rem;padding:4px 10px">...et ${valid.length-5} autre${valid.length-5!==1?'s':''}</div>`:''}
-      </div>`;
-  } catch(e) {
-    preview.innerHTML=`<div class="import-preview-err">❌ JSON invalide : ${e.message}</div>`;
-  }
+  try{
+    const cartes=JSON.parse(raw);if(!Array.isArray(cartes))throw new Error('Doit être un tableau []');
+    const valid=cartes.filter(c=>c.front&&c.back);const invalid=cartes.length-valid.length;
+    preview.innerHTML=`<div class="import-preview-ok">✓ ${valid.length} carte${valid.length!==1?'s':''} valide${valid.length!==1?'s':''}${invalid>0?` (${invalid} ignorée${invalid!==1?'s':''})`:''}</div><div class="import-preview-list">${valid.slice(0,5).map(c=>`<div class="import-preview-item"><strong>${esc(c.front)}</strong> → ${esc(c.back)}</div>`).join('')}${valid.length>5?`<div style="color:var(--muted);font-size:.75rem;padding:4px 10px">...et ${valid.length-5} autre${valid.length-5!==1?'s':''}</div>`:''}</div>`;
+  }catch(e){preview.innerHTML=`<div class="import-preview-err">❌ JSON invalide : ${e.message}</div>`;}
 };
-
 window.confirmerImport=async()=>{
   const raw=document.getElementById('importJsonInput').value.trim();
-  try {
-    const cartes=JSON.parse(raw);
-    if(!Array.isArray(cartes))throw new Error();
-    const valid=cartes.filter(c=>c.front&&c.back);
-    if(!valid.length){toast('Aucune carte valide !');return;}
-    const s=sujetCourant();
-    if(!s.cartes)s.cartes=[];
+  try{
+    const cartes=JSON.parse(raw);if(!Array.isArray(cartes))throw new Error();
+    const valid=cartes.filter(c=>c.front&&c.back);if(!valid.length){toast('Aucune carte valide !');return;}
+    const s=sujetCourant();if(!s.cartes)s.cartes=[];
     valid.forEach(c=>s.cartes.push({id:genId(),recto:String(c.front),verso:String(c.back),statut:'unseen',createdAt:Date.now()}));
-    window.closeModal(); renderSujetView(); renderSidebar();
-    await sauvegarderDonnees();
-    toast(`✓ ${valid.length} carte${valid.length!==1?'s':''} importée${valid.length!==1?'s':''} !`);
-  } catch(e){ toast('❌ JSON invalide'); }
+    window.closeModal();renderSujetView();renderSidebar();
+    await sauvegarderDonnees();toast(`✓ ${valid.length} carte${valid.length!==1?'s':''} importée${valid.length!==1?'s':''} !`);
+  }catch(e){toast('❌ JSON invalide');}
 };
 
 // ── INVITE ────────────────────────────────────────────────
-window.copierLien=()=>{
-  navigator.clipboard.writeText(document.getElementById('inviteLink').value).then(()=>{
-    document.getElementById('copyBtn').textContent='✓ Copié !';
-    setTimeout(()=>document.getElementById('copyBtn').textContent='Copier',2000);
-  });
-};
+window.copierLien=()=>{navigator.clipboard.writeText(document.getElementById('inviteLink').value).then(()=>{document.getElementById('copyBtn').textContent='✓ Copié !';setTimeout(()=>document.getElementById('copyBtn').textContent='Copier',2000);});};
 
 // ── VIEWS ─────────────────────────────────────────────────
 window.showView=name=>{
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+name).classList.add('active');
-  history.pushState({ view: name, sujetId: sujetCourantId }, '');
-  if(name==='home'){
-    sujetCourantId=null; sujetsSelectionnes.clear();
-    document.getElementById('launchBar').style.display='none';
-    document.getElementById('selectActions').style.display='none';
-    renderSidebar(); renderHome();
-  }
+  document.getElementById('nav-notes').classList.toggle('active',name==='notes'||name==='note');
+  history.pushState({view:name,sujetId:sujetCourantId},'');
+  if(name==='home'){sujetCourantId=null;sujetsSelectionnes.clear();document.getElementById('launchBar').style.display='none';document.getElementById('selectActions').style.display='none';renderSidebar();renderHome();}
+  if(name==='notes'){renderSidebar();renderNotesView();}
 };
 
-window.addEventListener('popstate', e => {
-  const s = e.state;
-  if (!s) { showView('home'); return; }
-  if (s.view === 'home') {
-    sujetCourantId=null; sujetsSelectionnes.clear();
-    document.getElementById('launchBar').style.display='none';
-    document.getElementById('selectActions').style.display='none';
-    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-    document.getElementById('view-home').classList.add('active');
-    renderSidebar(); renderHome();
-  } else if (s.view === 'sujet' && s.sujetId) {
-    sujetCourantId = s.sujetId;
-    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-    document.getElementById('view-sujet').classList.add('active');
-    renderSidebar(); renderSujetView();
-  } else if (s.view === 'revision') {
-    window.quitterRevision();
-  } else {
-    showView('home');
-  }
+window.addEventListener('popstate',e=>{
+  const s=e.state; if(!s){showView('home');return;}
+  if(s.view==='home'){sujetCourantId=null;sujetsSelectionnes.clear();document.getElementById('launchBar').style.display='none';document.getElementById('selectActions').style.display='none';document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('view-home').classList.add('active');renderSidebar();renderHome();}
+  else if(s.view==='sujet'&&s.sujetId){sujetCourantId=s.sujetId;document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('view-sujet').classList.add('active');renderSidebar();renderSujetView();}
+  else if(s.view==='notes'){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('view-notes').classList.add('active');renderNotesView();}
+  else if(s.view==='note'&&s.noteId){ouvrirNote(s.noteId);}
+  else if(s.view==='revision'){window.quitterRevision();}
+  else showView('home');
 });
 
 // ── MOBILE ────────────────────────────────────────────────
@@ -1048,16 +1172,10 @@ document.addEventListener('keydown',e=>{
 // ── BOOT ──────────────────────────────────────────────────
 const urlParams=new URLSearchParams(location.search);
 const cfgParam=urlParams.get('cfg');
-if(cfgParam){
-  try{const cfg=JSON.parse(atob(cfgParam));saveConfig(cfg);history.replaceState({},'',location.pathname);}
-  catch(e){}
-}
+if(cfgParam){try{const cfg=JSON.parse(atob(cfgParam));saveConfig(cfg);history.replaceState({},'',location.pathname);}catch(e){}}
 const savedCfg=getConfig();
 if(savedCfg){initFirebase(savedCfg);}
-else{
-  document.getElementById('loadingScreen').style.display='none';
-  document.getElementById('configScreen').style.display='flex';
-}
+else{document.getElementById('loadingScreen').style.display='none';document.getElementById('configScreen').style.display='flex';}
 </script>
 </body>
 </html>
