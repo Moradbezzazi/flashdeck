@@ -1461,7 +1461,9 @@ const cfgParam=urlParams.get('cfg');
 if(cfgParam){try{const cfg=JSON.parse(atob(cfgParam));saveConfig(cfg);history.replaceState({},'',location.pathname);}catch(e){}}
 const savedCfg=getConfig();
 if(savedCfg){initFirebase(savedCfg);}
-else{document.getElementById('loadingScreen').style.display='none';document.getElementById('configScreen').style.display='flex';}
+else{
+  document.getElementById('loadingScreen').style.display='none';document.getElementById('configScreen').style.display='flex';
+}
 </script>
 </body>
-</html>
+</html> 
