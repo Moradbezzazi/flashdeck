@@ -192,15 +192,15 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .md a:hover { text-decoration: underline; }
 
 /* ── MARKDOWN DANS LES CARTES ── */
-.md-card { text-align: left; width: 100%; max-height: 220px; overflow-y: auto; }
-.md-card p { font-family: 'DM Serif Display', serif; font-size: 1.3rem; line-height: 1.4; margin-bottom: 8px; }
-.md-card p:only-child { font-size: 1.5rem; text-align: center; }
-.md-card h1, .md-card h2, .md-card h3 { font-family: 'DM Serif Display', serif; margin-bottom: 8px; }
+.md-card { text-align: left; width: 100%; color: var(--text); }
+.md-card p { font-family: 'DM Serif Display', serif; font-size: 1.3rem; line-height: 1.4; margin-bottom: 8px; color: var(--text); }
+.md-card p:only-child { font-size: 1.5rem; text-align: center; color: var(--text); }
+.md-card h1, .md-card h2, .md-card h3 { font-family: 'DM Serif Display', serif; margin-bottom: 8px; color: var(--text); }
 .md-card h1 { font-size: 1.4rem; }
 .md-card h2 { font-size: 1.2rem; }
 .md-card h3 { font-size: 1.05rem; }
-.md-card ul, .md-card ol { margin: 0 0 8px 20px; font-size: 0.95rem; line-height: 1.6; }
-.md-card li { margin-bottom: 3px; }
+.md-card ul, .md-card ol { margin: 0 0 8px 20px; font-size: 0.95rem; line-height: 1.6; color: var(--text); }
+.md-card li { margin-bottom: 3px; color: var(--text); }
 .md-card code { background: rgba(124,106,247,.15); padding: 1px 6px; border-radius: 4px; font-family: monospace; font-size: 0.85em; color: var(--accent2); }
 .md-card pre { background: rgba(0,0,0,.3); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; overflow-x: auto; margin-bottom: 8px; font-size: 0.8rem; text-align: left; }
 .md-card pre code { background: none; padding: 0; color: var(--text); font-size: 0.82rem; }
@@ -216,10 +216,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .review-count { font-size: 0.86rem; color: var(--muted); }
 .review-bar { height: 4px; width: 180px; background: var(--border); border-radius: 2px; margin-top: 6px; overflow: hidden; }
 .review-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; transition: width .4s; }
-.flashcard-wrap { perspective: 1200px; width: 100%; max-width: 580px; margin: 0 auto 28px; cursor: pointer; user-select: none; transition: height .5s cubic-bezier(.4,0,.2,1); }
+.flashcard-wrap { perspective: 1200px; width: 100%; max-width: 100%; margin: 0 auto 28px; cursor: pointer; user-select: none; transition: height .5s cubic-bezier(.4,0,.2,1); }
 .flashcard { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform .5s cubic-bezier(.4,0,.2,1); border-radius: var(--radius); }
 .flashcard.flipped { transform: rotateY(180deg); }
-.flashcard-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 36px 40px; border: 1px solid var(--border); text-align: center; overflow-y: auto; }
+.flashcard-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 36px 40px; border: 1px solid var(--border); text-align: center; overflow-y: auto; color: var(--text); }
 .flashcard-front { background: var(--surface); }
 .flashcard-back { background: var(--surface2); transform: rotateY(180deg); border-color: var(--accent); }
 .card-face-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 16px; }
@@ -651,32 +651,47 @@ function setSyncStatus(s) {
 // ── MARKDOWN RENDERER ─────────────────────────────────────
 function renderMd(text) {
   if (!text) return '';
-  let html = esc(text);
-  // Blocs code
-  html = html.replace(/```([\s\S]*?)```/g, (_,c) => `<pre><code>${c.trim()}</code></pre>`);
-  // Titres
+  let html = text;
+  // 1. Extraire blocs code
+  const codeBlocks = [];
+  html = html.replace(/```([\s\S]*?)```/g, (_, c) => {
+    codeBlocks.push(`<pre><code>${esc(c.trim())}</code></pre>`);
+    return `\x00CODE${codeBlocks.length-1}\x00`;
+  });
+  // 2. Extraire code inline
+  const inlineCodes = [];
+  html = html.replace(/`([^`]+)`/g, (_, c) => {
+    inlineCodes.push(`<code>${esc(c)}</code>`);
+    return `\x00INLINE${inlineCodes.length-1}\x00`;
+  });
+  // 3. Markdown AVANT d'escaper
+  html = html.replace(/\*\*(.+?)\*\*/g, '\x00BOLD_START\x00$1\x00BOLD_END\x00');
+  html = html.replace(/\*(.+?)\*/g, '\x00EM_START\x00$1\x00EM_END\x00');
+  html = html.replace(/\[(.+?)\]\((.+?)\)/g, '\x00LINK_START $2\x00$1\x00LINK_END\x00');
+  // 4. Escaper le HTML
+  html = html.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // 5. Remettre les balises markdown
+  html = html.replace(/\x00BOLD_START\x00/g,'<strong>').replace(/\x00BOLD_END\x00/g,'</strong>');
+  html = html.replace(/\x00EM_START\x00/g,'<em>').replace(/\x00EM_END\x00/g,'</em>');
+  html = html.replace(/\x00LINK_START (.+?)\x00(.+?)\x00LINK_END\x00/g,'<a href="$1" target="_blank">$2</a>');
+  // 6. Titres, listes, blockquote, hr
   html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
   html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
   html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
-  // Gras / italique
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  // Code inline
-  html = html.replace(/`(.+?)`/g, '<code>$1</code>');
-  // Blockquote
   html = html.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
-  // Listes
   html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
-  html = html.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
-  // HR
+  html = html.replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>');
   html = html.replace(/^---$/gm, '<hr>');
-  // Liens
-  html = html.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank">$1</a>');
-  // Paragraphes
+  // 7. Réinjecter code
+  html = html.replace(/\x00CODE(\d+)\x00/g, (_, i) => codeBlocks[i]);
+  html = html.replace(/\x00INLINE(\d+)\x00/g, (_, i) => inlineCodes[i]);
+  // 8. Paragraphes
   html = html.split(/\n\n+/).map(p => {
-    if (p.startsWith('<h') || p.startsWith('<ul') || p.startsWith('<pre') || p.startsWith('<blockquote') || p.startsWith('<hr')) return p;
-    return `<p>${p.replace(/\n/g, '<br>')}</p>`;
-  }).join('');
+    p = p.trim();
+    if (!p) return '';
+    if (/^<(h[123]|ul|pre|blockquote|hr)/.test(p)) return p;
+    return `<p>${p.replace(/\n/g,'<br>')}</p>`;
+  }).filter(Boolean).join('');
   return html;
 }
 
