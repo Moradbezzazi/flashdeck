@@ -241,7 +241,43 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .done-stat-val { font-size: 1.8rem; font-weight: 700; }
 .done-stat-lbl { font-size: 0.78rem; color: var(--muted); }
 
-/* ── BUTTONS ── */
+/* ── QCM ── */
+.qcm-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.qcm-card-badge { display: inline-block; font-size: 0.68rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; border-radius: 20px; background: rgba(251,191,36,.15); color: var(--yellow); margin-bottom: 8px; }
+.qcm-card-question { font-weight: 500; font-size: 0.95rem; margin-bottom: 10px; }
+.qcm-card-choix { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+.qcm-choix-item { font-size: 0.82rem; padding: 4px 10px; border-radius: 6px; background: var(--surface2); color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.qcm-choix-item.correct { color: var(--green); background: rgba(52,211,153,.1); }
+
+/* QCM révision */
+.qcm-revision { width: 100%; padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 24px; }
+.qcm-revision-question { font-family: 'DM Serif Display', serif; font-size: 1.4rem; line-height: 1.5; margin-bottom: 24px; color: var(--text); }
+.qcm-revision-choix { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.qcm-revision-btn { padding: 14px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; cursor: pointer; text-align: left; transition: all .15s; display: flex; align-items: center; gap: 12px; }
+.qcm-revision-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent2); }
+.qcm-revision-btn.selected { border-color: var(--accent); background: rgba(124,106,247,.15); color: var(--accent2); }
+.qcm-revision-btn.correct { border-color: var(--green); background: rgba(52,211,153,.12); color: var(--green); }
+.qcm-revision-btn.wrong { border-color: var(--red); background: rgba(248,113,113,.12); color: var(--red); }
+.qcm-revision-btn.missed { border-color: var(--green); background: rgba(52,211,153,.06); color: var(--green); opacity: .7; }
+.qcm-revision-btn:disabled { cursor: default; }
+.qcm-revision-btn .choix-letter { width: 26px; height: 26px; border-radius: 50%; border: 1px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 600; flex-shrink: 0; }
+.qcm-revision-valider { width: 100%; padding: 13px; border-radius: var(--radius-sm); border: none; background: var(--accent); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: background .15s; margin-top: 4px; }
+.qcm-revision-valider:hover { background: var(--accent2); }
+.qcm-revision-valider:disabled { opacity: .4; cursor: default; }
+.qcm-revision-feedback { font-size: 0.88rem; padding: 10px 14px; border-radius: var(--radius-sm); margin-top: 12px; text-align: center; font-weight: 500; }
+.qcm-revision-feedback.ok { background: rgba(52,211,153,.12); color: var(--green); }
+.qcm-revision-feedback.ko { background: rgba(248,113,113,.12); color: var(--red); }
+
+/* modal QCM */
+.qcm-choix-list { display: flex; flex-direction: column; gap: 8px; }
+.qcm-choix-row { display: flex; align-items: center; gap: 8px; }
+.qcm-choix-row input[type=text] { flex: 1; }
+.qcm-choix-row .check-correct { width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--border); background: var(--surface2); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .15s; font-size: 0.75rem; }
+.qcm-choix-row .check-correct.on { background: var(--green); border-color: var(--green); color: #fff; }
+.qcm-type-toggle { display: flex; gap: 4px; background: var(--surface2); border-radius: var(--radius-sm); padding: 3px; margin-bottom: 20px; width: fit-content; }
+.qcm-type-btn { padding: 7px 18px; border-radius: 8px; border: none; background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; cursor: pointer; transition: all .15s; }
+.qcm-type-btn.active { background: var(--surface); color: var(--text); font-weight: 500; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+
 .btn { padding: 9px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 6px; }
 .btn:hover { border-color: var(--accent); color: var(--accent2); }
 .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
@@ -403,6 +439,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
           <button class="btn" onclick="lancerRevision('all','sequential')">↓ En ordre</button>
           <button class="btn" onclick="lancerRevision('incorrect','random')">⚡ Erreurs</button>
           <button class="btn btn-primary" onclick="openModal('carte')">＋ Carte</button>
+          <button class="btn" style="color:var(--yellow);border-color:rgba(251,191,36,.3)" onclick="openModal('qcm')">＋ QCM</button>
           <button class="btn" onclick="openModal('import')">⬆ JSON</button>
           <button class="btn" onclick="exporterSujet()">⬇ Export</button>
           <button class="btn btn-danger btn-sm" onclick="supprimerSujetCourant()">✕</button>
@@ -472,24 +509,40 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
         </div>
       </div>
       <div id="revisionContent">
-        <div class="flashcard-wrap" onclick="retournerCarte()">
-          <div class="flashcard" id="flashcard">
-            <div class="flashcard-face flashcard-front">
-              <div class="card-face-label">Question</div>
-              <div class="card-face-text md-card" id="carteFront"></div>
-              <div class="card-face-subject" id="carteSubject"></div>
-              <div class="flip-hint">↻ Cliquer pour retourner</div>
-            </div>
-            <div class="flashcard-face flashcard-back">
-              <div class="card-face-label">Réponse</div>
-              <div class="card-face-text md-card" id="carteBack"></div>
+        <!-- FLASHCARD MODE -->
+        <div id="revisionFlashcard">
+          <div class="flashcard-wrap" onclick="retournerCarte()">
+            <div class="flashcard" id="flashcard">
+              <div class="flashcard-face flashcard-front">
+                <div class="card-face-label">Question</div>
+                <div class="card-face-text md-card" id="carteFront"></div>
+                <div class="card-face-subject" id="carteSubject"></div>
+                <div class="flip-hint">↻ Cliquer pour retourner</div>
+              </div>
+              <div class="flashcard-face flashcard-back">
+                <div class="card-face-label">Réponse</div>
+                <div class="card-face-text md-card" id="carteBack"></div>
+              </div>
             </div>
           </div>
+          <div class="review-btns">
+            <button class="btn-incorrect" onclick="marquerCarte('incorrect')">✕ Incorrect</button>
+            <button class="btn-skip" onclick="cartesSuivante()">→ Passer</button>
+            <button class="btn-correct" onclick="marquerCarte('correct')">✓ Correct</button>
+          </div>
         </div>
-        <div class="review-btns">
-          <button class="btn-incorrect" onclick="marquerCarte('incorrect')">✕ Incorrect</button>
-          <button class="btn-skip" onclick="cartesSuivante()">→ Passer</button>
-          <button class="btn-correct" onclick="marquerCarte('correct')">✓ Correct</button>
+        <!-- QCM MODE -->
+        <div id="revisionQcm" style="display:none">
+          <div class="qcm-revision">
+            <div class="card-face-subject" id="qcmSubject"></div>
+            <div class="qcm-revision-question md-card" id="qcmQuestion"></div>
+            <div class="qcm-revision-choix" id="qcmChoix"></div>
+            <button class="qcm-revision-valider" id="qcmValider" onclick="validerQcm()" disabled>Valider</button>
+            <div class="qcm-revision-feedback" id="qcmFeedback" style="display:none"></div>
+          </div>
+          <div class="review-btns" id="qcmBtns" style="display:none">
+            <button class="btn-skip" onclick="cartesSuivante()">→ Passer</button>
+          </div>
         </div>
         <div style="display:flex;justify-content:center;margin-top:8px">
           <button class="btn btn-note-revision" onclick="openModal('note', null, sujetRevisionId)">📝 Ajouter une note</button>
@@ -573,12 +626,33 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
       </div>
     </div>
 
+    <!-- QCM -->
+    <div id="modal-qcm-content" style="display:none">
+      <div class="modal-title" id="modalQcmTitle">Nouvelle question QCM</div>
+      <div class="form-group">
+        <label class="form-label">Question</label>
+        <textarea class="form-textarea" id="qcmQuestionInput" placeholder="Ta question… (Markdown supporté)"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Choix <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">— coche ✓ les bonnes réponses</span></label>
+        <div class="qcm-choix-list" id="qcmChoixList"></div>
+        <button class="btn btn-sm" style="margin-top:8px" onclick="ajouterChoix()">＋ Ajouter un choix</button>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeModal()">Annuler</button>
+        <button class="btn btn-primary" onclick="sauvegarderQcm()">Enregistrer</button>
+      </div>
+    </div>
+
     <!-- IMPORT -->
     <div id="modal-import-content" style="display:none">
       <div class="modal-title">Importer des cartes</div>
       <div class="form-group">
-        <label class="form-label">Format attendu</label>
-        <div style="font-size:.78rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;font-family:monospace;line-height:1.6">[<br>&nbsp;&nbsp;{"front": "Question", "back": "Réponse"}<br>]</div>
+        <label class="form-label">Formats supportés</label>
+        <div style="font-size:.78rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;font-family:monospace;line-height:1.8">
+          {"front":"Q","back":"R"}&nbsp;&nbsp;<span style="color:var(--muted)">// flashcard</span><br>
+          {"type":"qcm","front":"Q","choices":["A","B"],"answers":[0]}&nbsp;&nbsp;<span style="color:var(--muted)">// QCM</span>
+        </div>
         <label class="form-label">Colle ton JSON</label>
         <textarea class="form-textarea" id="importJsonInput" placeholder='[{"front":"...","back":"..."}]' style="min-height:140px;font-family:monospace;font-size:0.82rem"></textarea>
       </div>
@@ -886,10 +960,28 @@ function renderCardsGrid(){
   let cartes=s.cartes||[];
   if(filtreCourant!=='all')cartes=cartes.filter(c=>c.statut===filtreCourant);
   if(!cartes.length){grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🃏</div><div class="empty-title">Aucune carte ici</div><div class="empty-sub">${filtreCourant==='all'?'Ajoute ta première carte !':'Aucune carte dans ce filtre.'}</div></div>`;return;}
-  grid.innerHTML=cartes.map(c=>`
-    <div class="card-item">
+  grid.innerHTML=cartes.map(c=>{
+    if(c.type==='qcm'){
+      const choix=(c.choix||[]);
+      return `<div class="qcm-card">
+        <div class="qcm-card-badge">QCM</div>
+        <div class="qcm-card-question">${renderMd(c.question||'')}</div>
+        <div class="qcm-card-choix">${choix.map((ch,i)=>`
+          <div class="qcm-choix-item ${(c.bonnesReponses||[]).includes(i)?'correct':''}">
+            <span style="font-size:.7rem;font-weight:600">${String.fromCharCode(65+i)}.</span> ${esc(ch)}
+          </div>`).join('')}</div>
+        <div class="card-item-footer">
+          <span class="card-status ${c.statut}">${{correct:'✓ Correct',incorrect:'✕ À revoir',unseen:'Non vue'}[c.statut]}</span>
+          <div class="card-item-actions">
+            <button class="btn btn-sm" onclick="openModal('qcm','${c.id}')">✏</button>
+            <button class="btn btn-sm btn-danger" onclick="supprimerCarte('${c.id}')">✕</button>
+          </div>
+        </div>
+      </div>`;
+    }
+    return `<div class="card-item">
       <div class="card-item-front md" style="font-size:.9rem">${renderMd(c.recto)}</div>
-      <div class="card-item-back" style="color:var(--muted);font-size:.82rem;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${c.verso.replace(/[#*`_\[\]]/g,'')}</div>
+      <div class="card-item-back" style="color:var(--muted);font-size:.82rem;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${(c.verso||'').replace(/[#*`_\[\]]/g,'')}</div>
       <div class="card-item-footer">
         <span class="card-status ${c.statut}">${{correct:'✓ Correct',incorrect:'✕ À revoir',unseen:'Non vue'}[c.statut]}</span>
         <div class="card-item-actions">
@@ -897,7 +989,8 @@ function renderCardsGrid(){
           <button class="btn btn-sm btn-danger" onclick="supprimerCarte('${c.id}')">✕</button>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 window.filtrerCartes=(f,btn)=>{filtreCourant=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderCardsGrid();};
@@ -973,7 +1066,10 @@ window.supprimerNote=async id=>{
 // ── EXPORT ────────────────────────────────────────────────
 window.exporterSujet=()=>{
   const s=sujetCourant(); if(!s) return;
-  const data=(s.cartes||[]).map(c=>({front:c.recto,back:c.verso}));
+  const data=(s.cartes||[]).map(c=>{
+    if(c.type==='qcm') return {type:'qcm',front:c.question,choices:c.choix,answers:c.bonnesReponses};
+    return {front:c.recto,back:c.verso};
+  });
   document.getElementById('exportJson').value=JSON.stringify(data,null,2);
   document.getElementById('exportFilename').textContent=`${s.nom.replace(/[^a-z0-9]/gi,'_')}_flashdeck.json`;
   document.getElementById('exportCopyBtn').textContent='Copier';
@@ -1010,14 +1106,92 @@ function demarrerRevision(cartes,titre){
 function afficherCarteCourante(){
   if(indexRevision>=fileRevision.length){terminerRevision();return;}
   const c=fileRevision[indexRevision];
-  document.getElementById('carteFront').innerHTML=renderMd(c.recto);
-  document.getElementById('carteBack').innerHTML=renderMd(c.verso);
-  const sl=document.getElementById('carteSubject');
-  if(c._sujetNom){sl.textContent=`📂 ${c._sujetNom}`;sl.style.display='';}else sl.style.display='none';
-  carteRetournee=false;document.getElementById('flashcard').classList.remove('flipped');
   document.getElementById('rvCount').textContent=`${indexRevision+1} / ${fileRevision.length}`;
   document.getElementById('rvBarFill').style.width=`${(indexRevision/fileRevision.length)*100}%`;
-  setTimeout(()=>syncCardHeight(false), 50);
+
+  if(c.type==='qcm'){
+    // Mode QCM
+    document.getElementById('revisionFlashcard').style.display='none';
+    document.getElementById('revisionQcm').style.display='';
+    document.getElementById('qcmFeedback').style.display='none';
+    document.getElementById('qcmBtns').style.display='none';
+    document.getElementById('qcmValider').style.display='';
+    document.getElementById('qcmValider').disabled=true;
+
+    const sl=document.getElementById('qcmSubject');
+    if(c._sujetNom){sl.textContent=`📂 ${c._sujetNom}`;sl.style.display='';}else sl.style.display='none';
+
+    document.getElementById('qcmQuestion').innerHTML=renderMd(c.question||'');
+    const choix=c.choix||[];
+    const multiple=(c.bonnesReponses||[]).length>1;
+    document.getElementById('qcmChoix').innerHTML=choix.map((ch,i)=>`
+      <button class="qcm-revision-btn" data-idx="${i}" onclick="toggleChoixQcm(this,${multiple})">
+        <span class="choix-letter">${String.fromCharCode(65+i)}</span>
+        <span>${esc(ch)}</span>
+      </button>`).join('');
+  } else {
+    // Mode Flashcard
+    document.getElementById('revisionFlashcard').style.display='';
+    document.getElementById('revisionQcm').style.display='none';
+    document.getElementById('carteFront').innerHTML=renderMd(c.recto);
+    document.getElementById('carteBack').innerHTML=renderMd(c.verso);
+    const sl=document.getElementById('carteSubject');
+    if(c._sujetNom){sl.textContent=`📂 ${c._sujetNom}`;sl.style.display='';}else sl.style.display='none';
+    carteRetournee=false;document.getElementById('flashcard').classList.remove('flipped');
+    setTimeout(()=>syncCardHeight(false), 50);
+  }
+}
+
+window.toggleChoixQcm=(btn, multiple)=>{
+  if(btn.disabled) return;
+  if(!multiple){
+    document.querySelectorAll('.qcm-revision-btn').forEach(b=>b.classList.remove('selected'));
+  }
+  btn.classList.toggle('selected');
+  const anySelected=document.querySelectorAll('.qcm-revision-btn.selected').length>0;
+  document.getElementById('qcmValider').disabled=!anySelected;
+};
+
+window.validerQcm=async()=>{
+  const c=fileRevision[indexRevision];
+  const bonnes=c.bonnesReponses||[];
+  const selected=[...document.querySelectorAll('.qcm-revision-btn.selected')].map(b=>parseInt(b.dataset.idx));
+
+  // Désactiver tous les boutons
+  document.querySelectorAll('.qcm-revision-btn').forEach((btn,i)=>{
+    btn.disabled=true;
+    if(bonnes.includes(i)&&selected.includes(i)) btn.classList.add('correct');
+    else if(!bonnes.includes(i)&&selected.includes(i)) btn.classList.add('wrong');
+    else if(bonnes.includes(i)&&!selected.includes(i)) btn.classList.add('missed');
+  });
+  document.getElementById('qcmValider').style.display='none';
+
+  // Vérifier si toutes les bonnes réponses sont sélectionnées et aucune mauvaise
+  const correct = bonnes.length===selected.length && bonnes.every(b=>selected.includes(b));
+  const statut = correct ? 'correct' : 'incorrect';
+
+  const fb=document.getElementById('qcmFeedback');
+  fb.className=`qcm-revision-feedback ${correct?'ok':'ko'}`;
+  fb.textContent=correct ? '✓ Bonne réponse !' : `✕ ${bonnes.length>1?'Bonnes réponses : '+bonnes.map(i=>String.fromCharCode(65+i)).join(', '):'Bonne réponse : '+String.fromCharCode(65+bonnes[0])}`;
+  fb.style.display='';
+  document.getElementById('qcmBtns').style.display='flex';
+  document.getElementById('qcmBtns').innerHTML=`
+    <button class="btn-incorrect" onclick="marquerCarte('incorrect')">✕ Incorrect</button>
+    <button class="btn-skip" onclick="cartesSuivante()">→ Passer</button>
+    <button class="btn-correct" onclick="marquerCarte('correct')">✓ Correct</button>`;
+
+  // Marquer automatiquement
+  await marquerCarteAuto(statut);
+};
+
+async function marquerCarteAuto(statut){
+  const c=fileRevision[indexRevision];
+  const sujet=etat.sujets.find(s=>s.id===c._sujetId);
+  const carte=(sujet?.cartes||[]).find(x=>x.id===c.id);
+  if(carte){carte.statut=statut;carte.derniereRevision=Date.now();}
+  statsRevision[statut]++;
+  await sauvegarderDonnees();
+  // Ne pas avancer automatiquement — l'utilisateur clique Suivant ou les boutons
 }
 function syncCardHeight(flipped) {
   const wrap = document.querySelector('.flashcard-wrap');
@@ -1040,9 +1214,15 @@ window.marquerCarte=async statut=>{
   const c=fileRevision[indexRevision];
   const sujet=etat.sujets.find(s=>s.id===c._sujetId);
   const carte=(sujet?.cartes||[]).find(x=>x.id===c.id);
-  if(carte){carte.statut=statut;carte.derniereRevision=Date.now();}
-  statsRevision[statut]++;indexRevision++;afficherCarteCourante();
-  await sauvegarderDonnees();
+  if(c.type!=='qcm'){
+    // Pour flashcard on met à jour le statut ici
+    if(carte){carte.statut=statut;carte.derniereRevision=Date.now();}
+    statsRevision[statut]++;
+    await sauvegarderDonnees();
+  }
+  // Pour QCM le statut a déjà été mis à jour par marquerCarteAuto
+  // Dans les deux cas on avance
+  indexRevision++;afficherCarteCourante();
 };
 window.cartesSuivante=()=>{statsRevision.skipped++;indexRevision++;afficherCarteCourante();};
 function terminerRevision(){
@@ -1056,8 +1236,9 @@ function terminerRevision(){
 window.quitterRevision=()=>{if(sujetCourantId){renderSujetView();showView('sujet');}else showView('home');};
 
 // ── MODALS ────────────────────────────────────────────────
+let editQcmId = null;
 window.openModal=(type,id=null,preSelectSujetId=null)=>{
-  ['export','sujet','carte','note','import','invite'].forEach(t=>
+  ['export','sujet','carte','qcm','note','import','invite'].forEach(t=>
     document.getElementById(`modal-${t}-content`).style.display=type===t?'':'none'
   );
   if(type==='sujet'){
@@ -1074,12 +1255,21 @@ window.openModal=(type,id=null,preSelectSujetId=null)=>{
     document.getElementById('carteBackInput').value=c?.verso||'';
     setTimeout(()=>document.getElementById('carteFrontInput').focus(),100);
   }
+  if(type==='qcm'){
+    editQcmId=id;
+    const s=sujetCourant();const c=id?(s?.cartes||[]).find(x=>x.id===id):null;
+    document.getElementById('modalQcmTitle').textContent=c?'Modifier le QCM':'Nouvelle question QCM';
+    document.getElementById('qcmQuestionInput').value=c?.question||'';
+    const choix=c?.choix||['',''];
+    const bonnes=c?.bonnesReponses||[];
+    document.getElementById('qcmChoixList').innerHTML=choix.map((ch,i)=>buildChoixRow(ch,bonnes.includes(i))).join('');
+    setTimeout(()=>document.getElementById('qcmQuestionInput').focus(),100);
+  }
   if(type==='note'){
     editNoteId=id;const n=id?(etat.notes||[]).find(x=>x.id===id):null;
     document.getElementById('modalNoteTitle').textContent=n?'Modifier la note':'Nouvelle note';
     document.getElementById('noteTitreInput').value=n?.titre||'';
     document.getElementById('noteContenuInput').value=n?.contenu||'';
-    // Sujets picker
     const defaultSujetIds=n?.sujetIds||(preSelectSujetId?[preSelectSujetId]:sujetCourantId?[sujetCourantId]:[]);
     document.getElementById('sujetsPicker').innerHTML=(etat.sujets||[]).map(s=>
       `<button class="sujet-pick-btn ${defaultSujetIds.includes(s.id)?'selected':''}" data-id="${s.id}" onclick="toggleSujetPick(this)">${esc(s.nom)}</button>`
@@ -1095,8 +1285,43 @@ window.openModal=(type,id=null,preSelectSujetId=null)=>{
 };
 window.closeModal=()=>document.getElementById('modal').classList.remove('open');
 document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))window.closeModal();});
-
 window.toggleSujetPick=btn=>btn.classList.toggle('selected');
+
+// ── QCM HELPERS ───────────────────────────────────────────
+function buildChoixRow(val='',correct=false){
+  return `<div class="qcm-choix-row">
+    <div class="check-correct ${correct?'on':''}" onclick="toggleCorrect(this)">${correct?'✓':''}</div>
+    <input class="form-input" type="text" placeholder="Choix…" value="${esc(val)}">
+    <button class="btn btn-sm btn-danger" onclick="supprimerChoix(this)">✕</button>
+  </div>`;
+}
+window.ajouterChoix=()=>document.getElementById('qcmChoixList').insertAdjacentHTML('beforeend',buildChoixRow());
+window.supprimerChoix=btn=>{
+  const list=document.getElementById('qcmChoixList');
+  if(list.children.length<=2){toast('Minimum 2 choix requis');return;}
+  btn.closest('.qcm-choix-row').remove();
+};
+window.toggleCorrect=el=>{el.classList.toggle('on');el.textContent=el.classList.contains('on')?'✓':'';};
+
+// ── SAVE QCM ──────────────────────────────────────────────
+window.sauvegarderQcm=async()=>{
+  const question=document.getElementById('qcmQuestionInput').value.trim();
+  if(!question){toast('Entre la question !');return;}
+  const rows=[...document.querySelectorAll('#qcmChoixList .qcm-choix-row')];
+  const choix=rows.map(r=>r.querySelector('input').value.trim());
+  const bonnesReponses=rows.map((r,i)=>r.querySelector('.check-correct').classList.contains('on')?i:-1).filter(i=>i>=0);
+  if(choix.some(c=>!c)){toast('Remplis tous les choix !');return;}
+  if(bonnesReponses.length===0){toast('Sélectionne au moins une bonne réponse !');return;}
+  const s=sujetCourant(); if(!s.cartes)s.cartes=[];
+  if(editQcmId){
+    const c=s.cartes.find(x=>x.id===editQcmId);
+    c.question=question;c.choix=choix;c.bonnesReponses=bonnesReponses;
+  } else {
+    s.cartes.push({id:genId(),type:'qcm',question,choix,bonnesReponses,statut:'unseen',createdAt:Date.now()});
+  }
+  window.closeModal();renderSujetView();renderSidebar();
+  await sauvegarderDonnees();toast('QCM sauvegardé ✓');
+};
 
 // ── SAVE SUJET ────────────────────────────────────────────
 window.sauvegarderSujet=async()=>{
@@ -1161,24 +1386,33 @@ window.supprimerSujetCourant=async()=>{
 };
 
 // ── IMPORT ────────────────────────────────────────────────
+function isValidCard(c){ return c.type==='qcm' ? (c.front&&Array.isArray(c.choices)&&c.choices.length>=2&&Array.isArray(c.answers)&&c.answers.length>0) : (c.front&&c.back); }
 window.previewImport=()=>{
   const raw=document.getElementById('importJsonInput').value.trim();
   const preview=document.getElementById('importPreview');
   try{
     const cartes=JSON.parse(raw);if(!Array.isArray(cartes))throw new Error('Doit être un tableau []');
-    const valid=cartes.filter(c=>c.front&&c.back);const invalid=cartes.length-valid.length;
-    preview.innerHTML=`<div class="import-preview-ok">✓ ${valid.length} carte${valid.length!==1?'s':''} valide${valid.length!==1?'s':''}${invalid>0?` (${invalid} ignorée${invalid!==1?'s':''})`:''}</div><div class="import-preview-list">${valid.slice(0,5).map(c=>`<div class="import-preview-item"><strong>${esc(c.front)}</strong> → ${esc(c.back)}</div>`).join('')}${valid.length>5?`<div style="color:var(--muted);font-size:.75rem;padding:4px 10px">...et ${valid.length-5} autre${valid.length-5!==1?'s':''}</div>`:''}</div>`;
+    const valid=cartes.filter(isValidCard);const invalid=cartes.length-valid.length;
+    const nbQcm=valid.filter(c=>c.type==='qcm').length;
+    const nbFlash=valid.length-nbQcm;
+    preview.innerHTML=`<div class="import-preview-ok">✓ ${valid.length} élément${valid.length!==1?'s':''} valide${valid.length!==1?'s':''}${nbFlash>0?` (${nbFlash} flashcard${nbFlash>1?'s':''})`:''} ${nbQcm>0?`(${nbQcm} QCM)`:''} ${invalid>0?`— ${invalid} ignoré${invalid>1?'s':''}`:''}</div><div class="import-preview-list">${valid.slice(0,5).map(c=>c.type==='qcm'?`<div class="import-preview-item"><span class="qcm-card-badge" style="font-size:.65rem">QCM</span> ${esc(c.front)}</div>`:`<div class="import-preview-item"><strong>${esc(c.front)}</strong> → ${esc(c.back)}</div>`).join('')}${valid.length>5?`<div style="color:var(--muted);font-size:.75rem;padding:4px 10px">...et ${valid.length-5} autre${valid.length-5!==1?'s':''}</div>`:''}</div>`;
   }catch(e){preview.innerHTML=`<div class="import-preview-err">❌ JSON invalide : ${e.message}</div>`;}
 };
 window.confirmerImport=async()=>{
   const raw=document.getElementById('importJsonInput').value.trim();
   try{
     const cartes=JSON.parse(raw);if(!Array.isArray(cartes))throw new Error();
-    const valid=cartes.filter(c=>c.front&&c.back);if(!valid.length){toast('Aucune carte valide !');return;}
+    const valid=cartes.filter(isValidCard);if(!valid.length){toast('Aucune carte valide !');return;}
     const s=sujetCourant();if(!s.cartes)s.cartes=[];
-    valid.forEach(c=>s.cartes.push({id:genId(),recto:String(c.front),verso:String(c.back),statut:'unseen',createdAt:Date.now()}));
+    valid.forEach(c=>{
+      if(c.type==='qcm'){
+        s.cartes.push({id:genId(),type:'qcm',question:String(c.front),choix:c.choices.map(String),bonnesReponses:c.answers,statut:'unseen',createdAt:Date.now()});
+      } else {
+        s.cartes.push({id:genId(),recto:String(c.front),verso:String(c.back),statut:'unseen',createdAt:Date.now()});
+      }
+    });
     window.closeModal();renderSujetView();renderSidebar();
-    await sauvegarderDonnees();toast(`✓ ${valid.length} carte${valid.length!==1?'s':''} importée${valid.length!==1?'s':''} !`);
+    await sauvegarderDonnees();toast(`✓ ${valid.length} élément${valid.length!==1?'s':''} importé${valid.length!==1?'s':''} !`);
   }catch(e){toast('❌ JSON invalide');}
 };
 
@@ -1212,6 +1446,8 @@ window.closeSidebar=()=>{document.getElementById('sidebar').classList.remove('op
 // ── KEYBOARD ──────────────────────────────────────────────
 document.addEventListener('keydown',e=>{
   if(document.getElementById('view-revision').classList.contains('active')&&!document.getElementById('modal').classList.contains('open')){
+    const c=fileRevision[indexRevision];
+    if(c&&c.type==='qcm') return; // pas de raccourcis clavier en mode QCM
     if(e.key===' '||e.key==='ArrowUp'){e.preventDefault();window.retournerCarte();}
     if(e.key==='ArrowRight'){if(carteRetournee)window.marquerCarte('correct');else window.cartesSuivante();}
     if(e.key==='ArrowLeft'){if(carteRetournee)window.marquerCarte('incorrect');}
