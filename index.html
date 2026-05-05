@@ -959,6 +959,29 @@ function renderSujetView(){
   document.getElementById('svMeta').textContent=`${cartes.length} cartes · ${cartes.filter(c=>c.statut==='correct').length} correctes · ${cartes.filter(c=>c.statut==='incorrect').length} à revoir · ${cartes.filter(c=>c.statut==='unseen').length} non vues`;
   const nbNotes=(etat.notes||[]).filter(n=>(n.sujetIds||[]).includes(sujetCourantId)).length;
   document.getElementById('notesCountBadge').textContent=nbNotes>0?`(${nbNotes})`:'';
+  // Bandeau "Reprendre" si session sauvegardée pour ce sujet
+  const sessions=getSavedSessions();
+  const sessionSujet=Object.values(sessions).find(s=>s.sujetCourantId===sujetCourantId);
+  let bandeau=document.getElementById('reprendre-sujet-bandeau');
+  if(sessionSujet){
+    if(!bandeau){
+      bandeau=document.createElement('div');
+      bandeau.id='reprendre-sujet-bandeau';
+      bandeau.style.cssText='background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);border-radius:var(--radius-sm);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap;';
+      const header=document.getElementById('svTitle').closest('.sujet-view-header');
+      header.parentNode.insertBefore(bandeau,header.nextSibling);
+    }
+    const idx=sessionSujet.indexRevision||0;
+    const total=sessionSujet.fileRevision?.length||0;
+    bandeau.innerHTML=`
+      <span style="font-size:.86rem;color:var(--yellow)">💾 Révision en cours — carte ${idx+1}/${total}</span>
+      <div style="display:flex;gap:8px">
+        <button onclick="reprendreRevision('${sessionSujet.id}')" class="btn btn-sm btn-primary">▶ Reprendre</button>
+        <button onclick="supprimerSessionSauvegardee('${sessionSujet.id}');renderSujetView()" class="btn btn-sm">✕ Supprimer</button>
+      </div>`;
+  } else {
+    if(bandeau) bandeau.remove();
+  }
   renderCardsGrid();
 }
 
@@ -1100,32 +1123,30 @@ window.lancerRevision=(mode,ordre='random')=>{
   demarrerRevision(cartes,s.nom);
 };
 const SESSION_KEY = 'fd_revision_session';
-const SAVED_KEY   = 'fd_revision_saved';
+const SAVED_KEY   = 'fd_revision_saved_v2'; // v2 = multi-sessions
 
 function sessionData() {
   return {
+    id: currentSavedId || genId(),
     fileRevision, indexRevision, statsRevision,
     sujetRevisionId, sujetCourantId,
-    titre: document.getElementById('rvTitle').textContent
+    titre: document.getElementById('rvTitle').textContent,
+    savedAt: Date.now()
   };
 }
 
+let currentSavedId = null; // ID de la session sauvegardée en cours
+
+// ─── SESSION REFRESH (sessionStorage) ─────────────────────
 function sauvegarderSessionRevision() {
   if(!fileRevision.length) return;
   sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionData()));
 }
-
-window.sauvegarderEtQuitter = () => {
-  if(!fileRevision.length) return;
-  localStorage.setItem(SAVED_KEY, JSON.stringify(sessionData()));
-  effacerSessionRevision();
-  toast('✓ Progression sauvegardée — tu pourras reprendre plus tard');
-  setTimeout(()=>{ if(sujetCourantId){renderSujetView();showView('sujet');}else showView('home'); }, 1500);
-};
-
+function effacerSessionRevision() {
+  sessionStorage.removeItem(SESSION_KEY);
+}
 function chargerSessionRevision() {
-  // Priorité : session en cours (refresh) > session sauvegardée (reprendre plus tard)
-  const raw = sessionStorage.getItem(SESSION_KEY) || null;
+  const raw = sessionStorage.getItem(SESSION_KEY);
   if(!raw) return false;
   try {
     const data = JSON.parse(raw);
@@ -1135,7 +1156,28 @@ function chargerSessionRevision() {
   } catch { return false; }
 }
 
+// ─── SESSIONS SAUVEGARDÉES (localStorage multi) ────────────
+function getSavedSessions() {
+  try { return JSON.parse(localStorage.getItem(SAVED_KEY)) || {}; } catch { return {}; }
+}
+function setSavedSessions(sessions) {
+  localStorage.setItem(SAVED_KEY, JSON.stringify(sessions));
+}
+
+window.sauvegarderEtQuitter = () => {
+  if(!fileRevision.length) return;
+  const data = sessionData();
+  currentSavedId = data.id;
+  const sessions = getSavedSessions();
+  sessions[data.id] = data;
+  setSavedSessions(sessions);
+  effacerSessionRevision();
+  toast('✓ Progression sauvegardée — reprends quand tu veux');
+  setTimeout(()=>{ if(sujetCourantId){renderSujetView();showView('sujet');}else showView('home'); }, 1500);
+};
+
 function _restaurerRevision(data) {
+  currentSavedId = data.id || null;
   fileRevision=data.fileRevision; indexRevision=data.indexRevision;
   statsRevision=data.statsRevision||{correct:0,incorrect:0,skipped:0};
   sujetRevisionId=data.sujetRevisionId; sujetCourantId=data.sujetCourantId;
@@ -1147,46 +1189,67 @@ function _restaurerRevision(data) {
   afficherCarteCourante();
 }
 
-function effacerSessionRevision() {
-  sessionStorage.removeItem(SESSION_KEY);
-}
-
-// Vérifier s'il y a une session sauvegardée à reprendre
+// ─── BANNIÈRE MULTI-SESSIONS ───────────────────────────────
 function verifierSessionSauvegardee() {
-  const raw = localStorage.getItem(SAVED_KEY);
-  if(!raw) return;
-  try {
-    const data = JSON.parse(raw);
-    if(!data?.fileRevision?.length) return;
-    const titre = data.titre || 'une révision';
-    const idx = data.indexRevision || 0;
-    const total = data.fileRevision.length;
-    // Afficher un toast avec option de reprendre
-    const t = document.getElementById('toast');
-    t.innerHTML = `💾 Révision en cours sauvegardée (${idx}/${total}) — <span style="color:var(--accent2);cursor:pointer;text-decoration:underline" onclick="reprendreRevision()">Reprendre</span> · <span style="cursor:pointer;opacity:.6" onclick="annulerRevisionSauvegardee()">✕</span>`;
-    t.classList.add('show');
-    t.style.pointerEvents = 'all';
-    t.style.maxWidth = '340px';
-  } catch {}
+  const sessions = getSavedSessions();
+  // N'afficher en bannière home que les sessions multi-sujets (sujetCourantId=null)
+  const multiSessions = Object.values(sessions).filter(s=>!s.sujetCourantId);
+  if(multiSessions.length) afficherBanniereReprise(multiSessions);
 }
 
-window.reprendreRevision = () => {
-  const raw = localStorage.getItem(SAVED_KEY);
-  if(!raw) return;
-  try {
-    const data = JSON.parse(raw);
-    localStorage.removeItem(SAVED_KEY);
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(data));
-    const t = document.getElementById('toast');
-    t.classList.remove('show'); t.style.pointerEvents='none'; t.innerHTML='';
-    _restaurerRevision(data);
-  } catch {}
+function afficherBanniereReprise(sessions) {
+  masquerBanniereReprise();
+  const banniere = document.createElement('div');
+  banniere.id = 'reprendre-banniere';
+  banniere.style.cssText = `position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--yellow);border-radius:var(--radius);padding:16px 20px;font-size:0.88rem;z-index:998;box-shadow:0 4px 24px rgba(0,0,0,.4);max-width:320px;`;
+  banniere.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <span style="font-weight:600;color:var(--yellow)">💾 Révisions sauvegardées</span>
+      <span onclick="masquerBanniereReprise()" style="cursor:pointer;color:var(--muted)">✕</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${sessions.map(s=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;background:var(--surface2);border-radius:var(--radius-sm)">
+          <div>
+            <div style="font-size:.82rem;font-weight:500;color:var(--text)">${esc(s.titre||'Révision')}</div>
+            <div style="font-size:.72rem;color:var(--muted)">carte ${s.indexRevision+1}/${s.fileRevision.length}</div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button onclick="reprendreRevision('${s.id}')" style="padding:5px 12px;border-radius:7px;border:none;background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:0.8rem;cursor:pointer;font-weight:500">▶</button>
+            <button onclick="supprimerSessionSauvegardee('${s.id}')" style="padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.8rem;cursor:pointer">✕</button>
+          </div>
+        </div>`).join('')}
+    </div>`;
+  document.body.appendChild(banniere);
+}
+
+function masquerBanniereReprise() {
+  const b = document.getElementById('reprendre-banniere');
+  if(b) b.remove();
+}
+
+window.reprendreRevision = (id) => {
+  const sessions = getSavedSessions();
+  const data = sessions[id];
+  if(!data) return;
+  // Ne pas supprimer — on la garde jusqu'à terminer
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify(data));
+  masquerBanniereReprise();
+  _restaurerRevision(data);
+};
+
+window.supprimerSessionSauvegardee = (id) => {
+  const sessions = getSavedSessions();
+  delete sessions[id];
+  setSavedSessions(sessions);
+  const list = Object.values(sessions);
+  if(list.length) afficherBanniereReprise(list);
+  else masquerBanniereReprise();
 };
 
 window.annulerRevisionSauvegardee = () => {
   localStorage.removeItem(SAVED_KEY);
-  const t = document.getElementById('toast');
-  t.classList.remove('show'); t.style.pointerEvents='none'; t.innerHTML='';
+  masquerBanniereReprise();
 };
 function demarrerRevision(cartes,titre){
   fileRevision=cartes;indexRevision=0;statsRevision={correct:0,incorrect:0,skipped:0};
@@ -1335,7 +1398,14 @@ window.cartesPrecedente=()=>{
 };
 function terminerRevision(){
   effacerSessionRevision();
-  localStorage.removeItem(SAVED_KEY);
+  // Supprimer la session sauvegardée correspondante
+  if(currentSavedId){
+    const sessions=getSavedSessions();
+    delete sessions[currentSavedId];
+    setSavedSessions(sessions);
+    currentSavedId=null;
+  }
+  masquerBanniereReprise();
   document.getElementById('revisionContent').style.display='none';
   document.getElementById('revisionDone').style.display='block';
   document.getElementById('doneCorrect').textContent=statsRevision.correct;
@@ -1343,7 +1413,7 @@ function terminerRevision(){
   document.getElementById('doneSkipped').textContent=statsRevision.skipped;
   if(sujetCourantId)renderSujetView();
 }
-window.quitterRevision=()=>{effacerSessionRevision();if(sujetCourantId){renderSujetView();showView('sujet');}else showView('home');};
+window.quitterRevision=()=>{effacerSessionRevision();masquerBanniereReprise();if(sujetCourantId){renderSujetView();showView('sujet');}else showView('home');};
 
 // ── MODALS ────────────────────────────────────────────────
 let editQcmId = null;
