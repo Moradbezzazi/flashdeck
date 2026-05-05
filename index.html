@@ -501,6 +501,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <!-- REVISION -->
     <div class="view" id="view-revision">
       <button class="back-btn" onclick="quitterRevision()">← Quitter</button>
+      <button class="btn btn-sm" style="float:right;margin-bottom:24px;color:var(--yellow);border-color:rgba(251,191,36,.3)" onclick="sauvegarderEtQuitter()" title="Sauvegarder la progression pour reprendre plus tard">💾 Sauvegarder</button>
       <div class="review-header">
         <div class="review-title" id="rvTitle">Révision</div>
         <div class="review-progress">
@@ -530,6 +531,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
             <button class="btn-skip" onclick="cartesSuivante()">→ Passer</button>
             <button class="btn-correct" onclick="marquerCarte('correct')">✓ Correct</button>
           </div>
+          <div style="display:flex;justify-content:center;margin-top:8px">
+            <button class="btn btn-sm" id="btnPrecedentFlash" onclick="cartesPrecedente()" style="display:none">← Précédente</button>
+          </div>
         </div>
         <!-- QCM MODE -->
         <div id="revisionQcm" style="display:none">
@@ -540,7 +544,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
             <button class="qcm-revision-valider" id="qcmValider" onclick="validerQcm()" disabled>Valider</button>
             <div class="qcm-revision-feedback" id="qcmFeedback" style="display:none"></div>
           </div>
-          <div class="review-btns" id="qcmBtns" style="display:none">
+          <div class="review-btns" id="qcmBtns">
+            <button class="btn btn-sm" id="btnPrecedentQcm" onclick="cartesPrecedente()" style="display:none">← Précédente</button>
             <button class="btn-skip" onclick="cartesSuivante()">→ Passer</button>
           </div>
         </div>
@@ -803,6 +808,8 @@ function initFirebase(cfg) {
       document.getElementById('mainApp').style.display='flex';
       afficherInfoUtilisateur(); renderSidebar(); renderHome();
       history.replaceState({view:'home',sujetId:null},'');
+      // Restaurer session de révision si elle existe
+      if(!chargerSessionRevision()) verifierSessionSauvegardee();
     } else {
       utilisateurCourant=null;
       document.getElementById('loadingScreen').style.display='none';
@@ -1092,7 +1099,95 @@ window.lancerRevision=(mode,ordre='random')=>{
   sujetRevisionId=s.id;
   demarrerRevision(cartes,s.nom);
 };
-function melangerTableau(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}}
+const SESSION_KEY = 'fd_revision_session';
+const SAVED_KEY   = 'fd_revision_saved';
+
+function sessionData() {
+  return {
+    fileRevision, indexRevision, statsRevision,
+    sujetRevisionId, sujetCourantId,
+    titre: document.getElementById('rvTitle').textContent
+  };
+}
+
+function sauvegarderSessionRevision() {
+  if(!fileRevision.length) return;
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionData()));
+}
+
+window.sauvegarderEtQuitter = () => {
+  if(!fileRevision.length) return;
+  localStorage.setItem(SAVED_KEY, JSON.stringify(sessionData()));
+  effacerSessionRevision();
+  toast('✓ Progression sauvegardée — tu pourras reprendre plus tard');
+  setTimeout(()=>{ if(sujetCourantId){renderSujetView();showView('sujet');}else showView('home'); }, 1500);
+};
+
+function chargerSessionRevision() {
+  // Priorité : session en cours (refresh) > session sauvegardée (reprendre plus tard)
+  const raw = sessionStorage.getItem(SESSION_KEY) || null;
+  if(!raw) return false;
+  try {
+    const data = JSON.parse(raw);
+    if(!data?.fileRevision?.length) return false;
+    _restaurerRevision(data);
+    return true;
+  } catch { return false; }
+}
+
+function _restaurerRevision(data) {
+  fileRevision=data.fileRevision; indexRevision=data.indexRevision;
+  statsRevision=data.statsRevision||{correct:0,incorrect:0,skipped:0};
+  sujetRevisionId=data.sujetRevisionId; sujetCourantId=data.sujetCourantId;
+  document.getElementById('revisionContent').style.display='';
+  document.getElementById('revisionDone').style.display='none';
+  document.getElementById('rvTitle').textContent=data.titre||'Révision';
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-revision').classList.add('active');
+  afficherCarteCourante();
+}
+
+function effacerSessionRevision() {
+  sessionStorage.removeItem(SESSION_KEY);
+}
+
+// Vérifier s'il y a une session sauvegardée à reprendre
+function verifierSessionSauvegardee() {
+  const raw = localStorage.getItem(SAVED_KEY);
+  if(!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    if(!data?.fileRevision?.length) return;
+    const titre = data.titre || 'une révision';
+    const idx = data.indexRevision || 0;
+    const total = data.fileRevision.length;
+    // Afficher un toast avec option de reprendre
+    const t = document.getElementById('toast');
+    t.innerHTML = `💾 Révision en cours sauvegardée (${idx}/${total}) — <span style="color:var(--accent2);cursor:pointer;text-decoration:underline" onclick="reprendreRevision()">Reprendre</span> · <span style="cursor:pointer;opacity:.6" onclick="annulerRevisionSauvegardee()">✕</span>`;
+    t.classList.add('show');
+    t.style.pointerEvents = 'all';
+    t.style.maxWidth = '340px';
+  } catch {}
+}
+
+window.reprendreRevision = () => {
+  const raw = localStorage.getItem(SAVED_KEY);
+  if(!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    localStorage.removeItem(SAVED_KEY);
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(data));
+    const t = document.getElementById('toast');
+    t.classList.remove('show'); t.style.pointerEvents='none'; t.innerHTML='';
+    _restaurerRevision(data);
+  } catch {}
+};
+
+window.annulerRevisionSauvegardee = () => {
+  localStorage.removeItem(SAVED_KEY);
+  const t = document.getElementById('toast');
+  t.classList.remove('show'); t.style.pointerEvents='none'; t.innerHTML='';
+};
 function demarrerRevision(cartes,titre){
   fileRevision=cartes;indexRevision=0;statsRevision={correct:0,incorrect:0,skipped:0};
   document.getElementById('revisionContent').style.display='';
@@ -1109,18 +1204,26 @@ function afficherCarteCourante(){
   document.getElementById('rvCount').textContent=`${indexRevision+1} / ${fileRevision.length}`;
   document.getElementById('rvBarFill').style.width=`${(indexRevision/fileRevision.length)*100}%`;
 
+  // Bouton précédente
+  const showBack = indexRevision > 0;
+  const btnPF = document.getElementById('btnPrecedentFlash');
+  const btnPQ = document.getElementById('btnPrecedentQcm');
+  if(btnPF) btnPF.style.display = showBack ? '' : 'none';
+  if(btnPQ) btnPQ.style.display = showBack ? '' : 'none';
+
   if(c.type==='qcm'){
-    // Mode QCM
     document.getElementById('revisionFlashcard').style.display='none';
     document.getElementById('revisionQcm').style.display='';
     document.getElementById('qcmFeedback').style.display='none';
-    document.getElementById('qcmBtns').style.display='none';
     document.getElementById('qcmValider').style.display='';
     document.getElementById('qcmValider').disabled=true;
+    // Reset boutons QCM
+    document.getElementById('qcmBtns').innerHTML=`
+      ${showBack?'<button class="btn btn-sm" onclick="cartesPrecedente()">← Précédente</button>':''}
+      <button class="btn-skip" onclick="cartesSuivante()">→ Passer</button>`;
 
     const sl=document.getElementById('qcmSubject');
     if(c._sujetNom){sl.textContent=`📂 ${c._sujetNom}`;sl.style.display='';}else sl.style.display='none';
-
     document.getElementById('qcmQuestion').innerHTML=renderMd(c.question||'');
     const choix=c.choix||[];
     const multiple=(c.bonnesReponses||[]).length>1;
@@ -1130,7 +1233,6 @@ function afficherCarteCourante(){
         <span>${esc(ch)}</span>
       </button>`).join('');
   } else {
-    // Mode Flashcard
     document.getElementById('revisionFlashcard').style.display='';
     document.getElementById('revisionQcm').style.display='none';
     document.getElementById('carteFront').innerHTML=renderMd(c.recto);
@@ -1174,11 +1276,9 @@ window.validerQcm=async()=>{
   fb.className=`qcm-revision-feedback ${correct?'ok':'ko'}`;
   fb.textContent=correct ? '✓ Bonne réponse !' : `✕ ${bonnes.length>1?'Bonnes réponses : '+bonnes.map(i=>String.fromCharCode(65+i)).join(', '):'Bonne réponse : '+String.fromCharCode(65+bonnes[0])}`;
   fb.style.display='';
-  document.getElementById('qcmBtns').style.display='flex';
   document.getElementById('qcmBtns').innerHTML=`
-    <button class="btn-incorrect" onclick="marquerCarte('incorrect')">✕ Incorrect</button>
-    <button class="btn-skip" onclick="cartesSuivante()">→ Passer</button>
-    <button class="btn-correct" onclick="marquerCarte('correct')">✓ Correct</button>`;
+    ${indexRevision>0?'<button class="btn btn-sm" onclick="cartesPrecedente()">← Précédente</button>':''}
+    <button class="btn-skip" onclick="cartesSuivante()">→ Suivant</button>`;
 
   // Marquer automatiquement
   await marquerCarteAuto(statut);
@@ -1190,8 +1290,8 @@ async function marquerCarteAuto(statut){
   const carte=(sujet?.cartes||[]).find(x=>x.id===c.id);
   if(carte){carte.statut=statut;carte.derniereRevision=Date.now();}
   statsRevision[statut]++;
+  sauvegarderSessionRevision();
   await sauvegarderDonnees();
-  // Ne pas avancer automatiquement — l'utilisateur clique Suivant ou les boutons
 }
 function syncCardHeight(flipped) {
   const wrap = document.querySelector('.flashcard-wrap');
@@ -1222,10 +1322,20 @@ window.marquerCarte=async statut=>{
   }
   // Pour QCM le statut a déjà été mis à jour par marquerCarteAuto
   // Dans les deux cas on avance
-  indexRevision++;afficherCarteCourante();
+  indexRevision++; sauvegarderSessionRevision(); afficherCarteCourante();
 };
-window.cartesSuivante=()=>{statsRevision.skipped++;indexRevision++;afficherCarteCourante();};
+window.cartesSuivante=()=>{statsRevision.skipped++;indexRevision++;sauvegarderSessionRevision();afficherCarteCourante();};
+window.cartesPrecedente=()=>{
+  if(indexRevision<=0) return;
+  indexRevision--;
+  // Annuler le statut skipped si on revient
+  if(statsRevision.skipped>0) statsRevision.skipped--;
+  sauvegarderSessionRevision();
+  afficherCarteCourante();
+};
 function terminerRevision(){
+  effacerSessionRevision();
+  localStorage.removeItem(SAVED_KEY);
   document.getElementById('revisionContent').style.display='none';
   document.getElementById('revisionDone').style.display='block';
   document.getElementById('doneCorrect').textContent=statsRevision.correct;
@@ -1233,7 +1343,7 @@ function terminerRevision(){
   document.getElementById('doneSkipped').textContent=statsRevision.skipped;
   if(sujetCourantId)renderSujetView();
 }
-window.quitterRevision=()=>{if(sujetCourantId){renderSujetView();showView('sujet');}else showView('home');};
+window.quitterRevision=()=>{effacerSessionRevision();if(sujetCourantId){renderSujetView();showView('sujet');}else showView('home');};
 
 // ── MODALS ────────────────────────────────────────────────
 let editQcmId = null;
@@ -1461,9 +1571,7 @@ const cfgParam=urlParams.get('cfg');
 if(cfgParam){try{const cfg=JSON.parse(atob(cfgParam));saveConfig(cfg);history.replaceState({},'',location.pathname);}catch(e){}}
 const savedCfg=getConfig();
 if(savedCfg){initFirebase(savedCfg);}
-else{
-  document.getElementById('loadingScreen').style.display='none';document.getElementById('configScreen').style.display='flex';
-}
+else{document.getElementById('loadingScreen').style.display='none';document.getElementById('configScreen').style.display='flex';}
 </script>
 </body>
-</html> 
+</html>
